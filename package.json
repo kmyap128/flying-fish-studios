@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/kmyap128/flying-fish-studios/issues"
   },
-  "homepage": "https://github.com/kmyap128/flying-fish-studios#readme"
+  "homepage": "https://github.com/kmyap128/flying-fish-studios#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
 }
