@@ -1,0 +1,111 @@
+body {
+    background-image: url(../../media/assets/backgrounds/sad-cheese-seller.jpg);
+    background-size: cover;
+}
+
+/* TOP OF SCREEN */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    height: 20vh;
+}
+
+.creature-icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.wizard-bar {
+    width: 50%;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #eee;
+    overflow: hidden;
+}
+
+#timer-container {
+    width: 150px;
+    height: 150px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#timer {
+    font-size: 5em;
+    color: #000;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center  ;
+}
+
+/* MAIN CONTENT */
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: baseline;
+    height: 80vh;
+    padding-top: 0;
+}
+
+#scenario-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#scenario-name,
+#scenario {
+    margin: 0;
+    padding: 0;
+}
+
+#scenario-name {
+    font-size: 1.25em;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+#scenario {
+    font-size: 2.5em;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    max-width: 80%;
+}
+
+#options {
+    display: flex;
+    justify-content: center;
+    height: 60%;
+    gap: 20px;
+    padding: 20px;
+}
+
+.option {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 30%;
+    font-size: 3em;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
