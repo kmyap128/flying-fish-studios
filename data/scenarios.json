@@ -1,15 +1,182 @@
 {
-  "scenarioName": {
-    "scenario": "",
-    "options": {
-      "option1": ["", 0],
-      "option2": ["", 0],
-      "option3": ["", 0]
+  "obstacle": {
+    "mushroomBlockade": {
+      "scenario": "You step into a clearing of towering mushrooms. Their glowing caps slowly swivel... tracking your every movement. The ground hums beneath your feet",
+      "options": {
+        "safe": ["Match thier gentle swaying rhythm", 0],
+        "balanced": ["Ask the mushrooms for safe passage", 1],
+        "risky": ["Dash between the stalks before they react", 2]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
     },
-    "type": "",
-    "sound": "",
-    "background": "",
-    "images": [],
-    "animation": ""
+    "snailParade": {
+      "scenario": "You've stumbled into the 14th Annual Snail Procession. Tiny banners wave. The snails are... very serious about this.",
+      "options": {
+        "safe": ["Wait respectfully for them to pass", 0],
+        "balanced": ["Become overly enthusiastic and cheer them on", 1],
+        "risky": ["Carefully weave through the parade", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    },
+    "gorestGiants": {
+      "scenario": "Ancient forest giants lie across the trail, snoring loud enough to shake leaves from trees. One clutches a glowing weapon that looks... extremely stealable",
+      "options": {
+        "safe": ["Quietly tiptoe around them", 0],
+        "balanced": ["Attempt to steal the glowing weapon", 1],
+        "risky": ["Sprint through before they wake", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+  },
+  "combat": {
+    "wolfGuardian": {
+      "scenario": "A giant wolf wearing armor and holding a massive sword blocks your path.",
+      "options": {
+        "safe": ["Challenge him to an honorable duel", 0],
+        "balanced": ["Throw a stick to distract him", 1],
+        "risky": ["Approach gently and offer to pet him", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    },
+    "angryShroombear": {
+      "scenario": "A massive Shroombear rears up, claws flashing in the moonlight.",
+      "options": {
+        "safe": ["Punch in bravely in the stomach", 0],
+        "balanced": ["Sweep its legs from underneath", 1],
+        "risky": ["Stand tall and attempt to indimidate it", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    },
+    "mirrorImage": {
+      "scenario": "You reach a crystal-clear pond where your reflection climbs out of the water, intent on taking your place in the real world.",
+      "options": {
+        "safe": [
+          "Fight your reflection in a duel where you must move in perfect sync",
+          0
+        ],
+        "balanced": [
+          "Sacrifice your 'Reflection' (you'll never have one again) to make it disappear",
+          1
+        ],
+        "risky": [
+          "Confuse it by making the stupidest face possible until it loses its form",
+          0
+        ]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+  },
+  "bonus": {
+    "goblinInterns": {
+      "scenario": "Three goblins in oversized business suits hand out aggressively professional flyers.",
+      "options": {
+        "safe": ["Take a flyer and encourage them", 2],
+        "balanced": ["Listen to their painfully long sales pitch", 1],
+        "risky": ["Smack the flyers away dramatically", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    },
+    "sadCheeseSeller": {
+      "scenario": "A tiny mouse chef sits behind a lonely cheese cart. 'No one believes in artisinal forest cheese anymore...'",
+      "options": {
+        "safe": ["Help redesign his cheese stand", 0],
+        "balanced": ["Sample the cheese", 1],
+        "risky": ["Question his business practices", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+  },
+  "dilemma": {
+    "trappedOgre": {
+      "scenario": "An ogre has fallen into a deep pit. 'HEY... a little help here?' A glowing potion sits just outside the hole",
+      "options": {
+        "safe": ["Help him climb out using vines", 0],
+        "balanced": ["Steal the potion while he's distracted", 1],
+        "risky": ["Pretend you didn't see anything and keep moving", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    },
+    "abandonedCart": {
+      "scenario": "You find a cart, seemingly abandoned, full of potions.",
+      "options": {
+        "safe": ["Ignore the cart and move on, it's not ours", 0],
+        "balanced": ["Pocket one potion from the edge of the cart", 1],
+        "risky": ["Grab as many potions as you can carry", 2]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    },
+    "tadpoleSoup": {
+      "scenario": "",
+      "options": {
+        "safe": ["", 0],
+        "balanced": ["", 1],
+        "risky": ["", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+  },
+  "sacrifice": {
+    "greedyKing": {
+      "scenario": "A golden statue blocks the path, it's mouth open; it will only move if it 'tastes' something incredibly valuable",
+      "options": {
+        "safe": ["lose the ability to choose answer one", 0],
+        "balanced": ["lose the ability to choose answer two", 0],
+        "risky": ["lose the ability to choose answer three", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+  },
+  "item": {
+    "frogMerchant": {
+      "scenario": "A whimsical frog in a tiny coat sits behind a crooked wooden stall. 'Greetings, travelers... care to improve your survival odds? I have a few items available.'",
+      "options": {
+        "safe": ["Sprint Boots - Gain extra time on one future decision", 0],
+        "balanced": ["Anti-Wizard Bell - Cancel one sabotage attempt", 1],
+        "risky": [
+          "Toad Alarm Clock - Reveals which option is safest in a future scenario",
+          0
+        ]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
   }
 }

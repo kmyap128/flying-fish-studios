@@ -1,0 +1,12 @@
+"scenarioName": {
+      "scenario": "",
+      "options": {
+        "safe": ["", 0],
+        "balanced": ["", 1],
+        "risky": ["", 0]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
