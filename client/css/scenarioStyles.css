@@ -4,6 +4,7 @@ body {
 }
 
 /*-------------------TOP OF SCREEN-------------------*/
+
 .header {
     display: flex;
     align-items: center;
@@ -131,30 +132,27 @@ body {
 
 .content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: baseline;
     height: 80vh;
-    padding-top: 0;
+    padding: 20px;
 }
 
 #scenario-container {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
-    padding: 20px;
-    width: 80%;
-    height: 20%;
+    width: 50%;              
+    height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+
 #scenario-name,
 #scenario {
-    margin: 0;
-    padding: 0;
+    text-align: left;
 }
+
 
 #scenario-name {
     font-size: 1.25em;
@@ -164,30 +162,9 @@ body {
 }
 
 #scenario {
-    font-size: 2.5em;
+    font-size: 3em;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     text-align: center;
     max-width: 80%;
-}
-
-#options {
-    display: flex;
-    justify-content: center;
-    height: 60%;
-    gap: 20px;
-    padding: 20px;
-}
-
-.option {
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 30%;
-    font-size: 3em;
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.8);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }

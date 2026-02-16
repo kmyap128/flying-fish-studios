@@ -1,0 +1,168 @@
+body {
+    background-image: url(../../media/assets/backgrounds/sad-cheese-seller.jpg);
+    background-size: cover;
+}
+
+/*-------------------TOP OF SCREEN-------------------*/
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    height: 20vh;
+}
+
+
+/* Life bars */
+.wizard-bar {
+    display: flex;
+    padding: 30px;
+    border-radius: 60px;
+    width: 100%;
+    height: 50px;          
+    align-items: center;
+    background-color: #333333;
+    overflow: hidden;
+}
+
+.segment {
+    flex: 1;
+    height: 100%;
+    background-color: #ddd;
+    border: 2px solid #000;  
+    transform: skewX(-20deg); 
+}
+
+
+.segment.filled {
+    background-color: #bb0000;
+}
+
+
+/*-------------------MAIN CONTENT-------------------*/
+
+.content {
+    display: flex;
+    height: 80vh;
+    padding: 20px;
+    gap: 10px;
+}
+
+#decision-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 30px;
+    width: 50%;              
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#scenario-type {
+    font-size: 2em;
+    color: #fff;
+}
+
+#scenario-title {
+    text-align: center;
+    font-size: 2em;
+    color: #fff;
+}
+
+#scenario-outcome {
+    text-align: center;
+    font-size: 1em;
+    color: #fff;
+}
+
+#selected-option {
+    max-width: 80%;
+    text-align: center;
+    font-size: 1.5em;
+    color: #fff;
+}
+
+#result-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 30px;
+    width: 50%;              
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#result {
+    text-align: center;
+    font-size: 2em;
+    color: #fff;
+}
+
+
+#character-statuses {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 30px;
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+}
+
+#character-statuses .creature-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#character-statuses .creature-bg {
+    width: 100px;
+    height: 100px;
+    background-color: #222;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+#character-statuses .creature-icon {
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+}
+
+#character-statuses .life-bar {
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+    background-color: #222;
+    padding: 6px 14px;
+    border-bottom-right-radius: 999px;
+    border-top-right-radius: 999px;
+}
+
+
+#character-statuses .life-segment {
+    width: 14px;
+    height: 35px;
+    background-color: #555;
+    border: 2px solid #000;
+    transform: skewX(-20deg);
+}
+
+#character-statuses .life-segment.filled {
+    background-color: #008100;
+}
+
