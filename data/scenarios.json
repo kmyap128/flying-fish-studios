@@ -3,9 +3,9 @@
     "mushroomBlockade": {
       "scenario": "You step into a clearing of towering mushrooms. Their glowing caps slowly swivel... tracking your every movement. The ground hums beneath your feet",
       "options": {
-        "safe": ["Match thier gentle swaying rhythm", 0],
-        "balanced": ["Ask the mushrooms for safe passage", 1],
-        "risky": ["Dash between the stalks before they react", 2]
+        "safe": ["Match thier gentle swaying rhythm", 0, ""],
+        "balanced": ["Ask the mushrooms for safe passage", 2],
+        "risky": ["Squeeze through the stalks", 1]
       },
       "sound": "",
       "background": "",

@@ -1,10 +1,11 @@
 "scenarioName": {
       "scenario": "",
       "options": {
-        "safe": ["", 0],
-        "balanced": ["", 1],
-        "risky": ["", 0]
+        "safe": ["", 0, ""],
+        "balanced": ["", 1, ""],
+        "risky": ["", 0, ""]
       },
+      "type": "",
       "sound": "",
       "background": "",
       "images": [],
