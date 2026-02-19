@@ -1,0 +1,35 @@
+#timer-container {
+    width: 25vw;
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(#bb0000 360deg, #222 0deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Inner circle to create border effect */
+.timer-circle::before {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+#timer {
+    position: relative;
+    font-size: 3em;
+    font-weight: bold;
+    z-index: 2;
+}

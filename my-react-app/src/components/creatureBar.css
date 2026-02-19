@@ -1,0 +1,54 @@
+.creature-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 25vw;
+    height: 20vh;
+}
+
+.creature-bg {
+    width: 170px;
+    height: 170px;
+    background-color: #222;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+.creature-icon {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+}
+
+/* Life bars */
+
+.life-bar {
+    position: absolute;
+    right: 89px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;  
+    align-items: center; 
+    gap: 6px;
+    height: 80px;
+    background-color: #222;
+    padding: 9px 29px;
+    border-bottom-right-radius: 999px;
+    border-top-right-radius: 999px;
+}
+
+.life-segment {
+    width: 20px;
+    height: 50px;
+    background-color: #555;
+    border: 2px solid #000;
+    transform: skewX(-20deg);   
+}
+
+.life-segment.filled {
+    background-color: #008100;
+}
