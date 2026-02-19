@@ -1,11 +1,53 @@
-"scenarioName": {
+base scenario:
+"Scenario Name": {
       "scenario": "",
       "options": {
         "safe": ["", 0, ""],
-        "balanced": ["", 1, ""],
-        "risky": ["", 0, ""]
+        "risky": ["", 0, ""],
+        "balanced": ["", 1, ""]
       },
       "type": "",
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+
+item scenario:
+"Scenario Name": {
+      "scenario": "",
+      "options": {
+        "item 1": ["item", "description"],
+        "item 2": ["item", "description"],
+        "item 3": ["item", "description"]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+
+sacrifice scenario:
+"Scenario Name": {
+      "scenario": "",
+      "options": {
+        "option 1": [""],
+        "option 2": [""],
+        "option 3": [""]
+      },
+      "sound": "",
+      "background": "",
+      "images": [],
+      "animation": ""
+    }
+
+dilemma scenario:
+"Scenario Name": {
+      "scenario": "",
+      "options": {
+        "helpful": ["", ""],
+        "selfish": ["", ""]
+      },
       "sound": "",
       "background": "",
       "images": [],
