@@ -13,6 +13,7 @@ APP.use(EXPRESS.static("client"));
 APP.use("/media", EXPRESS.static("media"));
 
 // parse arduino data (option selections and button press)
+ARDUINO_PARSER.subscribe("pedestal", (data) => io.emit("pedestalData", data));
 
 SERVER.listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);
