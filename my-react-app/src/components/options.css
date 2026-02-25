@@ -1,0 +1,25 @@
+#options-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.option {
+    padding: 60px 20px;
+    width: 30%;
+    font-size: 3em;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+
+    box-shadow:
+        inset 0 0 0 2px black,             
+        0 0 20px rgba(76, 46, 110, 0.9),
+        0 0 30px rgba(76, 46, 110, 0.7),
+        0 0 40px rgba(76, 46, 110, 0.5);
+
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}

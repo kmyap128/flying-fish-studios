@@ -1,5 +1,10 @@
 #scenario-container {
-    background-color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(
+        to right, 
+        rgba(129, 82, 182, 0) 0%,          
+        rgba(129, 82, 182, 0.8) 50%,       
+        rgba(129, 82, 182, 0) 100%         
+    );
     border-radius: 10px;
     width: 50%;              
     height: 100%;

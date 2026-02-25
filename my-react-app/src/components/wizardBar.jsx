@@ -1,23 +1,16 @@
 import './wizardBar.css'
 
-export function WizardBar() {
+export function WizardBar({ value = 15 }) {
+  const maxValue = 15;
+  const fillPercent = (value / maxValue) * 100;
+
   return (
     <div className="wizard-bar">
-        <div className="segment filled"></div>
-        <div className="segment filled"></div>
-        <div className="segment filled"></div>
-        <div className="segment filled"></div>
-        <div className="segment filled"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
-        <div className="segment"></div>
+      <div 
+          className="wizard-fill"
+          style={{ width: `${fillPercent}%` }}
+      />
+      <span className="wizard-text">{value} / {maxValue}</span>
     </div>
   )
 }
