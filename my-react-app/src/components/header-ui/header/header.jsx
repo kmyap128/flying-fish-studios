@@ -1,6 +1,6 @@
-import { WizardBar } from "./wizardBar";
-import { CreatureBar } from "./creatureBar";
-import { Timer } from "./timer";
+import { WizardBar } from "../wizard-bar/wizardBar";
+import { CreatureBar } from "../creature-bar/creatureBar";
+import { Timer } from "../timer/timer";
 import './header.css'
 
 export function Header({image, creatureName, timerStart, scenarioNumber}) {
