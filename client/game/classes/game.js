@@ -2,29 +2,51 @@
 //import imposter (1 instance)
 //import round
 
-//CONSTRUCTOR
-//players
-//impostor
-//stage
-//state
+import { CreaturePlayer } from "./creaturePlayer";
+import { ImpostorPlayer } from "./impostorPlayer";
 
-//ENUM states
-//start
-//onboarding
-//ongoing -> stage or animation
-//end
-//idle?
+export class Game {
+  constructor(players, impostor) {
+    //CONSTRUCTOR
+    //players
+    this.players = [
+      new CreaturePlayer(players[0]),
+      new CreaturePlayer(players[1], new CreaturePlayer(players[2])),
+    ];
+    //impostor
+    this.impostor = new ImpostorPlayer(impostor);
+    //stage
+    this.stage = 0;
+    //state
+    this.state = STATES.START;
+    this.round = null;
+  }
 
-//FUNC update
-//update round timer
-//update check trigger state change
+  update() {
+    //update round timer
+    if (this.round != null) {
+      this.round.update();
+    }
+    //update check trigger state change
+  }
 
-//FUNC start round
+  //FUNC start round
+  startRound() {
+    this.round = new Round();
+    this.state = STATES.SCENARIO;
+  }
 
-//FUNC end round?
+  //FUNC end round?
+  endRound() {
+    this.stage++;
+  }
 
-//FUNC trigger state change
+  //FUNC trigger state change
+stateChange() {
+    
+}
 
-//FUNC assign imposter
-//chose random int between 1-3/1-4 (depending on number of players)
-//assign imposter role (impostor redirect)
+  //FUNC assign imposter
+  //chose random int between 1-3/1-4 (depending on number of players)
+  //assign imposter role (impostor redirect)
+}
