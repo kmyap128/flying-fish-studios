@@ -3,6 +3,8 @@ import { CreaturePlayer } from "./classes/creaturePlayer";
 import { ImpostorPlayer } from "./classes/impostorPlayer";
 import { Game } from "./classes/game";
 
+let scenarios = JSON.parse(scenarios);
+
 //controller instance
 const ARDUINO_CONTROLLER = new ArduinoController();
 //global game instance
