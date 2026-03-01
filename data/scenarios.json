@@ -1,10 +1,10 @@
 {
   "obstacle": {
     "Mushrooms Blockade": {
-      "scenario": "You step into a clearing of towering mushrooms. Their glowing caps slowly swivel... tracking your every movement. The ground hums beneath your feet",
+      "scenario": "You step into a clearing of towering mushrooms. Their glowing caps slowly swivel, tracking your every movement.",
       "options": {
         "safe": [
-          "Match thier gentle swaying rhythm",
+          "Match thier rhythm",
           0,
           "The mushrooms were impressed with how in sync you were, they created a large opening for the fastest route"
         ],
@@ -14,7 +14,7 @@
           "While successful, the mushrooms were persistent on not letting you through, causing you to waste a lot of time as well as making you feel quite sore"
         ],
         "balanced": [
-          "Ask the mushrooms for safe passage",
+          "Ask for safe passage",
           2,
           "The mushrooms felt no desire to let you through, and found you quite laughable"
         ]
@@ -26,20 +26,20 @@
       "animation": ""
     },
     "The Annual Snail Parade": {
-      "scenario": "You've stumbled into the 14th Annual Snail Procession. Tiny banners wave. The snails are... very serious about this.",
+      "scenario": "You stumble into the 14th Annual Snail Procession. Tiny banners wave as the snails march with serious determination.",
       "options": {
         "safe": [
-          "Wait respectfully for them to pass",
+          "Wait for them to pass",
           2,
           "The snails truly appreciated this but the parade was far from fast. You wasted a lot of time. So much for being respectful."
         ],
         "risky": [
-          "Move carefully between the lines, matching their pace",
+          "Move carefully through them",
           0,
           "The snails were very angry but there's only so much they could do. You managed to zoom by and caused no harm, only an angry, but slow, mob of snails"
         ],
         "balanced": [
-          "Become overly enthusiastic and cheer them on",
+          "Join the parade",
           1,
           "This was not the fastest option but with you joining the parade the snails felt a sense of invigoration. They moved faster and the parade went by quicker, but not by that much"
         ]
@@ -51,15 +51,11 @@
       "animation": ""
     },
     "Floral Grasp": {
-      "scenario": "You enter a field of delicate flowers. As you step forward, their stems gently curl around your ankles, tightening just enough to anchor you in place",
+      "scenario": "You enter a field of delicate flowers. Their stems gently curl around your ankles, tightening just enough to anchor you in place",
       "options": {
-        "safe": ["Stand still and let the flowers finish wrapping.", 2, ""],
-        "risky": ["Sing a soft song to calm the flowers.", 0, ""],
-        "balanced": [
-          "Move slowly, lifting your feet carefully with each step.",
-          1,
-          ""
-        ]
+        "safe": ["Let the flowers tighten.", 2, ""],
+        "risky": ["Sing a soft, calm song.", 0, ""],
+        "balanced": ["Move slowly and carefully.", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -70,11 +66,11 @@
   },
   "combat": {
     "The Wolf Guardian": {
-      "scenario": "A giant wolf wearing armor and holding a massive sword blocks your path.",
+      "scenario": "A giant armored wolf holding a massive sword steps forward and blocks your path.",
       "options": {
-        "safe": ["Approach gently and offer to pet him", 2, ""],
-        "risky": ["Throw a stick to distract him", 0, ""],
-        "balanced": ["Challenge him to an honorable duel", 1, ""]
+        "safe": ["Gently offer to pet him", 2, ""],
+        "risky": ["Throw a stick at him", 0, ""],
+        "balanced": ["Challenge him to a duel", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -83,11 +79,11 @@
       "animation": ""
     },
     "The Angry Shroombear": {
-      "scenario": "A massive Shroombear rears up, claws flashing in the moonlight.",
+      "scenario": "A massive bear rears up before you, claws flashing in the moonlight.",
       "options": {
-        "safe": ["Punch in bravely in the stomach", 0, ""],
-        "risky": ["Throw some mushrooms at it", 2, ""],
-        "balanced": ["Stand tall and attempt to indimidate it", 1, ""]
+        "safe": ["Punch it in the stomach", 0, ""],
+        "risky": ["Throw mushrooms at it", 2, ""],
+        "balanced": ["Stand tall and indimidate it", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -96,23 +92,11 @@
       "animation": ""
     },
     "The Mirror-Image Duel": {
-      "scenario": "You reach a crystal-clear pond where your reflection climbs out of the water, intent on taking your place in the real world.",
+      "scenario": "You reach a crystal-clear pond where your reflection climbs out, intent on taking your place in the real world.",
       "options": {
-        "safe": [
-          "Confuse it by making the stupidest face possible until it loses its form",
-          2,
-          ""
-        ],
-        "risky": [
-          "Sacrifice your 'Reflection' (you'll never have one again) to make it disappear",
-          0,
-          ""
-        ],
-        "balanced": [
-          "Fight your reflection in a duel where you must move in perfect sync",
-          1,
-          ""
-        ]
+        "safe": ["Make stupid faces at it.", 2, ""],
+        "risky": ["Sacrifice your Reflection.", 0, ""],
+        "balanced": ["Fight your reflection.", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -123,10 +107,14 @@
   },
   "item": {
     "The Merchant": {
-      "scenario": "Tobias the frog in a tiny coat sits behind a crooked wooden stall. 'Greetings, travelers... care to improve your survival odds? I have a few items available.'",
+      "scenario": "Gilbert the frog in a tiny coat sits behind a crooked wooden stall. 'Greetings, travelers... care to improve your survival odds? I have a few items available.'",
       "options": {
-        "item 1": ["Frog's Feet", "Increase the timer for decision making", ""],
-        "item 2": ["Candy Rock", "Heal your ailments", ""],
+        "item 1": [
+          "Sprint Boots",
+          "Gain extra time on one future decision",
+          ""
+        ],
+        "item 2": ["Anti-Wizard Bell", "Cancel one sabotage attempt", ""],
         "item 3": [
           "Toad Alarm Clock",
           "Reveals which option is safest in a future scenario",
@@ -139,7 +127,7 @@
       "animation": ""
     },
     "Fairy Fountain": {
-      "scenario": "Magical forest fairies greet you in front of a beautifully illuminated fountain. They giggle as they offer you a blessing for discovering their hidden sanctuary.",
+      "scenario": "Magical forest fairies greet you before a glowing fountain, offering a blessing for finding their hidden sanctuary.",
       "options": {
         "item 1": ["Fountain Water", "Heals you of all your ailments", ""],
         "item 2": ["Fairy Wand", "Reveal the worst option on a decision", ""],
@@ -151,7 +139,7 @@
       "animation": ""
     },
     "The Gardener": {
-      "scenario": "Tobias the forset florist tends to his magical flowers. He offers you some, inside are magical rewards.",
+      "scenario": "Tobias the forset florist tends to his magical flowers and offers you one hiding a mysterious reward.",
       "options": {
         "item 1": ["The Lovely Lily", "Heals you of all your ailments", ""],
         "item 2": ["Dandelion Wish", "Sets back your Wizard's Grasp", ""],
@@ -165,7 +153,7 @@
   },
   "sacrifice": {
     "The Statue of the Greedy King": {
-      "scenario": "A golden statue blocks the path, its mouth open; it will only move if it 'tastes' something incredibly valuable",
+      "scenario": "A golden statue blocks the path, its mouth open. It will only move if it 'tastes' something incredibly valuable",
       "options": {
         "option 1": ["Lose the ability to choose answer one", ""],
         "option 2": ["Lose the ability to choose answer three", ""],
@@ -177,11 +165,11 @@
       "animation": ""
     },
     "The Glowing Bridge": {
-      "scenario": "A narrow bridge made of shimmering blue light stretches over a bottomless ravine. The glow flickers unpredictably.",
+      "scenario": "A narrow bridge made of shimmering blue light stretches over a bottomless ravine, its glow flickering unpredictably.",
       "options": {
-        "option 1": ["Drop all your items to reduce weight", ""],
+        "option 1": ["Drop your items to reduce weight", ""],
         "option 2": ["Vote someone to stay behind", ""],
-        "option 3": ["Cross anyways and see what happens", ""]
+        "option 3": ["Cross anyways", ""]
       },
       "sound": "",
       "background": "",
@@ -189,11 +177,11 @@
       "animation": ""
     },
     "The Illuminated Portal": {
-      "scenario": "A mesmerizing portal sits in the middle of the woods. It feels as if it's calling to you and you can not avert your gaze unless you please it.",
+      "scenario": "A mesmerizing portal hums in the woods, pulling at your mind. You cannot look away unless you please it.",
       "options": {
-        "option 1": ["Toss in your item to close it", ""],
-        "option 2": ["Keep staring back and sacrifice wizard's grasp", ""],
-        "option 3": ["Throw in one of your companions, leaving them behind", ""]
+        "option 1": ["Toss in your item", ""],
+        "option 2": ["Sacrifice Wizard's Grasp", ""],
+        "option 3": ["Throw in a companion", ""]
       },
       "sound": "",
       "background": "",
@@ -206,8 +194,8 @@
       "scenario": "Three goblins in oversized business suits hand out aggressively professional flyers.",
       "options": {
         "safe": ["Take a flyer and encourage them", 2, ""],
-        "risky": ["Smack the flyers away dramatically", 0, ""],
-        "balanced": ["Listen to their painfully long sales pitch", 1, ""]
+        "risky": ["Smack the flyers away", 0, ""],
+        "balanced": ["Listen to their long sales pitch", 1, ""]
       },
       "sound": "",
       "background": "",
@@ -217,8 +205,8 @@
     "The Sad Cheese Seller": {
       "scenario": "A tiny mouse chef sits behind a lonely cheese cart. 'No one believes in artisinal forest cheese anymore...'",
       "options": {
-        "safe": ["Help redesign his cheese stand", 1, ""],
-        "risky": ["Question his business practices", 2, ""],
+        "safe": ["Help redesign his stand", 1, ""],
+        "risky": ["Question his business", 2, ""],
         "balanced": ["Sample the cheese", 0, ""]
       },
       "sound": "",
@@ -227,7 +215,7 @@
       "animation": ""
     },
     "The Whimsical Tree": {
-      "scenario": "An ancient and mythical tree blocks your path. 'I will only open the eay if you can answer my riddle: I am always hungry, I must be fed. The finger I touch will soon turn red. What am I?",
+      "scenario": "An ancient and mythical tree blocks your path. 'Answer my riddle,' it booms. 'I am always hungry, I must be fed. The finger I touch soon turns red.",
       "options": {
         "safe": ["Fire", 0, ""],
         "balanced": ["A Rose", 1, ""],
@@ -241,10 +229,10 @@
   },
   "dilemma": {
     "Trapped Ogre": {
-      "scenario": "An ogre has fallen into a deep pit. 'HEY... a little help here?' A glowing potion sits just outside the hole.",
+      "scenario": "An ogre has fallen into a deep pit. 'HEY... little help here?' A glowing potion rests just outside the hole.",
       "options": {
-        "helpful": ["Help him climb out using vines", ""],
-        "selfish": ["Steal the potion while he's distracted", ""]
+        "helpful": ["Help him climb out", ""],
+        "selfish": ["Steal the potion", ""]
       },
       "sound": "",
       "background": "",
@@ -263,10 +251,10 @@
       "animation": ""
     },
     "Witch's Soup": {
-      "scenario": "A witch has infested a pond full of tadpoles. She doesn't want to harm you as she is just using them to make soup.",
+      "scenario": "A witch stirs a bubbling pond of tadpoles. She claims she means no harm, they're only for soup.",
       "options": {
-        "helpful": ["Save the tadpoles by knocking out the wish", ""],
-        "selfish": ["Indulge in the soup and bring it with you", ""]
+        "helpful": ["Save the tadpoles", ""],
+        "selfish": ["Indulge in the soup", ""]
       },
       "sound": "",
       "background": "",
