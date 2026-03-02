@@ -5,20 +5,43 @@ import { Game } from "./classes/game";
 
 let scenarios = JSON.parse(scenarios);
 
-//controller instance
 const ARDUINO_CONTROLLER = new ArduinoController();
-//global game instance
 window.GAME = new Game();
-//global variables (window.VARNAME)?
 
+//global variables (window.VARNAME)?
+window.NINETAIL_CHOICE;
+window.JACKALOPE_CHOICE;
+window.DUCKDUCKGOOSE_CHOICE;
+window.DINOGON_CHOICE;
 //regular variables
+const NINETAIL = new CreaturePlayer("Nine-Tail Fish", "", "", "");
+const JACKALOPE = new CreaturePlayer("Jackalope", "", "", "");
+const DUCKDUCKGOOSE = new CreaturePlayer("Duck Duck Goose", "", "", "");
+const DINOGON = new CreaturePlayer("Dinogon", "", "", "");
+
+let nineTailChoice;
+let jackalopeChoice;
+let duckDuckGooseChoice;
+let dinogonChoice;
 
 //FUNC init
-//trigger state change (to start)
-//start onboarding
+function init() {
+  //trigger state change (to start)
+  GAME.stateChange("start");
+}
 
 //FUNC update
-//get data
-//update game
+function update() {
+  //get data
+  nineTailChoice = ARDUINO_CONTROLLER.getCharacter1Choice();
+  jackalopeChoice = ARDUINO_CONTROLLER.getCharacter2Choice();
+  duckDuckGooseChoice = ARDUINO_CONTROLLER.getCharacter3Choice();
+  dinogonChoice = ARDUINO_CONTROLLER.getCharacter4Choice();
+  //update game
+  GAME.update();
+}
 
 //FUNC trigger html event
+function triggerEvent() {
+
+}

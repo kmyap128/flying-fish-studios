@@ -10,12 +10,9 @@ export class Game {
   constructor(players, impostor) {
     //CONSTRUCTOR
     //players
-    this.players = [
-      new CreaturePlayer(players[0]),
-      new CreaturePlayer(players[1], new CreaturePlayer(players[2])),
-    ];
+    this.players = players;
     //impostor
-    this.impostor = new ImpostorPlayer(impostor);
+    this.impostor = impostor;
     //stage
     this.stage = 0;
     //state
@@ -43,7 +40,9 @@ export class Game {
   }
 
   //FUNC trigger state change
-  stateChange() {}
+  stateChange(state) {
+    this.state = STATES[state];
+  }
 
   //FUNC assign imposter
   //chose random int between 1-3/1-4 (depending on number of players)
