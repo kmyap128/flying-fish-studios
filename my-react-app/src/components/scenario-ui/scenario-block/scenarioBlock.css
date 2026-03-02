@@ -1,0 +1,41 @@
+#scenario-container {
+    background: linear-gradient(
+        to right, 
+        rgba(76, 46, 110, 0.2) 0%, 
+        rgba(76, 46, 110, 0.6) 10%,         
+        rgba(76, 46, 110, 0.9) 50%, 
+        rgba(76, 46, 110, 0.6) 90%,      
+        rgba(76, 46, 110, 0.2) 100%       
+    );
+    border-radius: 10px;
+    width: 50%;              
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    align-self: flex-start;
+}
+
+
+#scenario-name,
+#scenario {
+    text-align: left;
+}
+
+
+#scenario-name {
+    font-size: 1.25em;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+#scenario {
+    font-size: 3em;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    max-width: 80%;
+}

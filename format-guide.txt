@@ -11,7 +11,7 @@
     - Constants:                UPPER_SNAKE_CASE
     - Enum Values:              UPPER_SNAKE_CASE
     - Functions:                camelCase()
-    - Clases:                   UpperCamelCase
+    - Classes:                   UpperCamelCase
 
 
 3. Arduino Naming Conventions
