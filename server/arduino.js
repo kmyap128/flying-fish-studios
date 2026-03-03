@@ -39,3 +39,11 @@ PORT.on("error", (err) => console.error("Port error:", err.message));
 module.exports = {
   subscribe,
 };
+
+// function subscribe(type, callback) {
+//   // Do nothing for now
+// }
+
+// module.exports = {
+//   subscribe,
+// };

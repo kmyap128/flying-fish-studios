@@ -2,6 +2,7 @@ const EXPRESS = require("express");
 const HTTP = require("http");
 const { Server } = require("socket.io");
 const ARDUINO_PARSER = require("./arduino");
+const path = require("path");
 
 const APP = EXPRESS();
 const SERVER = HTTP.createServer(APP);
@@ -11,6 +12,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 APP.use(EXPRESS.static("client"));
 APP.use("/media", EXPRESS.static("media"));
+APP.use("/data", EXPRESS.static(path.join(__dirname, "../data")));
 
 // parse arduino data (option selections and button press)
 ARDUINO_PARSER.subscribe("pedestal", (data) => io.emit("pedestalData", data));

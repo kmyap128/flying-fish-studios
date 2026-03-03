@@ -198,3 +198,28 @@ html, body {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+.option.selected {
+    border: 3px solid gold;
+    background-color: rgba(0, 0, 0, 0.9) ;
+}
+
+#completeButton {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #bb0000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#completeButton.disabled {
+    opacity: .5;
+    pointer-events: none;
+}
