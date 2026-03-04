@@ -1,20 +1,28 @@
 {
-  "Nine-Tailed Fish": {
+  "ntf": {
+    "name": "Finley",
+    "species": "Nine-Tailed Fish",
     "image": "",
     "description": "",
     "item": ""
   },
-  "Jackalope": {
+  "jl": {
+    "name": "Sprig",
+    "species": "Jackalope",
     "image": "",
     "description": "",
     "item": ""
   },
-  "Duck Duck Goose": {
+  "ddg": {
+    "name": "Waddles",
+    "species": "Duck Duck Goose",
     "image": "",
     "description": "",
     "item": ""
   },
-  "Dinogon": {
+  "dg": {
+    "name": "Smoulder",
+    "species": "Dinogon",
     "image": "",
     "description": "",
     "item": ""

@@ -16,13 +16,13 @@ void loop() {
   int mag3State = digitalRead(pedestal3Pin);
 
     if (mag1State == LOW) {
-      Serial.print("1");
+      Serial.print("DuckDuckGoose:1");
     } else if (mag2State == LOW) {
-      Serial.print("2");
+      Serial.print("DuckDuckGoose:2");
     } else if (mag3State == LOW) {
-      Serial.print("3");
+      Serial.print("DuckDuckGoose:3");
     } else {
-    Serial.print("0");
+    Serial.print("DuckDuckGoose:0");
   }
   
   Serial.println();

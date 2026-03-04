@@ -26,17 +26,17 @@ export class ArduinoController {
   }
 
   //FUNC get choice (4 instances, one for each creature)
-  getCharacter1Choice() {
-    return this.creature1Data;
-  }
-  getCharacter2Choice() {
-    return this.creature2Data;
-  }
-  getCharacter3Choice() {
-    return this.creature3Data;
-  }
-  getCharacter4Choice() {
-    return this.creature4Data;
+  getCharacterChoice(species) {
+    let creature = species.trim();
+    if (creature == this.creature1Data.creature) {
+      return this.creature1Data.choice;
+    } else if (creature == this.creature2Data.creature) {
+      return this.creature2Data.choice;
+    } else if (creature == this.creature3Data.creature) {
+      return this.creature3Data.choice;
+    } else if (creature == this.creature4Data.creature) {
+      return this.creature4Data.choice;
+    }
   }
 
   //FUNC get button press (4 instances, one for each creature)?

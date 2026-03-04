@@ -17,9 +17,10 @@ const SUBSCRIBERS = { pedestal: [] };
 PORT.on("open", () => console.log("Port open"));
 
 PARSER.on("data", (data) => {
-  let newData = data.trim();
-  notify("pedestal", {
-    selectedPedestal: newData[0],
+  let newData = data.split(":").map((s) => s.trim());
+  notify("pedestal3", {
+    creature: newData[0],
+    choice: newData[1],
   });
 });
 

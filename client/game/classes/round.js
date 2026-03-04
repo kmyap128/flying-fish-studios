@@ -11,15 +11,10 @@ export class Round {
     //type
     this.type = SCENARIO_TYPES[type];
     //media
+    this.media = [];
   }
 
   //FUNC timer countdown
   //FUNC update round
-  update() {
-    this.elapsed = (millis() - this.startTime) / 1000;
-
-    this.timeRemaining = Math.max(this.startTime - Math.floor(this.elapsed), 0);
-  }
-
-  
+  update() {}
 }

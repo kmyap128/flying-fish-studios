@@ -1,4 +1,3 @@
-import { ArduinoController } from "./controllers/ArduinoController";
 import { CreaturePlayer } from "./classes/creaturePlayer";
 import { ImpostorPlayer } from "./classes/impostorPlayer";
 import { Game } from "./classes/game";
@@ -14,10 +13,54 @@ window.JACKALOPE_CHOICE;
 window.DUCKDUCKGOOSE_CHOICE;
 window.DINOGON_CHOICE;
 //regular variables
-const NINETAIL = new CreaturePlayer("Nine-Tail Fish", "", "", "");
-const JACKALOPE = new CreaturePlayer("Jackalope", "", "", "");
-const DUCKDUCKGOOSE = new CreaturePlayer("Duck Duck Goose", "", "", "");
-const DINOGON = new CreaturePlayer("Dinogon", "", "", "");
+
+let nineTail;
+let jackalope;
+let duckDuckGoose;
+let dinogon;
+
+fetch("/data/scenarios.json")
+  .then((res) => res.json())
+  .then((data) => {
+    creatures = data;
+
+    nineTail = Object.entries(creatures.ntf || null);
+    jackalope = Object.entries(creatures.jl || null);
+    duckDuckGoose = Object.entries(creatures.ddg || null);
+    dinogon = Object.entries(creatures.dg || null);
+
+    startGame();
+  });
+const NINETAIL = new CreaturePlayer(
+  ntf.name,
+  ntf.species,
+  ntf.image,
+  ntf.description,
+  ntf.item,
+);
+const JACKALOPE = new CreaturePlayer(
+  jl.name,
+  jl.species,
+  jl.image,
+  jl.description,
+  jl.item,
+);
+const DUCKDUCKGOOSE = new CreaturePlayer(
+  ddg.name,
+  ddg.species,
+  ddg.image,
+  ddg.description,
+  ddg.item,
+);
+const DINOGON = new CreaturePlayer(
+  dg.name,
+  dg.species,
+  dg.image,
+  dg.description,
+  dg.item,
+);
+
+const CREATURES = [NINETAIL, JACKALOPE, DUCKDUCKGOOSE, DINOGON];
 
 let nineTailChoice;
 let jackalopeChoice;
@@ -26,6 +69,9 @@ let dinogonChoice;
 
 //FUNC init
 function init() {
+  let impostor = Math.floor(Math.random() * 4);
+  CREATURES[impostor].makeImpostor();
+
   //trigger state change (to start)
   GAME.stateChange("start");
 }
@@ -33,15 +79,12 @@ function init() {
 //FUNC update
 function update() {
   //get data
-  nineTailChoice = ARDUINO_CONTROLLER.getCharacter1Choice();
-  jackalopeChoice = ARDUINO_CONTROLLER.getCharacter2Choice();
-  duckDuckGooseChoice = ARDUINO_CONTROLLER.getCharacter3Choice();
-  dinogonChoice = ARDUINO_CONTROLLER.getCharacter4Choice();
+  CREATURES.forEach((creature) => {
+    creature.update();
+  });
   //update game
   GAME.update();
 }
 
 //FUNC trigger html event
-function triggerEvent() {
-
-}
+function triggerEvent() {}
