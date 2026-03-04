@@ -1,3 +1,4 @@
+// TODO: FIGURE OUT IF MULTIPLE INSTANCES OF THE SAME HTML FILE WILL RUN THE SAME OR DIFFERENT INSTANCES OF MANAGER
 import { ArduinoController } from "./controllers/ArduinoController";
 import { CreaturePlayer } from "./classes/creaturePlayer";
 import { ImpostorPlayer } from "./classes/impostorPlayer";
