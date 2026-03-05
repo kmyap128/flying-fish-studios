@@ -1,6 +1,6 @@
 import './wizardBar.css'
 
-export function WizardBar({ value = 15 }) {
+export function WizardBar({ value }) {
   const maxValue = 15;
   const fillPercent = (value / maxValue) * 100;
 
