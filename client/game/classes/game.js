@@ -94,7 +94,11 @@ export class Game {
     this.selectedOption = null;
     this.lockInButton.disabled = true;
 
-    this.round.startTimer(this.timerElement, this.circle);
+    this.round.startTimer(
+      this.timerElement,
+      this.circle,
+      () => this.showTimeUpLoseScreen()
+    );
   }
 
   //FUNC load current scenario
@@ -161,8 +165,8 @@ export class Game {
 
   //FUNC win screen
   showWinScreen() {
-    document.getElementById("scenario-name").textContent = "Game Over";
-    document.getElementById("scenario").textContent = "You Win!! :DDDDDDD";
+    document.getElementById("scenario-name").textContent = "FREEDOM!!!";
+    document.getElementById("scenario").textContent = "YOU SUCCESSFULLY MADE IT BACK HOME!! :DDDDDDD";
 
     this.optionButtons.forEach(btn => btn.style.display = "none");
     this.lockInButton.style.display = "none";
@@ -179,6 +183,15 @@ export class Game {
     this.lockInButton.style.display = "none";
 
     clearInterval(this.round.countdown);
+  }
+  
+  //FUNC time up lose screen
+  showTimeUpLoseScreen() {
+    document.getElementById("scenario-name").textContent = "TOO SLOW!!";
+    document.getElementById("scenario").textContent = "YOU TOOK TOO LONG AND THE WIZARD CAUGHT UP! ( x _ x )";
+
+    this.optionButtons.forEach(btn => btn.style.display = "none");
+    this.lockInButton.style.display = "none";
   }
 
   //FUNC trigger state change

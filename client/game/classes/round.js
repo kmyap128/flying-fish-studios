@@ -14,7 +14,7 @@ export class Round {
   }
 
   //FUNC timer countdown
-  startTimer(timerElement, circle) {
+  startTimer(timerElement, circle, onTimeUp) {
     this.timeRemaining = this.totalTime;
 
     timerElement.textContent = this.timeRemaining;
@@ -34,7 +34,10 @@ export class Round {
 
       if (this.timeRemaining <= 0) {
         clearInterval(this.countdown);
-        console.log("TIME UP");
+        
+        if (onTimeUp){
+          onTimeUp();
+        }
       }
     }, 1000);
   }
