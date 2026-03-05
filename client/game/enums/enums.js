@@ -20,7 +20,7 @@ const SCENARIO_TYPES = {
   SACRIFICE: "sacrifice",
 };
 
-const STATES = {
+export const STATES = {
   START: "start",
   ONBOARDING: "onboarding",
   ONGOING: "ongoing",

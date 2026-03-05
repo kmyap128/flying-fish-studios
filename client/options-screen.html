@@ -63,158 +63,154 @@
     <button id="completeButton">LOCK IN ANSWER</button>
 
     <script>
-        let timeLeft = 10;
-        const totalTime = 10;
-        let countdown = null
-        const timerElement = document.getElementById("timer");
-        const circle = document.querySelector(".timer-circle");
+        // function startTimer() {
+        //     timeLeft = totalTime;
 
-        function startTimer() {
-            timeLeft = totalTime;
+        //     timerElement.textContent = timeLeft;
+        //     circle.style.background = `conic-gradient(#bb0000 360deg, #222 0deg)`;
 
-            timerElement.textContent = timeLeft;
-            circle.style.background = `conic-gradient(#bb0000 360deg, #222 0deg)`;
+        //     if (countdown) {
+        //         clearInterval(countdown);
+        //     }
 
-            if (countdown) {
-                clearInterval(countdown);
-            }
+        //     countdown = setInterval(() => {
+        //         timeLeft--;
 
-            countdown = setInterval(() => {
-                timeLeft--;
+        //         timerElement.textContent = timeLeft;
 
-                timerElement.textContent = timeLeft;
+        //         let progress = (timeLeft / totalTime) * 360;
+        //         circle.style.background = `conic-gradient(#bb0000 ${progress}deg, #222 0deg)`;
 
-                let progress = (timeLeft / totalTime) * 360;
-                circle.style.background = `conic-gradient(#bb0000 ${progress}deg, #222 0deg)`;
+        //         if (timeLeft <= 0) {
+        //             clearInterval(countdown);
+        //             console.log("TIME UP");
+        //         }
+        //     }, 1000);
+        // }
 
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    console.log("TIME UP");
-                }
-            }, 1000);
-        }
+        // const optionButtons = document.querySelectorAll(".option");
+        // const lockInButton = document.getElementById("completeButton");
 
-        const optionButtons = document.querySelectorAll(".option");
-        const lockInButton = document.getElementById("completeButton");
+        // let selectedOption = null;
+        // lockInButton.disabled = true;
 
-        let selectedOption = null;
-        lockInButton.disabled = true;
+        // optionButtons.forEach((button) => {
+        //     button.addEventListener("click", () => {
 
-        optionButtons.forEach((button) => {
-            button.addEventListener("click", () => {
+        //         // Remove previous selection
+        //         optionButtons.forEach(btn => btn.classList.remove("selected"));
 
-                // Remove previous selection
-                optionButtons.forEach(btn => btn.classList.remove("selected"));
+        //         // Mark current as selection
+        //         button.classList.add("selected");
+        //         selectedOption = button.textContent;
 
-                // Mark current as selection
-                button.classList.add("selected");
-                selectedOption = button.textContent;
+        //         // Enable the lock in button
+        //         lockInButton.disabled = false;
+        //     });
+        // });
 
-                // Enable the lock in button
-                lockInButton.disabled = false;
-            });
-        });
+        // lockInButton.addEventListener("click", () => {
+        //     if (!selectedOption) return;
 
-        lockInButton.addEventListener("click", () => {
-            if (!selectedOption) return;
+        //     clearInterval(countdown);
 
-            clearInterval(countdown);
+        //     console.log("LOCKED IN:", selectedOption);
+        //     currentCategoryIndex++;
+        //     loadCurrentScenario();
+        // });
 
-            console.log("LOCKED IN:", selectedOption);
-            currentCategoryIndex++;
-            loadCurrentScenario();
-        });
-
-        let allScenarios = {};
-        let obstacleScenarios = [];
-        let combatScenarios = [];
-        let itemScenarios = [];
-        let sacrificeScenarios = [];
-        let bonusScenarios = [];
-        let deilemaScenarios = [];
+        // let allScenarios = {};
+        // let obstacleScenarios = [];
+        // let combatScenarios = [];
+        // let itemScenarios = [];
+        // let sacrificeScenarios = [];
+        // let bonusScenarios = [];
+        // let deilemaScenarios = [];
 
 
-        fetch("/data/scenarios.json")
-            .then(res => res.json())
-            .then(data => {
-                allScenarios = data;
+        // fetch("/data/scenarios.json")
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         allScenarios = data;
 
-                obstacleScenarios = Object.entries(allScenarios.obstacle);
-                combatScenarios = Object.entries(data.combat || {});
-                itemScenarios = Object.entries(data.item || {});
-                sacrificeScenarios = Object.entries(data.sacrifice || {});
-                bonusScenarios = Object.entries(data.bonus || {});
-                dilemmaScenarios = Object.entries(data.dilemma || {});
+        //         obstacleScenarios = Object.entries(allScenarios.obstacle);
+        //         combatScenarios = Object.entries(data.combat || {});
+        //         itemScenarios = Object.entries(data.item || {});
+        //         sacrificeScenarios = Object.entries(data.sacrifice || {});
+        //         bonusScenarios = Object.entries(data.bonus || {});
+        //         dilemmaScenarios = Object.entries(data.dilemma || {});
 
-                startGame();
-            });
+        //         startGame();
+        //     });
 
-        const scenarioFlow = [
-            () => obstacleScenarios,
-            () => combatScenarios,
-            () => itemScenarios,
-            () => sacrificeScenarios,
-            () => bonusScenarios,
-            () => dilemmaScenarios
-        ];
+        // const scenarioFlow = [
+        //     () => obstacleScenarios,
+        //     () => combatScenarios,
+        //     () => itemScenarios,
+        //     () => sacrificeScenarios,
+        //     () => bonusScenarios,
+        //     () => dilemmaScenarios
+        // ];
 
-        let currentCategoryIndex = 0;
+        // let currentCategoryIndex = 0;
 
-        function startGame() {
-            currentCategoryIndex = 0;
-            loadCurrentScenario();
-        }
+        // function startGame() {
+        //     currentCategoryIndex = 0;
+        //     loadCurrentScenario();
+        // }
 
-        function loadCurrentScenario() {
+        // function loadCurrentScenario() {
 
-            if (currentCategoryIndex >= scenarioFlow.length) {
-                showWinScreen();
-                return;
-            }
+        //     if (currentCategoryIndex >= scenarioFlow.length) {
+        //         showWinScreen();
+        //         return;
+        //     }
 
-            const currentCategory = scenarioFlow[currentCategoryIndex]();
+        //     const currentCategory = scenarioFlow[currentCategoryIndex]();
 
-            if (!currentCategory || currentCategory.length === 0) {
-                currentCategoryIndex++;
-                loadCurrentScenario();
-                return;
-            }
+        //     if (!currentCategory || currentCategory.length === 0) {
+        //         currentCategoryIndex++;
+        //         loadCurrentScenario();
+        //         return;
+        //     }
 
-            const randomIndex = Math.floor(Math.random() * currentCategory.length);
-            const [scenarioName, scenarioData] = currentCategory[randomIndex];
+        //     const randomIndex = Math.floor(Math.random() * currentCategory.length);
+        //     const [scenarioName, scenarioData] = currentCategory[randomIndex];
 
-            document.getElementById("scenario-name").textContent = scenarioName;
-            document.getElementById("scenario").textContent = scenarioData.scenario;
+        //     document.getElementById("scenario-name").textContent = scenarioName;
+        //     document.getElementById("scenario").textContent = scenarioData.scenario;
 
-            const options = Object.values(scenarioData.options);
+        //     const options = Object.values(scenarioData.options);
 
-            optionButtons.forEach((button, index) => {
-                if (index < options.length) {
-                    button.style.display = "inline-block"; // show it
-                    button.textContent = options[index][0];
-                    button.disabled = false;
-                    button.classList.remove("selected");
-                } else {
-                    button.style.display = "none"; // hide extra buttons
-                }
-            });
+        //     optionButtons.forEach((button, index) => {
+        //         if (index < options.length) {
+        //             button.style.display = "inline-block"; // show it
+        //             button.textContent = options[index][0];
+        //             button.disabled = false;
+        //             button.classList.remove("selected");
+        //         } else {
+        //             button.style.display = "none"; // hide extra buttons
+        //         }
+        //     });
 
-            selectedOption = null;
-            lockInButton.disabled = true;
+        //     selectedOption = null;
+        //     lockInButton.disabled = true;
 
-            startTimer();
-        }
+        //     startTimer();
+        // }
 
-        function showWinScreen() {
-            document.getElementById("scenario-name").textContent = "Game Over";
-            document.getElementById("scenario").textContent = "You Win! 🎉";
+        // function showWinScreen() {
+        //     document.getElementById("scenario-name").textContent = "Game Over";
+        //     document.getElementById("scenario").textContent = "You Win! 🎉";
 
-            optionButtons.forEach(btn => btn.style.display = "none");
-            lockInButton.style.display = "none";
+        //     optionButtons.forEach(btn => btn.style.display = "none");
+        //     lockInButton.style.display = "none";
 
-            clearInterval(countdown);
-        }
+        //     clearInterval(countdown);
+        // }
     </script>
+    <script type="module" src="./src/optionsScreen.js"></script>
+
 </body>
 
 </html>
