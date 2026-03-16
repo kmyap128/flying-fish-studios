@@ -15,7 +15,10 @@ APP.use("/media", EXPRESS.static("media"));
 APP.use("/data", EXPRESS.static(path.join(__dirname, "../data")));
 
 // parse arduino data (option selections and button press)
-ARDUINO_PARSER.subscribe("pedestal", (data) => io.emit("pedestalData", data));
+ARDUINO_PARSER.subscribe("pedestal1", (data) => io.emit("pedestal1Data", data));
+ARDUINO_PARSER.subscribe("pedestal2", (data) => io.emit("pedestal2Data", data));
+ARDUINO_PARSER.subscribe("pedestal3", (data) => io.emit("pedestal3Data", data));
+ARDUINO_PARSER.subscribe("pedestal4", (data) => io.emit("pedestal4Data", data));
 
 SERVER.listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);
