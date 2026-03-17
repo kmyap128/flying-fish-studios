@@ -1,12 +1,12 @@
 @font-face {
-  font-family: 'Chinese Rocks';
-  src: url('./media/fonts/chinese-rocks-rg.otf') format('opentype');
+  font-family: 'Kanit';
+  src: url('./media/fonts/Kanit/Kanit-Medium.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 :root {
-  font-family: 'Chinese Rocks', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Kanit', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
