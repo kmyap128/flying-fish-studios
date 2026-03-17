@@ -1,12 +1,12 @@
 import { Round } from "./round.js";
 import { STATES } from "./enums/enums.js";
+import { Scenario } from "./scenario.js";
 
 export class Game {
   constructor() {
     //CONSTRUCTOR
     //players
     this.players = [];
-    // //impostor
     this.state = STATES.START;
     // stage
     this.stage = 0;
@@ -19,6 +19,8 @@ export class Game {
     this.currentScenario = null;
     this.currentOptions = null;
     this.currentType = null;
+
+    this.round = null;
 
     // Callbacks (React will assign these)
     this.onScenarioChange = null;
@@ -41,38 +43,9 @@ export class Game {
     ];
   }
 
-  //  //FUNC start round
-  //   startRound(scenario, options, type, media) {
-  //     this.round = new Round(scenario, options, type, media);
-  //     this.state = STATES.SCENARIO;
-  //     this.currentOptions = options;
-  //     this.currentType = type;
-
-  //     document.getElementById("scenario-name").textContent = scenario.name;
-  //     document.getElementById("scenario").textContent = scenario.text;
-
-  //     this.optionButtons.forEach((button, index) => {
-  //       if (index < options.length) {
-  //         button.style.display = "inline-block";
-  //         button.textContent = options[index][0];
-  //         button.disabled = false;
-  //         button.classList.remove("selected");
-  //       } else {
-  //         button.style.display = "none";
-  //       }
-  //     });
-
-  //     this.selectedOption = null;
-  //     this.lockInButton.disabled = true;
-
-  //     this.round.startTimer(
-  //       this.timerElement,
-  //       this.circle,
-  //       () => this.showTimeUpLoseScreen()
-  //     );
-  //   }
-
   //FUNC load current scenario
+  loadCurrentRound() {}
+
   loadCurrentScenario() {
     if (this.currentCategoryIndex >= this.scenarioFlow.length) {
       this.endGame("win");
@@ -90,29 +63,19 @@ export class Game {
     const randomIndex = Math.floor(Math.random() * currentCategory.length);
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
 
-    const options = Object.values(scenarioData.options);
+    this.currentScenario = new Scenario(scenarioName, scenarioData);
 
-    this.currentScenario = {
-      name: scenarioName,
-      text: scenarioData.scenario,
-      media: {
-        background: scenarioData.background,
-        sound: scenarioData.sound,
-        images: scenarioData.images,
-        animation: scenarioData.animation,
-      },
-    };
-
-    this.currentOptions = options;
-    this.currentType = scenarioData.type;
     this.state = STATES.SCENARIO;
 
     if (this.onScenarioChange) {
-      this.onScenarioChange({
-        scenario: this.currentScenario,
-        options: options,
-        type: this.currentType,
-      });
+      this.onScenarioChange(
+        (this.round = new Round(
+          this.currentScenario,
+          this.currentScenario.options,
+          this.currentScenario.type,
+          this.currentScenario.media,
+        )),
+      );
     }
   }
 
@@ -149,6 +112,15 @@ export class Game {
     }
   }
 
+  //FUNC assign imposter
+  //chose random int between 1-3/1-4 (depending on number of players)
+  //assign imposter role (impostor redirect)
+  assignImpostor() {
+    let randomInt = (Math.random() * this.players.length()).floor();
+
+    this.players[randomInt].makeImpostor();
+  }
+
   // //FUNC win screen
   //   showWinScreen() {
   //     document.getElementById("scenario-name").textContent = "FREEDOM!!!";
@@ -179,18 +151,4 @@ export class Game {
   //     this.optionButtons.forEach(btn => btn.style.display = "none");
   //     this.lockInButton.style.display = "none";
   //   }
-
-  //   //FUNC trigger state change
-  //   stateChange(state) {
-  //     this.state = STATES[state];
-  //   }
-
-  //FUNC assign imposter
-  //chose random int between 1-3/1-4 (depending on number of players)
-  //assign imposter role (impostor redirect)
-  assignImpostor() {
-    let randomInt = (Math.random() * this.players.length()).floor();
-
-    this.players[randomInt].makeImpostor();
-  }
 }
