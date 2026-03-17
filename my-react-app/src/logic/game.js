@@ -68,14 +68,7 @@ export class Game {
     this.state = STATES.SCENARIO;
 
     if (this.onScenarioChange) {
-      this.onScenarioChange(
-        (this.round = new Round(
-          this.currentScenario,
-          this.currentScenario.options,
-          this.currentScenario.type,
-          this.currentScenario.media,
-        )),
-      );
+      this.onScenarioChange((this.round = new Round(this.currentScenario)));
     }
   }
 

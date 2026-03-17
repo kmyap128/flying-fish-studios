@@ -3,7 +3,7 @@ export class Scenario {
     this.name = scenarioName;
     this.text = scenarioData.scenario;
     this.options = Object.values(scenarioData.options);
-    this.type = scenarioData.type;
+    this.type = SCENARIO_TYPES[scenarioData.type];
     this.media = {
       background: scenarioData.background,
       sound: scenarioData.sound,
