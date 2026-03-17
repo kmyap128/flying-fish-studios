@@ -15,7 +15,7 @@ export default function ReviewScreen() {
     >
       <div id="content-container">
         <WizardBar value={2} />
-
+        
       </div>
     </div>
   )
