@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Chinese Rocks';
-  src: url('../../media/fonts/chinese-rocks-rg.otf') format('opentype');
+  src: url('../../../media/fonts/chinese-rocks-rg.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
