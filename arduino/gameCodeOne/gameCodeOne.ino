@@ -45,6 +45,8 @@ void loop() {
     Serial.print("0");
   }
 
+  Serial.print(" | ");
+
   Serial.print("Pedestal2: ")
 
     if (sta2mag1State == LOW) {
@@ -56,8 +58,6 @@ void loop() {
     } else {
     Serial.print("0");
   }
-
-  Serial.print(" | ");
   
   Serial.println();
 }

@@ -231,8 +231,8 @@
     "Trapped Ogre": {
       "scenario": "An ogre has fallen into a deep pit. 'HEY... little help here?' A glowing potion rests just outside the hole.",
       "options": {
-        "helpful": ["Help him climb out", ""],
-        "selfish": ["Steal the potion", ""]
+        "helpful": ["Help him climb out", 1, ""],
+        "selfish": ["Steal the potion", [0, ""], [2, ""]]
       },
       "sound": "",
       "background": "",
@@ -242,8 +242,8 @@
     "Abandoned Cart": {
       "scenario": "A gnome's cart sits against a tree, a goblin is taking items from it and ushers you to help while the gnome doesn't notice.",
       "options": {
-        "helpful": ["Yell to the gnome and warn him", ""],
-        "selfish": ["Raid the cart with the goblin", ""]
+        "helpful": ["Yell to the gnome and warn him", 1, ""],
+        "selfish": ["Raid the cart with the goblin", [0, ""], [2, ""]]
       },
       "sound": "",
       "background": "",
@@ -253,8 +253,8 @@
     "Witch's Soup": {
       "scenario": "A witch stirs a bubbling pond of tadpoles. She claims she means no harm, they're only for soup.",
       "options": {
-        "helpful": ["Save the tadpoles", ""],
-        "selfish": ["Indulge in the soup", ""]
+        "helpful": ["Save the tadpoles", 1, ""],
+        "selfish": ["Indulge in the soup", [0, ""], [2, ""]]
       },
       "sound": "",
       "background": "",
