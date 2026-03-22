@@ -53,11 +53,14 @@ export default function ScenarioScreen() {
   }, [scenarioData])
 
   const handleSelectOption = (index) => {
+    console.log("Selected index:", index)
     game.selectOption(index)
   }
 
   const handleLockIn = () => {
+    console.log("Locking in option", game.selectedOptionIndex)
     game.endRound()
+    console.log("Current Grasp:", game.wizardsGrasp)
   }
 
   return (
@@ -82,6 +85,7 @@ export default function ScenarioScreen() {
               creatureName={'Jackalope'}
               timerStart={5}
               scenarioNumber={game.stage + 1}
+              wizardsGrasp={game.wizardsGrasp}
             />
 
             <ScenarioBlock
@@ -98,6 +102,7 @@ export default function ScenarioScreen() {
               creatureName={'Jackalope'}
               timerStart={10}
               scenarioNumber={game.stage + 1}
+              wizardsGrasp={game.wizardsGrasp}
             />
 
             <ScenarioOption

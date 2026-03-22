@@ -1,8 +1,8 @@
 import './wizardBar.css'
 
-export function WizardBar({ value }) {
+export function WizardBar({ wizardsGrasp }) {
   const maxValue = 15;
-  const fillPercent = (value / maxValue) * 100;
+  const fillPercent = (wizardsGrasp / maxValue) * 100;
 
   return (
     <div className="wizard-bar">
@@ -10,7 +10,7 @@ export function WizardBar({ value }) {
           className="wizard-fill"
           style={{ width: `${fillPercent}%` }}
       />
-      <span className="wizard-text">{value} / {maxValue}</span>
+      <span className="wizard-text">{wizardsGrasp} / {maxValue}</span>
     </div>
   )
 }

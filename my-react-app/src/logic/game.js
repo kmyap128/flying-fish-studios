@@ -87,7 +87,7 @@ export class Game {
     }
 
     // Lose Condition
-    if (this.wizardsGrasp >= 3) {
+    if (this.wizardsGrasp >= 15) {
       this.endGame("lose");
       return;
     }
