@@ -1,6 +1,8 @@
-import { ArduinoController } from "./controllers/ArduinoController";
+// import { ArduinoController } from "./controllers/ArduinoController";
+import { KeyboardController } from "../controllers/KeyboardController";
 
-const ARDUINO_CONTROLLER = new ArduinoController();
+// const ARDUINO_CONTROLLER = new ArduinoController();
+const KEYBOARD_CONTROLLER = new KeyboardController();
 
 export class CreaturePlayer {
   constructor(name, species, image, description, item) {
@@ -34,6 +36,7 @@ export class CreaturePlayer {
   }
 
   update() {
-    this.choice = ARDUINO_CONTROLLER.getCharacterChoice(this.species);
+    // this.choice = ARDUINO_CONTROLLER.getCharacterChoice(this.species);
+    this.choice = KEYBOARD_CONTROLLER.getCharacterChoice(this.species);
   }
 }
