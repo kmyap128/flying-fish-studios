@@ -1,4 +1,4 @@
-import { Round } from "./round.js";
+//import { Round } from "./round.js";
 import { STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
 
@@ -44,8 +44,6 @@ export class Game {
   }
 
   //FUNC load current scenario
-  loadCurrentRound() {}
-
   loadCurrentScenario() {
     if (this.currentCategoryIndex >= this.scenarioFlow.length) {
       this.endGame("win");

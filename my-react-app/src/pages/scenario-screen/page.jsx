@@ -1,67 +1,22 @@
-import { Header } from '../../components/hud-ui/header/header.jsx'
-import { ScenarioOption } from '../../components/scenario-ui/scenario-option/scenarioOption.jsx'
-import { ScenarioBlock } from '../../components/scenario-ui/scenario-block/scenarioBlock.jsx'
-import { Options } from '../../components/scenario-ui/options/options.jsx'
-import { Game } from '../../logic/game.js'
-import jackalope from '../../media/assets/characters/jackalope.png'
-import './page.css'
-import { useState, useEffect } from 'react'
+import { Header } from "../../components/hud-ui/header/header.jsx";
+import { ScenarioOption } from "../../components/scenario-ui/scenario-option/scenarioOption.jsx";
+import { ScenarioBlock } from "../../components/scenario-ui/scenario-block/scenarioBlock.jsx";
+import { Options } from "../../components/scenario-ui/options/options.jsx";
+import { Manager } from "../../logic/manager.js";
+import jackalope from "../../media/assets/characters/jackalope.png";
+import "./page.css";
+import { useState, useEffect } from "react";
 
 export default function ScenarioScreen() {
-
-  const [game] = useState(() => new Game())
-  const [scenarioData, setScenarioData] = useState(null)
-  const [gameResult, setGameResult] = useState(null)
-
-  const [mode, setMode] = useState('scenario')
-  const [countdown, setCountdown] = useState(5)
-
   // Initialize game once
   useEffect(() => {
-    game.onScenarioChange = (data) => {
-      setScenarioData(data)
-    }
-
-    game.onGameEnd = (result) => {
-      setGameResult(result)
-    }
-
-    game.loadScenarios().then(() => {
-      game.loadCurrentScenario()
-    })
-  }, [game])
+    Manager.setTransitions();
+  }, [Manager]);
 
   // Restart countdown every time scenario changes
   useEffect(() => {
-    if (!scenarioData) return
-
-    setMode('scenario')
-    setCountdown(5)
-
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval)
-          setMode('options')
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [scenarioData])
-
-  const handleSelectOption = (index) => {
-    console.log("Selected index:", index)
-    game.selectOption(index)
-  }
-
-  const handleLockIn = () => {
-    console.log("Locking in option", game.selectedOptionIndex)
-    game.endRound()
-    console.log("Current Grasp:", game.wizardsGrasp)
-  }
+    Manager.setInterval();
+  }, [Manager.scenarioData]);
 
   return (
     <div
@@ -69,20 +24,19 @@ export default function ScenarioScreen() {
       style={{
         backgroundImage: scenarioData
           ? `url(/backgrounds/${scenarioData.scenario.media.background})`
-          : 'none'
+          : "none",
       }}
     >
       <div id="content-container">
-
         {gameResult && (
           <h1>{gameResult === "win" ? "YOU WIN!" : "YOU LOSE!"}</h1>
         )}
 
-        {!gameResult && mode === 'scenario' && scenarioData && (
+        {!gameResult && mode === "scenario" && scenarioData && (
           <>
             <Header
               image={jackalope}
-              creatureName={'Jackalope'}
+              creatureName={"Jackalope"}
               timerStart={5}
               scenarioNumber={game.stage + 1}
               wizardsGrasp={game.wizardsGrasp}
@@ -95,11 +49,11 @@ export default function ScenarioScreen() {
           </>
         )}
 
-        {!gameResult && mode === 'options' && scenarioData && (
+        {!gameResult && mode === "options" && scenarioData && (
           <>
             <Header
               image={jackalope}
-              creatureName={'Jackalope'}
+              creatureName={"Jackalope"}
               timerStart={10}
               scenarioNumber={game.stage + 1}
               wizardsGrasp={game.wizardsGrasp}
@@ -111,17 +65,14 @@ export default function ScenarioScreen() {
             />
 
             <Options
-              options={scenarioData.options.map(o => o[0])}
+              options={scenarioData.options.map((o) => o[0])}
               onSelect={handleSelectOption}
             />
 
-            <button onClick={handleLockIn}>
-              Lock In
-            </button>
+            <button onClick={handleLockIn}>Lock In</button>
           </>
         )}
-
       </div>
     </div>
-  )
+  );
 }
