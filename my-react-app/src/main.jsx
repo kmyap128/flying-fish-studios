@@ -4,9 +4,10 @@ import './index.css'
 import ScenarioScreen from './pages/scenario-screen/page.jsx'
 import ResultScreen from './pages/result-screen/page.jsx'
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ScenarioScreen />
+    <ScenarioScreen />    
     {/* <ResultScreen /> */}
   </StrictMode>,
 )

@@ -100,7 +100,7 @@ export default function ScenarioScreen() {
             <Header
               image={jackalope}
               creatureName={'Jackalope'}
-              timerStart={10}
+              timerStart={15}
               scenarioNumber={game.stage + 1}
               wizardsGrasp={game.wizardsGrasp}
             />
@@ -111,7 +111,7 @@ export default function ScenarioScreen() {
             />
 
             <Options
-              options={scenarioData.options.map(o => o[0])}
+              options={scenarioData.options}
               onSelect={handleSelectOption}
             />
 

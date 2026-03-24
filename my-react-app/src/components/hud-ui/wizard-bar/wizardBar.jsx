@@ -10,7 +10,7 @@ export function WizardBar({ wizardsGrasp }) {
           className="wizard-fill"
           style={{ width: `${fillPercent}%` }}
       />
-      <span className="wizard-text">{wizardsGrasp} / {maxValue}</span>
+      <span className="wizard-text">{Math.round(fillPercent)}%</span>
     </div>
   )
 }
