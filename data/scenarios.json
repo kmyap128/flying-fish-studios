@@ -4,7 +4,7 @@
       "scenario": "You step into a clearing of towering mushrooms. Their glowing caps slowly swivel, tracking your every movement.",
       "options": {
         "safe": [
-          "Match thier rhythm",
+          "Match their rhythm",
           0,
           "The mushrooms were impressed with how in sync you were, they created a large opening for the fastest route"
         ],
@@ -21,7 +21,7 @@
       },
       "type": "",
       "sound": "",
-      "background": "",
+      "background": "mushrooms-purple.PNG",
       "images": [],
       "animation": ""
     },
@@ -46,7 +46,7 @@
       },
       "type": "",
       "sound": "",
-      "background": "",
+      "background": "forest-day-snails.png",
       "images": [],
       "animation": ""
     },
@@ -59,7 +59,7 @@
       },
       "type": "",
       "sound": "",
-      "background": "",
+      "background": "flowerfield.png",
       "images": [],
       "animation": ""
     }
@@ -74,7 +74,7 @@
       },
       "type": "",
       "sound": "",
-      "background": "",
+      "background": "forest-day-wolf.png",
       "images": [],
       "animation": ""
     },
@@ -87,7 +87,7 @@
       },
       "type": "",
       "sound": "",
-      "background": "",
+      "background": "forest-night-shroombear.png",
       "images": [],
       "animation": ""
     },
@@ -100,7 +100,7 @@
       },
       "type": "",
       "sound": "",
-      "background": "",
+      "background": "pond-notadpoles.png",
       "images": [],
       "animation": ""
     }
@@ -122,7 +122,7 @@
         ]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-gillbert.png",
       "images": [],
       "animation": ""
     },
@@ -134,19 +134,19 @@
         "item 3": ["Glitter Dust", "Prevent your grasp from increasing", ""]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-fountain.png",
       "images": [],
       "animation": ""
     },
     "The Gardener": {
-      "scenario": "Tobias the forset florist tends to his magical flowers and offers you one hiding a mysterious reward.",
+      "scenario": "Tobias the forest florist tends to his magical flowers and offers you one hiding a mysterious reward.",
       "options": {
         "item 1": ["The Lovely Lily", "Heals you of all your ailments", ""],
         "item 2": ["Dandelion Wish", "Sets back your Wizard's Grasp", ""],
         "item 3": ["Midnight Orchid", "Reveals the worst choice", ""]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-gardener.png",
       "images": [],
       "animation": ""
     }
@@ -155,36 +155,36 @@
     "The Statue of the Greedy King": {
       "scenario": "A golden statue blocks the path, its mouth open. It will only move if it 'tastes' something incredibly valuable",
       "options": {
-        "option 1": ["Lose the ability to choose answer one", ""],
-        "option 2": ["Lose the ability to choose answer three", ""],
-        "option 3": ["Lose the ability to choose answer two", ""]
+        "option 1": ["Lose the ability to choose answer one", 1, ""],
+        "option 2": ["Lose the ability to choose answer three", 1, ""],
+        "option 3": ["Lose the ability to choose answer two", 1, ""]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-statue.png",
       "images": [],
       "animation": ""
     },
     "The Glowing Bridge": {
       "scenario": "A narrow bridge made of shimmering blue light stretches over a bottomless ravine, its glow flickering unpredictably.",
       "options": {
-        "option 1": ["Drop your items to reduce weight", ""],
-        "option 2": ["Vote someone to stay behind", ""],
-        "option 3": ["Cross anyways", ""]
+        "option 1": ["Drop your items to reduce weight", 1, ""],
+        "option 2": ["Vote someone to stay behind", 1, ""],
+        "option 3": ["Cross anyways", 1, ""]
       },
       "sound": "",
-      "background": "",
+      "background": "ravine-bridge.png",
       "images": [],
       "animation": ""
     },
     "The Illuminated Portal": {
       "scenario": "A mesmerizing portal hums in the woods, pulling at your mind. You cannot look away unless you please it.",
       "options": {
-        "option 1": ["Toss in your item", ""],
-        "option 2": ["Sacrifice Wizard's Grasp", ""],
-        "option 3": ["Throw in a companion", ""]
+        "option 1": ["Toss in your item", 1, ""],
+        "option 2": ["Sacrifice Wizard's Grasp", 1, ""],
+        "option 3": ["Throw in a companion", 1, ""]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-portal.png",
       "images": [],
       "animation": ""
     }
@@ -198,7 +198,7 @@
         "balanced": ["Listen to their long sales pitch", 1, ""]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-goblin-interns.png",
       "images": [],
       "animation": ""
     },
@@ -210,7 +210,7 @@
         "balanced": ["Sample the cheese", 0, ""]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-cheese-seller.png",
       "images": [],
       "animation": ""
     },
@@ -222,7 +222,7 @@
         "risky": ["The Sunset", 2, ""]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-whimsical-tree.png",
       "images": [],
       "animation": ""
     }
@@ -246,7 +246,7 @@
         "selfish": ["Raid the cart with the goblin", [0, ""], [2, ""]]
       },
       "sound": "",
-      "background": "",
+      "background": "forest-day-goblin-thief.png",
       "images": [],
       "animation": ""
     },
@@ -257,7 +257,7 @@
         "selfish": ["Indulge in the soup", [0, ""], [2, ""]]
       },
       "sound": "",
-      "background": "",
+      "background": "pond-notadpoles-witch.png",
       "images": [],
       "animation": ""
     }

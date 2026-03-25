@@ -2,28 +2,55 @@ import { Header } from "../../components/hud-ui/header/header.jsx";
 import { ScenarioOption } from "../../components/scenario-ui/scenario-option/scenarioOption.jsx";
 import { ScenarioBlock } from "../../components/scenario-ui/scenario-block/scenarioBlock.jsx";
 import { Options } from "../../components/scenario-ui/options/options.jsx";
-import { Manager } from "../../logic/manager.js";
 import jackalope from "../../media/assets/characters/jackalope.png";
 import "./page.css";
 import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3000");
 
 export default function ScenarioScreen() {
+  const [scenarioData, setScenarioData] = useState(null);
+  const [gameResult, setGameResult] = useState(null);
+  const [mode, setMode] = useState("scenario");
+  const [gameState, setGameState] = useState({ stage: 0, wizardsGrasp: 0 });
+
   // Initialize game once
   useEffect(() => {
-    Manager.setTransitions();
-  }, [Manager]);
+    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
+    socket.on("scenarioChange", ({ round, stage, wizardsGrasp }) => {
+      setScenarioData(round.scenarioData);
+      setGameState({ stage, wizardsGrasp });
+    });
+    socket.on("gameEnd", (result) => {
+      setGameResult(result);
+    });
+    return () => {
+      socket.off("connect");
+      socket.off("scenarioChange");
+      socket.off("gameEnd");
+    };
+  }, []);
 
   // Restart countdown every time scenario changes
   useEffect(() => {
-    Manager.setInterval();
-  }, [Manager.scenarioData]);
+    if (!scenarioData) return;
+
+    setMode("scenario");
+
+    const timer = setTimeout(() => {
+      setMode("options");
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [scenarioData]);
 
   return (
     <div
       className="app-container"
       style={{
         backgroundImage: scenarioData
-          ? `url(/backgrounds/${scenarioData.scenario.media.background})`
+          ? `url(/backgrounds/${scenarioData.media.background})`
           : "none",
       }}
     >
@@ -38,13 +65,13 @@ export default function ScenarioScreen() {
               image={jackalope}
               creatureName={"Jackalope"}
               timerStart={5}
-              scenarioNumber={game.stage + 1}
-              wizardsGrasp={game.wizardsGrasp}
+              scenarioNumber={gameState.stage + 1}
+              wizardsGrasp={gameState.wizardsGrasp}
             />
 
             <ScenarioBlock
-              title={scenarioData.scenario.name}
-              description={scenarioData.scenario.text}
+              title={scenarioData.name}
+              description={scenarioData.text}
             />
           </>
         )}
@@ -55,21 +82,18 @@ export default function ScenarioScreen() {
               image={jackalope}
               creatureName={"Jackalope"}
               timerStart={10}
-              scenarioNumber={game.stage + 1}
-              wizardsGrasp={game.wizardsGrasp}
+              scenarioNumber={gameState.stage + 1}
+              wizardsGrasp={gameState.wizardsGrasp}
             />
-
             <ScenarioOption
-              title={scenarioData.scenario.name}
-              description={scenarioData.scenario.text}
+              title={scenarioData.name}
+              description={scenarioData.text}
             />
-
             <Options
               options={scenarioData.options.map((o) => o[0])}
-              onSelect={handleSelectOption}
+              //onSelect={handleSelectOption}
             />
-
-            <button onClick={handleLockIn}>Lock In</button>
+            {/* <button onClick={handleLockIn}>Lock In</button> */}
           </>
         )}
       </div>

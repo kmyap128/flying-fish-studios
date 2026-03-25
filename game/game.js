@@ -1,4 +1,4 @@
-//import { Round } from "./round.js";
+import { Round } from "./round.js";
 import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
 
@@ -27,10 +27,7 @@ export class Game {
     this.onGameEnd = null;
   }
 
-  async loadScenarios() {
-    const res = await fetch("/data/scenarios.json");
-    const data = await res.json();
-
+  loadScenarios(data) {
     this.allScenarios = data;
 
     this.scenarioFlow = [
@@ -66,7 +63,8 @@ export class Game {
     this.state = STATES.SCENARIO;
 
     if (this.onScenarioChange) {
-      this.onScenarioChange((this.round = new Round(this.currentScenario)));
+      this.round = new Round(this.currentScenario);
+      this.onScenarioChange(this.round);
     }
   }
 
@@ -102,6 +100,8 @@ export class Game {
       this.onGameEnd(result); // "win" or "lose"
     }
   }
+
+  assignPlayers() {}
 
   //FUNC assign imposter
   //chose random int between 1-3/1-4 (depending on number of players)

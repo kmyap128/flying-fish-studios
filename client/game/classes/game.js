@@ -3,7 +3,7 @@
 //import round
 import { Round } from "./round.js";
 
-import { STATES } from "../enums/enums.js";
+import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "../enums/enums.js";
 
 import { CreaturePlayer } from "./creaturePlayer.js";
 import { ImpostorPlayer } from "./impostorPlayer.js";
