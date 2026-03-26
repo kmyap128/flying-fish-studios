@@ -1,6 +1,7 @@
 import { Round } from "./round.js";
 import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
+import { CreaturePlayer } from "./creaturePlayer.js";
 
 export class Game {
   constructor() {
@@ -22,9 +23,26 @@ export class Game {
 
     this.round = null;
 
-    // Callbacks (React will assign these)
+    // Callbacks (Server sends these to react)
     this.onScenarioChange = null;
     this.onGameEnd = null;
+    this.onModeChange = null;
+    this.onTimerTick = null;
+    this.timerInterval = null;
+  }
+
+  generateCreatures(data) {
+    data.forEach((character) => {
+      this.players.push(
+        new CreaturePlayer(
+          character.name,
+          character.key,
+          character.image,
+          character.description,
+          character.item,
+        ),
+      );
+    });
   }
 
   loadScenarios(data) {
@@ -59,6 +77,7 @@ export class Game {
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
 
     this.currentScenario = new Scenario(scenarioName, scenarioData);
+    this.currentOptions = this.currentScenario.options;
 
     this.state = STATES.SCENARIO;
 
@@ -66,6 +85,29 @@ export class Game {
       this.round = new Round(this.currentScenario);
       this.onScenarioChange(this.round);
     }
+
+    this.startTimer(5, "scenario", () => {
+      if (this.onModeChange) this.onModeChange("options");
+      this.startTimer(10, "options", () => {
+        this.endRound();
+      });
+    });
+  }
+
+  startTimer(duration, mode, onComplete) {
+    clearInterval(this.timerInterval);
+    let remaining = duration;
+
+    if (this.onTimerTick) this.onTimerTick({ mode, remaining });
+
+    this.timerInterval = setInterval(() => {
+      remaining--;
+      if (this.onTimerTick) this.onTimerTick({ mode, remaining });
+      if (remaining <= 0) {
+        clearInterval(this.timerInterval);
+        onComplete();
+      }
+    }, 1000);
   }
 
   selectOption(index) {
@@ -75,7 +117,12 @@ export class Game {
   //FUNC end round?
   endRound() {
     if (this.currentType !== "item") {
-      const value = this.currentOptions[this.selectedOptionIndex]?.[1];
+      let value;
+      if (this.currentOptions[this.selectedOptionIndex][1]) {
+        value = this.currentOptions[this.selectedOptionIndex][1];
+      } else {
+        value = this.currentOptions[0][1];
+      }
 
       if (typeof value === "number") {
         this.wizardsGrasp += value;
@@ -111,35 +158,4 @@ export class Game {
 
     this.players[randomInt].makeImpostor();
   }
-
-  // //FUNC win screen
-  //   showWinScreen() {
-  //     document.getElementById("scenario-name").textContent = "FREEDOM!!!";
-  //     document.getElementById("scenario").textContent = "YOU SUCCESSFULLY MADE IT BACK HOME!! :DDDDDDD";
-
-  //     this.optionButtons.forEach(btn => btn.style.display = "none");
-  //     this.lockInButton.style.display = "none";
-
-  //     clearInterval(this.round.countdown);
-  //   }
-
-  //   //FUNC lose screen
-  //   showLoseScreen() {
-  //     document.getElementById("scenario-name").textContent = "YOU LOSE!!!";
-  //     document.getElementById("scenario").textContent = "YOU GOT CAPTURED BY THE WIZARD! D:";
-
-  //     this.optionButtons.forEach(btn => btn.style.display = "none");
-  //     this.lockInButton.style.display = "none";
-
-  //     clearInterval(this.round.countdown);
-  //   }
-
-  //   //FUNC time up lose screen
-  //   showTimeUpLoseScreen() {
-  //     document.getElementById("scenario-name").textContent = "TOO SLOW!!";
-  //     document.getElementById("scenario").textContent = "YOU TOOK TOO LONG AND THE WIZARD CAUGHT UP! ( x _ x )";
-
-  //     this.optionButtons.forEach(btn => btn.style.display = "none");
-  //     this.lockInButton.style.display = "none";
-  //   }
 }

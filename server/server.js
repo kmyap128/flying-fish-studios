@@ -35,7 +35,18 @@ game.onScenarioChange = (roundData) => {
     wizardsGrasp: game.wizardsGrasp,
   });
 };
+game.onModeChange = (mode) => {
+  io.emit("modeChange", mode);
+};
+game.onTimerTick = ({ mode, remaining }) => {
+  io.emit("timerTick", { mode, remaining });
+};
 game.onGameEnd = (result) => io.emit("gameEnd", result);
+
+const creaturesPath = path.join(__dirname, "../data/creatures.json");
+const creaturesData = JSON.parse(fs.readFileSync(creaturesPath, "utf-8"));
+game.generateCreatures(creaturesData);
+game.assignImpostor();
 
 //Load scenarios and start
 const scenariosPath = path.join(__dirname, "../data/scenarios.json");
@@ -51,6 +62,9 @@ io.on("connection", (socket) => {
       round: game.round,
       stage: game.stage,
       wizardsGrasp: game.wizardsGrasp,
+      mode: game.mode,
+      timerTick: game.timerTick,
+      remaining: game.remaining,
     });
   }
 });

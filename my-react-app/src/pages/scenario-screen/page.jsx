@@ -14,6 +14,7 @@ export default function ScenarioScreen() {
   const [gameResult, setGameResult] = useState(null);
   const [mode, setMode] = useState("scenario");
   const [gameState, setGameState] = useState({ stage: 0, wizardsGrasp: 0 });
+  const [countdown, setCountdown] = useState(5);
 
   // Initialize game once
   useEffect(() => {
@@ -22,6 +23,12 @@ export default function ScenarioScreen() {
       setScenarioData(round.scenarioData);
       setGameState({ stage, wizardsGrasp });
     });
+    socket.on("modeChange", ({ mode }) => {
+      setMode(newMode);
+    });
+    socket.on("timerTick", ({ remaining }) => {
+      setCountdown(remaining);
+    });
     socket.on("gameEnd", (result) => {
       setGameResult(result);
     });
@@ -29,21 +36,10 @@ export default function ScenarioScreen() {
       socket.off("connect");
       socket.off("scenarioChange");
       socket.off("gameEnd");
+      socket.off("modeChange");
+      socket.off("timerTick");
     };
   }, []);
-
-  // Restart countdown every time scenario changes
-  useEffect(() => {
-    if (!scenarioData) return;
-
-    setMode("scenario");
-
-    const timer = setTimeout(() => {
-      setMode("options");
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [scenarioData]);
 
   return (
     <div
@@ -64,7 +60,7 @@ export default function ScenarioScreen() {
             <Header
               image={jackalope}
               creatureName={"Jackalope"}
-              timerStart={5}
+              timerStart={countdown}
               scenarioNumber={gameState.stage + 1}
               wizardsGrasp={gameState.wizardsGrasp}
             />

@@ -6,7 +6,6 @@ import { Round } from "./round.js";
 import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "../enums/enums.js";
 
 import { CreaturePlayer } from "./creaturePlayer.js";
-import { ImpostorPlayer } from "./impostorPlayer.js";
 
 export class Game {
   constructor(players, impostor, scenarioFlow, optionButtons, lockInButton, timerElement, circle) {

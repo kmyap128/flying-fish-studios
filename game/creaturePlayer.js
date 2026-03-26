@@ -18,6 +18,7 @@ export class CreaturePlayer {
     this.item = window.ITEMS[item];
 
     this.isImpostor = false;
+    this.pedestal = 0;
 
     this.choice = 0;
   }

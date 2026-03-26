@@ -1,21 +1,25 @@
 {
   "Nine-Tailed Fish": {
-    "image": "",
+    "name": "Finley",
+    "image": "fish.png",
     "description": "",
     "item": ""
   },
   "Jackalope": {
-    "image": "",
+    "name": "Sprig",
+    "image": "jackalope.png",
     "description": "",
     "item": ""
   },
   "Duck Duck Goose": {
-    "image": "",
+    "name": "Waddles",
+    "image": "duck.png",
     "description": "",
     "item": ""
   },
   "Dinogon": {
-    "image": "",
+    "name": "Smoulder",
+    "image": "dinosaur.png",
     "description": "",
     "item": ""
   }
