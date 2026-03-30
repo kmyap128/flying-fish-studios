@@ -1,5 +1,5 @@
 // import { ArduinoController } from "./controllers/ArduinoController";
-import { KeyboardController } from "../controllers/KeyboardController";
+import { KeyboardController } from "./controllers/KeyboardController";
 
 // const ARDUINO_CONTROLLER = new ArduinoController();
 const KEYBOARD_CONTROLLER = new KeyboardController();

@@ -43,6 +43,12 @@ export class Game {
         ),
       );
     });
+
+    this.players.forEach((player) => {
+      let pedestals = [1, 2, 3, 4];
+      let randomInt = (Math.random() * this.players.length()).floor();
+      player.pedestal = pedestals.pop(randomInt);
+    });
   }
 
   loadScenarios(data) {
@@ -78,7 +84,6 @@ export class Game {
 
     this.currentScenario = new Scenario(scenarioName, scenarioData);
     this.currentOptions = this.currentScenario.options;
-
     this.state = STATES.SCENARIO;
 
     if (this.onScenarioChange) {
