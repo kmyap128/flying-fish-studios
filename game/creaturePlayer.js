@@ -1,6 +1,6 @@
-// import { ArduinoController } from "./controllers/ArduinoController";
-import { KeyboardController } from "./controllers/KeyboardController";
-
+// import { ArduinoController } from "./controllers/ArduinoController.js";
+import { KeyboardController } from "./controllers/KeyboardController.js";
+import { ITEMS } from "./enums/enums.js";
 // const ARDUINO_CONTROLLER = new ArduinoController();
 const KEYBOARD_CONTROLLER = new KeyboardController();
 
@@ -15,17 +15,17 @@ export class CreaturePlayer {
     //creature description
     this.description = description;
     //creature item
-    this.item = window.ITEMS[item];
-
-    this.isImpostor = false;
+    this.item = ITEMS[item];
     this.pedestal = 0;
 
-    this.choice = 0;
+    this.isImpostor = false;
+
+    this.choice = null;
   }
 
   //FUNC add/change/remove item
   changeItem(item) {
-    this.item = window.ITEMS[item];
+    this.item = ITEMS[item];
   }
 
   makeImpostor() {
@@ -36,8 +36,11 @@ export class CreaturePlayer {
     this.isImpostor = false;
   }
 
-  update() {
-    // this.choice = ARDUINO_CONTROLLER.getCharacterChoice(this.species);
-    this.choice = KEYBOARD_CONTROLLER.getCharacterChoice(this.species);
+  resetChoice() {
+    this.choice = 0;
+  }
+
+  setChoice(choice) {
+    this.choice = choice;
   }
 }

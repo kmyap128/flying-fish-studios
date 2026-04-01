@@ -86,6 +86,8 @@ export class Game {
     this.currentOptions = this.currentScenario.options;
     this.state = STATES.SCENARIO;
 
+    this.players.forEach((p) => p.resetChoice());
+
     if (this.onScenarioChange) {
       this.round = new Round(this.currentScenario);
       this.onScenarioChange(this.round);
@@ -97,6 +99,25 @@ export class Game {
         this.endRound();
       });
     });
+  }
+
+  registerChoice(pedestalIndex, optionIndex) {
+    const player = this.players[pedestalIndex];
+    if (!player) return;
+
+    player.setChoice(optionIndex);
+
+    if (this.onPlayerChoice) {
+      this.onPlayerChoice({
+        pedestalIndex,
+        species: player.species,
+        optionIndex,
+        choices: this.players.map((p) => ({
+          species: p.species,
+          choice: p.choice,
+        })),
+      });
+    }
   }
 
   startTimer(duration, mode, onComplete) {
