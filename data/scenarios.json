@@ -3,17 +3,17 @@
     "Mushrooms Blockade": {
       "scenario": "You step into a clearing of towering mushrooms. Their glowing caps slowly swivel, tracking your every movement.",
       "options": {
-        "safe": [
+        "best": [
           "Match their rhythm",
           0,
           "The mushrooms were impressed with how in sync you were, they created a large opening for the fastest route"
         ],
-        "risky": [
+        "neutral": [
           "Squeeze through the stalks",
           1,
           "While successful, the mushrooms were persistent on not letting you through, causing you to waste a lot of time as well as making you feel quite sore"
         ],
-        "balanced": [
+        "worst": [
           "Ask for safe passage",
           2,
           "The mushrooms felt no desire to let you through, and found you quite laughable"
@@ -28,17 +28,17 @@
     "The Annual Snail Parade": {
       "scenario": "You stumble into the 14th Annual Snail Procession. Tiny banners wave as the snails march with serious determination.",
       "options": {
-        "safe": [
+        "worst": [
           "Wait for them to pass",
           2,
           "The snails truly appreciated this but the parade was far from fast. You wasted a lot of time. So much for being respectful."
         ],
-        "risky": [
+        "best": [
           "Move carefully through them",
           0,
           "The snails were very angry but there's only so much they could do. You managed to zoom by and caused no harm, only an angry, but slow, mob of snails"
         ],
-        "balanced": [
+        "neutral": [
           "Join the parade",
           1,
           "This was not the fastest option but with you joining the parade the snails felt a sense of invigoration. They moved faster and the parade went by quicker, but not by that much"
@@ -53,9 +53,9 @@
     "Floral Grasp": {
       "scenario": "You enter a field of delicate flowers. Their stems gently curl around your ankles, tightening just enough to anchor you in place",
       "options": {
-        "safe": ["Let the flowers tighten.", 2, ""],
-        "risky": ["Sing a soft, calm song.", 0, ""],
-        "balanced": ["Move slowly and carefully.", 1, ""]
+        "worst": ["Let the flowers tighten.", 2, ""],
+        "best": ["Sing a soft, calm song.", 0, ""],
+        "neutral": ["Move slowly and carefully.", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -68,9 +68,9 @@
     "The Wolf Guardian": {
       "scenario": "A giant armored wolf holding a massive sword steps forward and blocks your path.",
       "options": {
-        "safe": ["Gently offer to pet him", 2, ""],
-        "risky": ["Throw a stick at him", 0, ""],
-        "balanced": ["Challenge him to a duel", 1, ""]
+        "worst": ["Gently offer to pet him", 2, ""],
+        "best": ["Throw a stick at him", 0, ""],
+        "neutral": ["Challenge him to a duel", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -81,9 +81,9 @@
     "The Angry Shroombear": {
       "scenario": "A massive bear rears up before you, claws flashing in the moonlight.",
       "options": {
-        "safe": ["Punch it in the stomach", 0, ""],
-        "risky": ["Throw mushrooms at it", 2, ""],
-        "balanced": ["Stand tall and indimidate it", 1, ""]
+        "best": ["Punch it in the stomach", 0, ""],
+        "worst": ["Throw mushrooms at it", 2, ""],
+        "neutral": ["Stand tall and indimidate it", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -94,9 +94,9 @@
     "The Mirror-Image Duel": {
       "scenario": "You reach a crystal-clear pond where your reflection climbs out, intent on taking your place in the real world.",
       "options": {
-        "safe": ["Make stupid faces at it.", 2, ""],
-        "risky": ["Sacrifice your Reflection.", 0, ""],
-        "balanced": ["Fight your reflection.", 1, ""]
+        "worst": ["Make stupid faces at it.", 2, ""],
+        "best": ["Sacrifice your Reflection.", 0, ""],
+        "neutral": ["Fight your reflection.", 1, ""]
       },
       "type": "",
       "sound": "",
@@ -193,9 +193,9 @@
     "The Goblin Interns": {
       "scenario": "Three goblins in oversized business suits hand out aggressively professional flyers.",
       "options": {
-        "safe": ["Take a flyer and encourage them", 2, ""],
-        "risky": ["Smack the flyers away", 0, ""],
-        "balanced": ["Listen to their long sales pitch", 1, ""]
+        "worst": ["Take a flyer and encourage them", 2, ""],
+        "best": ["Smack the flyers away", 0, ""],
+        "neutral": ["Listen to their long sales pitch", 1, ""]
       },
       "sound": "",
       "background": "forest-day-goblin-interns.png",
@@ -205,9 +205,9 @@
     "The Sad Cheese Seller": {
       "scenario": "A tiny mouse chef sits behind a lonely cheese cart. 'No one believes in artisinal forest cheese anymore...'",
       "options": {
-        "safe": ["Help redesign his stand", 1, ""],
-        "risky": ["Question his business", 2, ""],
-        "balanced": ["Sample the cheese", 0, ""]
+        "neutral": ["Help redesign his stand", 1, ""],
+        "worst": ["Question his business", 2, ""],
+        "best": ["Sample the cheese", 0, ""]
       },
       "sound": "",
       "background": "forest-day-cheese-seller.png",
@@ -217,9 +217,9 @@
     "The Whimsical Tree": {
       "scenario": "An ancient and mythical tree blocks your path. 'Answer my riddle,' it booms. 'I am always hungry, I must be fed. The finger I touch soon turns red.",
       "options": {
-        "safe": ["Fire", 0, ""],
-        "balanced": ["A Rose", 1, ""],
-        "risky": ["The Sunset", 2, ""]
+        "neutral": ["Fire", 1, ""],
+        "best": ["A Rose", 0, ""],
+        "worst": ["The Sunset", 2, ""]
       },
       "sound": "",
       "background": "forest-day-whimsical-tree.png",
