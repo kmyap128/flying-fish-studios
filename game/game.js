@@ -22,33 +22,45 @@ export class Game {
     this.currentType = null;
 
     this.round = null;
+    this.timerInterval = null;
 
     // Callbacks (Server sends these to react)
     this.onScenarioChange = null;
     this.onGameEnd = null;
     this.onModeChange = null;
     this.onTimerTick = null;
-    this.timerInterval = null;
+    this.onPlayerChoice;
   }
 
   generateCreatures(data) {
-    data.forEach((character) => {
-      this.players.push(
-        new CreaturePlayer(
-          character.name,
-          character.key,
-          character.image,
-          character.description,
-          character.item,
-        ),
+    const entries = Object.entries(data);
+
+    for (let i = entries.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [entries[i], entries[j]] = [entries[j], entries[i]];
+    }
+
+    this.players = entries.map(([species, character], index) => {
+      return new CreaturePlayer(
+        character.name,
+        species,
+        character.image,
+        character.description,
+        character.item,
+        index,
       );
     });
 
-    this.players.forEach((player) => {
-      let pedestals = [1, 2, 3, 4];
-      let randomInt = (Math.random() * this.players.length()).floor();
-      player.pedestal = pedestals.pop(randomInt);
-    });
+    // this.players.forEach((player) => {
+    //   let pedestals = [1, 2, 3, 4];
+    //   let randomInt = Math.floor(Math.random() * this.players.length);
+    //   player.pedestal = pedestals.splice(randomInt, 1)[0];
+    // });
+
+    console.log(
+      "🐾 Players assigned:",
+      this.players.map((p) => `${p.species} → pedestal ${p.pedestalIndex + 1}`),
+    );
   }
 
   loadScenarios(data) {
@@ -83,6 +95,7 @@ export class Game {
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
 
     this.currentScenario = new Scenario(scenarioName, scenarioData);
+    this.currentType = this.currentScenario.type;
     this.currentOptions = this.currentScenario.options;
     this.state = STATES.SCENARIO;
 
@@ -102,7 +115,7 @@ export class Game {
   }
 
   registerChoice(pedestalIndex, optionIndex) {
-    const player = this.players[pedestalIndex];
+    const player = this.players.find((p) => p.pedestalIndex === pedestalIndex);
     if (!player) return;
 
     player.setChoice(optionIndex);
@@ -114,10 +127,33 @@ export class Game {
         optionIndex,
         choices: this.players.map((p) => ({
           species: p.species,
+          pedestalIndex: p.pedestalIndex,
           choice: p.choice,
         })),
       });
     }
+  }
+
+  getMajorityChoice() {
+    const tally = { best: 0, neutral: 0, worst: 0 };
+    this.players.forEach((p) => {
+      const choice = p.choice ?? "worst";
+      console.log(choice);
+      tally[choice] += 1;
+    });
+
+    let maxVotes = 0;
+    let winning = "";
+
+    for (const [key, votes] of Object.entries(tally)) {
+      if (votes > maxVotes) {
+        maxVotes = votes;
+        winning = this.currentOptions[key];
+      }
+    }
+    console.log(winning);
+
+    return winning;
   }
 
   startTimer(duration, mode, onComplete) {
@@ -142,17 +178,24 @@ export class Game {
 
   //FUNC end round?
   endRound() {
-    if (this.currentType !== "item") {
-      let value;
-      if (this.currentOptions[this.selectedOptionIndex][1]) {
-        value = this.currentOptions[this.selectedOptionIndex][1];
-      } else {
-        value = this.currentOptions[0][1];
-      }
+    clearInterval(this.timerInterval);
 
+    if (this.currentType !== SCENARIO_TYPES.ITEM) {
+      const winningChoice = this.getMajorityChoice();
+      const value = winningChoice[1];
       if (typeof value === "number") {
         this.wizardsGrasp += value;
       }
+    } else {
+      let total = 0;
+      this.players.forEach((player) => {
+        const choiceIndex = player.choice ?? "option 1";
+        const value = this.currentOptions[choiceIndex][1];
+        if (typeof value === "number") {
+          total += value;
+        }
+      });
+      this.wizardsGrasp += total / this.players.length;
     }
 
     // Lose Condition
@@ -167,6 +210,7 @@ export class Game {
   }
 
   endGame(result) {
+    clearInterval(this.timerInterval);
     this.state = STATES.END;
 
     if (this.onGameEnd) {
@@ -174,13 +218,11 @@ export class Game {
     }
   }
 
-  assignPlayers() {}
-
   //FUNC assign imposter
   //chose random int between 1-3/1-4 (depending on number of players)
   //assign imposter role (impostor redirect)
   assignImpostor() {
-    let randomInt = (Math.random() * this.players.length()).floor();
+    let randomInt = Math.floor(Math.random() * this.players.length);
 
     this.players[randomInt].makeImpostor();
   }

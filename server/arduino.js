@@ -3,8 +3,8 @@ const { SerialPort } = require("serialport");
 const { ReadlineParser } = require("@serialport/parser-readline");
 
 //track port (2)
-const PORT1 = new SerialPort({ path: "COM3", baudRate: 9600 });
-const PORT2 = new SerialPort({ path: "COM4", baudRate: 9600 });
+const PORT1 = new SerialPort({ path: "COM3", baudRate: 115200 });
+const PORT2 = new SerialPort({ path: "COM4", baudRate: 115200 });
 //create parsers (2)
 const PARSER1 = PORT1.pipe(new ReadlineParser({ delimiter: "\n" }));
 const PARSER2 = PORT2.pipe(new ReadlineParser({ delimiter: "\n" }));

@@ -1,11 +1,7 @@
-// import { ArduinoController } from "./controllers/ArduinoController.js";
-import { KeyboardController } from "./controllers/KeyboardController.js";
 import { ITEMS } from "./enums/enums.js";
-// const ARDUINO_CONTROLLER = new ArduinoController();
-const KEYBOARD_CONTROLLER = new KeyboardController();
 
 export class CreaturePlayer {
-  constructor(name, species, image, description, item) {
+  constructor(name, species, image, description, item, pedestalIndex) {
     //creature name
     this.name = name;
 
@@ -16,7 +12,7 @@ export class CreaturePlayer {
     this.description = description;
     //creature item
     this.item = ITEMS[item];
-    this.pedestal = 0;
+    this.pedestalIndex = pedestalIndex;
 
     this.isImpostor = false;
 
@@ -37,7 +33,7 @@ export class CreaturePlayer {
   }
 
   resetChoice() {
-    this.choice = 0;
+    this.choice = null;
   }
 
   setChoice(choice) {

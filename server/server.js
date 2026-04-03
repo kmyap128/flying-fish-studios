@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 // import ARDUINO_PARSER from "./arduino";
 import path from "path";
 import fs from "fs";
+import readline from "readline";
 import { fileURLToPath } from "url";
 import { Game } from "../game/game.js";
 
@@ -28,6 +29,7 @@ APP.use("/data", EXPRESS.static(path.join(__dirname, "../data")));
 
 // Single game instance
 const game = new Game();
+
 game.onScenarioChange = (roundData) => {
   io.emit("scenarioChange", {
     round: roundData,
@@ -35,13 +37,19 @@ game.onScenarioChange = (roundData) => {
     wizardsGrasp: game.wizardsGrasp,
   });
 };
+
+game.onPlayerChoice = (choiceData) => {
+  io.emit("playerChoice", choiceData);
+};
 game.onModeChange = (mode) => {
   io.emit("modeChange", mode);
 };
 game.onTimerTick = ({ mode, remaining }) => {
   io.emit("timerTick", { mode, remaining });
 };
-game.onGameEnd = (result) => io.emit("gameEnd", result);
+game.onGameEnd = (result) => {
+  io.emit("gameEnd", result);
+};
 
 const creaturesPath = path.join(__dirname, "../data/creatures.json");
 const creaturesData = JSON.parse(fs.readFileSync(creaturesPath, "utf-8"));
@@ -74,6 +82,38 @@ io.on("connection", (socket) => {
 // ARDUINO_PARSER.subscribe("pedestal2", (data) => io.emit("pedestal2Data", data));
 // ARDUINO_PARSER.subscribe("pedestal3", (data) => io.emit("pedestal3Data", data));
 // ARDUINO_PARSER.subscribe("pedestal4", (data) => io.emit("pedestal4Data", data));
+if (process.stdin.isTTY) {
+  readline.emitKeypressEvents(process.stdin);
+  process.stdin.setRawMode(true);
+
+const keyMap = {
+  1: { pedestal: 0, option: "best" },
+  2: { pedestal: 0, option: "neutral" },
+  3: { pedestal: 0, option: "worst" },
+  q: { pedestal: 1, option: "best" },
+  w: { pedestal: 1, option: "neutral" },
+  e: { pedestal: 1, option: "worst" },
+  a: { pedestal: 2, option: "best" },
+  s: { pedestal: 2, option: "neutral" },
+  d: { pedestal: 2, option: "worst" },
+  z: { pedestal: 3, option: "best" },
+  x: { pedestal: 3, option: "neutral" },
+  c: { pedestal: 3, option: "worst" },
+};
+
+  process.stdin.on("keypress", (str, key) => {
+    if (key.ctrl && key.name === "c") process.exit();
+    if (keyMap[str]) {
+      const { pedestal, option } = keyMap[str];
+      console.log(
+        `⌨️  Key ${str} → pedestal ${pedestal + 1}, option ${option}`,
+      );
+      game.registerChoice(pedestal, option);
+    }
+  });
+
+  console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
+}
 
 SERVER.listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);
