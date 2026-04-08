@@ -2,28 +2,28 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <SparkFun_TMAG5273_Arduino_Library.h>
+#include <SparkFun_I2C_Mux_Arduino_Library.h>
 
-#define NUMBER_OF_SENSORS 2
-#define NUMBER_OF_MAGS 2
-//#define NUMBER_OF_RFID 1
+#define NUMBER_OF_SENSORS 16
+#define NUMBER_OF_MAGS 12
+#define NUMBER_OF_RFID 4
 
-#define RST_PIN_1 9
-#define SS_PIN 4
-
-#define MUX_ADDR 0x70;
+#define RST_PIN 9
+#define SS_PIN_1 4;
+#define SS_PIN_2 5;
+#define SS_PIN_3 6;
+#define SS_PIN_4 7;
 
 TMAG5273 sensors[NUMBER_OF_MAGS];
-int magToMuxNum = { 1, 2 } MFRC522 mfrc522[NUMBER_OF_RFID] = { MFRC522(SS_PIN, RST_PIN_1) };
+uint8_t i2cAddress = TMAG5273_I2C_ADDRESS_INITIAL;
+int magToMuxNum = { 1, 2, 3, 5, 6, 7 }
+
+MFRC522 mfrc522[NUMBER_OF_RFID] = { MFRC522(SS_PIN_1, RST_PIN), MFRC522(SS_PIN_2, RST_PIN), MFRC522(SS_PIN_3, RST_PIN), MFRC522(SS_PIN_4, RST_PIN) };
 
 String pedestal1RFID;
 String pedestal2RFID;
 String pedestal3RFID;
 String pedestal4RFID;
-
-// int pedestal1Pins[4] = {};
-// int pedestal2Pins[4] = {};
-// int pedestal3Pins[4] = {};
-// int pedestal4Pins[4] = {};
 
 String pedestal1Data[2] = {};
 String pedestal2Data[2] = {};
@@ -31,80 +31,93 @@ String pedestal3Data[2] = {};
 String pedestal4Data[2] = {};
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Wire.begin();
   SPI.begin();
 
   for (byte x = 0; x < 8; x++) {
-    disableMuxPort(x);
+    disableMuxPort(x, 0x70);
+    disableMuxPort(x, 0x71);
   }
 
+  int magIndex = 0;
   for (byte x = 0; x < NUMBER_OF_SENSORS; x++) {
+    int threshold = NUMBER_OF_SENSORS / 2;
     int index = magToMuxNum[x];
-    enableMuxPort(index);
-
-    sensors[x] = TMAG5273 sensor;
-    sensor.begin();
-
-    //initialize sensor
-    // if (x < NUMBER_OF_RFID) {
-    //     mfrc522[x].PCD_Init();
-    // } else {
-    //     sensors[x - NUMBER_OF_RFID].begin(TMAG5273_I2C_ADDRESS_INITIAL, Wire);
-    // }
+    uint8_t mux_addr;
+    if (x < threshold) {
+      mux_addr = 0x70;
+    } else {
+      mux_addr = 0x71;
+    }
+    enableMuxPort(index, mux_addr);
+    if (contains(magToMuxNum, x % threshold)) {
+      sensors[magIndex] = TMAG5273 sensor;
+      if (sensors[magIndex].begin(i2cAddress, Wire) == 1) {
+        serial.println("Begin");
+      } else {
+        Serial.print("FAIL ");
+        Serial.println(x);
+        while(1);
+      }
+      magIndex++;
+    } else {
+      int index = x / 4;
+      SPI.begin();
+      mfrc522[index].PCD_Init();
+      for(byte i = 0; i < 6; i++) {
+        key.keyBite[i] = 0xFF;
+      }
+    }
 
     disableMuxPort(x);
   }
 }
 
 void loop() {
+  int magIndex = 0;
   for (byte x = 0; x < NUMBER_OF_SENSORS; x++) {
-    int index = magToMuxNum[x];
-    enableMuxPort(x);
+    if (contains(magToMuxNum, x % threshold)) {
+      int index = magToMuxNum[magIndex];
+    uint8_t mux_addr;
+    if (x < threshold) {
+      mux_addr = 0x70;
+    } else {
+      mux_addr = 0x71;
+    }
+      enableMuxPort(x, mag_addr);
+      if (sensors[magIndex].getMagneticChannel() != 0) {
+        float magX = sensors[magIndex].getXData();
+        float magY = sensors[magIndex].getYData();
+        float magZ = sensors[magIndex].getZData();
 
-    float magX = sensor.getXData();
-    float magY = sensor.getYData();
-    float magZ = sensor.getZData();
+        Serial.print(sensors[magIndex].getI2CAddress());
+        Serial.print(": ");
+        Serial.print(magX);
+        Serial.print(" ");
+        Serial.print(magY);
+        Serial.print(" ");
+        Serial.print(magZ);
+        Serial.print(" ");
+        magIndex++;
+      }
+    } else {
+      int index = x / 4;
+      if (mfrc522[index].PICC_IsNewCardPresent()) {
+        mfrc522[index].PICC_ReadCardSerial();
+        if (index == 0) {
+          pedestal1Data[0] = readBytes(mfrc522[index].uid.uidByte, mfrc522[index].uid.size)
+        } else if (index == 1) {
+          pedestal2Data[0] = readBytes(mfrc522[index].uid.uidByte, mfrc522[index].uid.size)
+        } else if (index == 2) {
+          pedestal3Data[0] = readBytes(mfrc522[index].uid.uidByte, mfrc522[index].uid.size)
+        } else if (index == 3) {
+          pedestal4Data[0] = readBytes(mfrc522[index].uid.uidByte, mfrc522[index].uid.size)
+        }
+      }
+    }
 
-    Serial.print(sensor.getI2CAddress());
-    Serial.print(": ");
-    Serial.print(magX);
-    Serial.print(" ");
-    Serial.print(magY);
-    Serial.print(" ");
-    Serial.print(magZ);
-    Serial.print(" ");
-
-    // if (x < NUMBER_OF_RFID) {
-    //     if (mfrc522[x].PICC_IsNewCardPresent()){
-    //         mfrc522[x].PICC_ReadCardSerial();
-    //         if (x == 0) {
-    //             pedestal1Data[0] = readBytes(mfrc522[x].uid.uidByte, mfrc522[x].uid.size);
-    //         } else if (x == 1) {
-    //             pedestal2Data[0] = readBytes(mfrc522[x].uid.uidByte, mfrc522[x].uid.size);
-    //         } else if (x == 2) {
-    //             pedestal3Data[0] = readBytes(mfrc522[x].uid.uidByte, mfrc522[x].uid.size);
-    //         } else if (x == 3) {
-    //             pedestal4Data[0] = readBytes(mfrc522[x].uid.uidByte, mfrc522[x].uid.size);
-    //         }
-    //     }
-    // } else {
-    //     // read the sensor data
-    //     float magX = sensors[x - NUMBER_OF_RFID].getXData();
-    //     float magY = sensors[x - NUMBER_OF_RFID].getYData();
-    //     float magZ = sensors[x - NUMBER_OF_RFID].getZData();
-    //     // print the data output
-    //     Serial.print(sensors[x - NUMBER_OF_RFID].getI2CAddress());
-    //     Serial.print(": ");
-    //     Serial.print(magX);
-    //     Serial.print(" ");
-    //     Serial.print(magY);
-    //     Serial.print(" ");
-    //     Serial.print(magZ);
-    //     Serial.print(" ");
-    // }
-
-    disableMuxPort(x);
+    disableMuxPort(x, mux_addr);
   }
 
   printPedestal1Data();
@@ -154,4 +167,13 @@ void printPedestal4Data() {
   Serial.print(pedestal4Data[0]);
   Serial.print(" ");
   Serial.print(pedestal4Data[1]);
+}
+
+bool contains([int] array, int val) {
+  for (int x = 0; x < array.length; x++) {
+    if (array[x] == val) {
+      return true;
+    }
+  }
+  return false;
 }

@@ -19,7 +19,7 @@
           "The mushrooms felt no desire to let you through, and found you quite laughable"
         ]
       },
-      "type": "",
+      "type": "synergy",
       "sound": "",
       "background": "mushrooms-purple.PNG",
       "images": [],
@@ -44,7 +44,7 @@
           "This was not the fastest option but with you joining the parade the snails felt a sense of invigoration. They moved faster and the parade went by quicker, but not by that much"
         ]
       },
-      "type": "",
+      "type": "synergy",
       "sound": "",
       "background": "forest-day-snails.png",
       "images": [],
@@ -57,7 +57,7 @@
         "best": ["Sing a soft, calm song.", 0, ""],
         "neutral": ["Move slowly and carefully.", 1, ""]
       },
-      "type": "",
+      "type": "synergy",
       "sound": "",
       "background": "flowerfield.png",
       "images": [],
@@ -72,7 +72,7 @@
         "best": ["Throw a stick at him", 0, ""],
         "neutral": ["Challenge him to a duel", 1, ""]
       },
-      "type": "",
+      "type": "synergy",
       "sound": "",
       "background": "forest-day-wolf.png",
       "images": [],
@@ -85,7 +85,7 @@
         "worst": ["Throw mushrooms at it", 2, ""],
         "neutral": ["Stand tall and indimidate it", 1, ""]
       },
-      "type": "",
+      "type": "synergy",
       "sound": "",
       "background": "forest-night-shroombear.png",
       "images": [],
@@ -98,7 +98,7 @@
         "best": ["Sacrifice your Reflection.", 0, ""],
         "neutral": ["Fight your reflection.", 1, ""]
       },
-      "type": "",
+      "type": "synergy",
       "sound": "",
       "background": "pond-notadpoles.png",
       "images": [],
@@ -121,6 +121,7 @@
           ""
         ]
       },
+      "type": "solo",
       "sound": "",
       "background": "forest-day-gillbert.png",
       "images": [],
@@ -133,6 +134,7 @@
         "option 2": ["Fairy Wand", "Reveal the worst option on a decision", ""],
         "option 3": ["Glitter Dust", "Prevent your grasp from increasing", ""]
       },
+      "type": "solo",
       "sound": "",
       "background": "forest-day-fountain.png",
       "images": [],
@@ -145,6 +147,7 @@
         "option 2": ["Dandelion Wish", "Sets back your Wizard's Grasp", ""],
         "option 3": ["Midnight Orchid", "Reveals the worst choice", ""]
       },
+      "type": "solo",
       "sound": "",
       "background": "forest-day-gardener.png",
       "images": [],
@@ -159,6 +162,7 @@
         "option 2": ["Lose the ability to choose answer three", 1, ""],
         "option 3": ["Lose the ability to choose answer two", 1, ""]
       },
+      "type": "solo",
       "sound": "",
       "background": "forest-day-statue.png",
       "images": [],
@@ -171,6 +175,7 @@
         "option 2": ["Vote someone to stay behind", 1, ""],
         "option 3": ["Cross anyways", 1, ""]
       },
+      "type": "synergy",
       "sound": "",
       "background": "ravine-bridge.png",
       "images": [],
@@ -183,6 +188,7 @@
         "option 2": ["Sacrifice Wizard's Grasp", 1, ""],
         "option 3": ["Throw in a companion", 1, ""]
       },
+      "type": "synergy",
       "sound": "",
       "background": "forest-day-portal.png",
       "images": [],
@@ -197,6 +203,7 @@
         "best": ["Smack the flyers away", 0, ""],
         "neutral": ["Listen to their long sales pitch", 1, ""]
       },
+      "type": "synergy",
       "sound": "",
       "background": "forest-day-goblin-interns.png",
       "images": [],
@@ -209,6 +216,7 @@
         "worst": ["Question his business", 2, ""],
         "best": ["Sample the cheese", 0, ""]
       },
+      "type": "synergy",
       "sound": "",
       "background": "forest-day-cheese-seller.png",
       "images": [],
@@ -221,6 +229,7 @@
         "best": ["A Rose", 0, ""],
         "worst": ["The Sunset", 2, ""]
       },
+      "type": "synergy",
       "sound": "",
       "background": "forest-day-whimsical-tree.png",
       "images": [],
@@ -234,6 +243,7 @@
         "helpful": ["Help him climb out", 1, ""],
         "selfish": ["Steal the potion", [0, ""], [2, ""]]
       },
+      "type": "synergy",
       "sound": "",
       "background": "",
       "images": [],
@@ -245,6 +255,7 @@
         "helpful": ["Yell to the gnome and warn him", 1, ""],
         "selfish": ["Raid the cart with the goblin", [0, ""], [2, ""]]
       },
+      "type": "synergy",
       "sound": "",
       "background": "forest-day-goblin-thief.png",
       "images": [],
@@ -256,6 +267,7 @@
         "helpful": ["Save the tadpoles", 1, ""],
         "selfish": ["Indulge in the soup", [0, ""], [2, ""]]
       },
+      "type": "synergy",
       "sound": "",
       "background": "pond-notadpoles-witch.png",
       "images": [],

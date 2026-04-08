@@ -86,20 +86,56 @@ if (process.stdin.isTTY) {
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
 
-const keyMap = {
-  1: { pedestal: 0, option: "best" },
-  2: { pedestal: 0, option: "neutral" },
-  3: { pedestal: 0, option: "worst" },
-  q: { pedestal: 1, option: "best" },
-  w: { pedestal: 1, option: "neutral" },
-  e: { pedestal: 1, option: "worst" },
-  a: { pedestal: 2, option: "best" },
-  s: { pedestal: 2, option: "neutral" },
-  d: { pedestal: 2, option: "worst" },
-  z: { pedestal: 3, option: "best" },
-  x: { pedestal: 3, option: "neutral" },
-  c: { pedestal: 3, option: "worst" },
-};
+  const keyMap = {
+    1: {
+      pedestal: 0,
+      option: game.currentType == "synergy" ? "best" : "option 3",
+    },
+    2: {
+      pedestal: 0,
+      option: game.currentType == "synergy" ? "neutral" : "option 2",
+    },
+    3: {
+      pedestal: 0,
+      option: game.currentType == "synergy" ? "worst" : "option 1",
+    },
+    q: {
+      pedestal: 1,
+      option: game.currentType == "synergy" ? "best" : "option 3",
+    },
+    w: {
+      pedestal: 1,
+      option: game.currentType == "synergy" ? "neutral" : "option 2",
+    },
+    e: {
+      pedestal: 1,
+      option: game.currentType == "synergy" ? "worst" : "option 1",
+    },
+    a: {
+      pedestal: 2,
+      option: game.currentType == "synergy" ? "best" : "option 3",
+    },
+    s: {
+      pedestal: 2,
+      option: game.currentType == "synergy" ? "neutral" : "option 2",
+    },
+    d: {
+      pedestal: 2,
+      option: game.currentType == "synergy" ? "worst" : "option 1",
+    },
+    z: {
+      pedestal: 3,
+      option: game.currentType == "synergy" ? "best" : "option 3",
+    },
+    x: {
+      pedestal: 3,
+      option: game.currentType == "synergy" ? "neutral" : "option 2",
+    },
+    c: {
+      pedestal: 3,
+      option: game.currentType == "synergy" ? "worst" : "option 1",
+    },
+  };
 
   process.stdin.on("keypress", (str, key) => {
     if (key.ctrl && key.name === "c") process.exit();

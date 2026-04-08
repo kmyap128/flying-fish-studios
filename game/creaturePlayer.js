@@ -17,6 +17,7 @@ export class CreaturePlayer {
     this.isImpostor = false;
 
     this.choice = null;
+    this.disabled = null;
   }
 
   //FUNC add/change/remove item

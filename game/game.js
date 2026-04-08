@@ -94,7 +94,11 @@ export class Game {
     const randomIndex = Math.floor(Math.random() * currentCategory.length);
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
 
-    this.currentScenario = new Scenario(scenarioName, scenarioData);
+    this.currentScenario = new Scenario(
+      scenarioName,
+      scenarioData,
+      this.currentCategoryIndex,
+    );
     this.currentType = this.currentScenario.type;
     this.currentOptions = this.currentScenario.options;
     this.state = STATES.SCENARIO;
@@ -180,9 +184,11 @@ export class Game {
   endRound() {
     clearInterval(this.timerInterval);
 
-    if (this.currentType !== SCENARIO_TYPES.ITEM) {
+    if (this.currentType !== "solo") {
       const winningChoice = this.getMajorityChoice();
       const value = winningChoice[1];
+      if (this.currentCategoryIndex == SCENARIO_TYPES.SACRIFICE) {
+      }
       if (typeof value === "number") {
         this.wizardsGrasp += value;
       }
@@ -190,9 +196,22 @@ export class Game {
       let total = 0;
       this.players.forEach((player) => {
         const choiceIndex = player.choice ?? "option 1";
+        console.log(this.currentOptions);
+        console.log(this.currentOptions[choiceIndex]);
         const value = this.currentOptions[choiceIndex][1];
         if (typeof value === "number") {
           total += value;
+        }
+        if (this.currentCategoryIndex == SCENARIO_TYPES.ITEM) {
+          player.item == this.currentScenario.item;
+        } else if (this.currentCategoryIndex == SCENARIO_TYPES.SACRIFICE) {
+          if ((choiceIndex = "option 1")) {
+            player.disabled = 1;
+          } else if ((choiceIndex = "option 2")) {
+            player.disabled = 2;
+          } else {
+            player.disabled = 3;
+          }
         }
       });
       this.wizardsGrasp += total / this.players.length;

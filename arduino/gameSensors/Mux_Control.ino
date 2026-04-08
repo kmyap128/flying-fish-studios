@@ -2,10 +2,8 @@
   Basic control and commands for the PCA9548A/TCA9548A I2C multiplexer
 */
 
-#define MUX_ADDR 0x70 //7-bit unshifted default I2C Address
-
 //Enables a specific port number
-void enableMuxPort(byte portNumber)
+void enableMuxPort(byte portNumber, uint8_t MUX_ADDR)
 {
   if (portNumber > 7) portNumber = 7;
 
@@ -24,7 +22,7 @@ void enableMuxPort(byte portNumber)
 }
 
 //Disables a specific port number
-void disableMuxPort(byte portNumber)
+void disableMuxPort(byte portNumber, uint8_t MUX_ADDR)
 {
   if (portNumber > 7) portNumber = 7;
 
