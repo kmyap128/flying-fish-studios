@@ -6,19 +6,19 @@
         "safe": [
           "Match their rhythm",
           0,
-          "The mushrooms were impressed with how in sync you were, they created a large opening for the fastest route",
+          "The mushrooms assume you are one of them. They open the way for you to go on through.",
           "mushroom-blockade/MushSway.png"
         ],
         "risky": [
           "Squeeze through the stalks",
           1,
-          "While successful, the mushrooms were persistent on not letting you through, causing you to waste a lot of time as well as making you feel quite sore",
+          "The mushrooms are not pleased and put up a fight, but you manage to make it through after a while.",
           "mushroom-blockade/Squeeze.png"
         ],
         "balanced": [
           "Ask for safe passage",
           2,
-          "The mushrooms felt no desire to let you through, and found you quite laughable",
+          "The mushrooms find you funny but after a long time decide you’re kind of pathetic and finally let you through.",
           "mushroom-blockade/Pleaseee.png"
         ]
       },
@@ -34,19 +34,19 @@
         "safe": [
           "Wait for them to pass",
           2,
-          "The snails truly appreciated this but the parade was far from fast. You wasted a lot of time. So much for being respectful.",
+          "The snails move extremely slow… you wasted a lot of time.",
           "snail-parade/Wait.png"
         ],
         "risky": [
           "Move carefully through them",
           0,
-          "The snails were very angry but there's only so much they could do. You managed to zoom by and caused no harm, only an angry, but slow, mob of snails",
+          "The snails are angered by your interruption, but they are too slow to catch up.",
           "snail-parade/Cross.png"
         ],
         "balanced": [
           "Join the parade",
           1,
-          "This was not the fastest option but with you joining the parade the snails felt a sense of invigoration. They moved faster and the parade went by quicker, but not by that much",
+          "You are handed a banner and the snails feel inspired, they barely moved any faster though.",
           "snail-parade/JoinIn.png"
         ]
       },
@@ -59,9 +59,9 @@
     "Floral Grasp": {
       "scenario": "You enter a field of delicate flowers. Their stems gently curl around your ankles, tightening just enough to anchor you in place",
       "options": {
-        "safe": ["Let the flowers tighten.", 2, "", "floral-grasp/Tighten.png"],
-        "risky": ["Sing a soft, calm song.", 0, "", "floral-grasp/Sing.png"],
-        "balanced": ["Move slowly and carefully.", 1, "", "floral-grasp/Slowly.png"]
+        "safe": ["Let the flowers tighten.", 2, "Congratulations, you are now trapped and take forever to rip off all of the flowers.", "floral-grasp/Tighten.png"],
+        "risky": ["Sing a soft, calm song.", 0, "The flowers loosened, they release you and create a beautiful pathway.", "floral-grasp/Sing.png"],
+        "balanced": ["Move slowly and carefully.", 1, "They loosened slightly, impressed by your patience, but it does take a while.", "floral-grasp/Slowly.png"]
       },
       "type": "",
       "sound": "",
@@ -74,9 +74,9 @@
     "The Wolf Guardian": {
       "scenario": "A giant armored wolf holding a massive sword steps forward and blocks your path.",
       "options": {
-        "safe": ["Gently offer to pet him", 2, "", "wolf-guardian/Pet.png"],
-        "risky": ["Throw a stick at him", 0, "", "wolf-guardian/Stick.png"],
-        "balanced": ["Challenge him to a duel", 1, "", "wolf-guardian/Duel.png"]
+        "safe": ["Gently offer to pet him", 2, "He is strictly professional and finds this extremely disrespectful. He claws your hand and roars.", "wolf-guardian/Pet.png"],
+        "risky": ["Throw a stick at him", 0, "Despite everything, he is still a wolf. Instincts surpass honor, he playfully runs after it, making an opening.", "wolf-guardian/Stick.png"],
+        "balanced": ["Challenge him to a duel", 1, "He accepts. It is an exhausting fight and you sustain injuries, but he guides you along as a reward.", "wolf-guardian/Duel.png"]
       },
       "type": "",
       "sound": "",
@@ -87,9 +87,9 @@
     "The Angry Shroombear": {
       "scenario": "A massive bear rears up before you, claws flashing in the moonlight.",
       "options": {
-        "safe": ["Punch it in the stomach", 0, "", "shroombear/Punch.png"],
-        "risky": ["Throw mushrooms at it", 2, "", "shroombear/Throw.png"],
-        "balanced": ["Stand tall and indimidate it", 1, "", "shroombear/Strong.png"]
+        "safe": ["Punch it in the stomach", 0, "A giant fish flew out of its mouth, it was choking and only wanted your help. It shows you a shortcut.", "shroombear/Punch.png"],
+        "risky": ["Throw mushrooms at it", 2, "The bear gets annoyed and claws at you.", "shroombear/Throw.png"],
+        "balanced": ["Stand tall and indimidate it", 1, "It’s confused. You’re confused. The bear walks away in confusion.", "shroombear/Strong.png"]
       },
       "type": "",
       "sound": "",
@@ -100,9 +100,9 @@
     "The Mirror-Image Duel": {
       "scenario": "You reach a crystal-clear pond where your reflection climbs out, intent on taking your place in the real world.",
       "options": {
-        "safe": ["Make stupid faces at it.", 2, "", "mirror-image/Stupid.png"],
-        "risky": ["Sacrifice your Reflection.", 0, "", "mirror-image/Goodbye.png"],
-        "balanced": ["Fight your reflection.", 1, "", "mirror-image/Reflect.png"]
+        "safe": ["Make stupid faces at it.", 2, "It copies you perfectly. You both lose respect for yourselves and sit there in silence for a while.", "mirror-image/Stupid.png"],
+        "risky": ["Sacrifice your Reflection.", 0, "It dramatically fades, “I was cooler” You win anyway.", "mirror-image/Goodbye.png"],
+        "balanced": ["Fight your reflection.", 1, "It mirrors every move. Eventually, this tires it out after a long battle.", "mirror-image/Reflect.png"]
       },
       "type": "",
       "sound": "",
@@ -199,9 +199,9 @@
     "The Goblin Interns": {
       "scenario": "Three goblins in oversized business suits hand out aggressively professional flyers.",
       "options": {
-        "safe": ["Take a flyer and encourage them", 2, "", "goblin-interns/TakeIt.png"],
-        "risky": ["Smack the flyers away", 0, "", "goblin-interns/Smack.png"],
-        "balanced": ["Listen to their long sales pitch", 1, "", "goblin-interns/Listen.png"]
+        "safe": ["Take a flyer and encourage them", 2, "The goblins were secretly working for the wizard and the flyers were coated with magic that traps you briefly.", "goblin-interns/TakeIt.png"],
+        "risky": ["Smack the flyers away", 0, "The goblins panic, they were secretly working for the wizard to sabotage you. You have successfully thwarted their attempt.", "goblin-interns/Smack.png"],
+        "balanced": ["Listen to their long sales pitch", 1, "The goblins trap you there for a long time, this was all a set up to stall for the wizard and you fell for it but you managed to get out of there.", "goblin-interns/Listen.png"]
       },
       "sound": "",
       "background": "forest-day-goblin-interns.png",
@@ -211,9 +211,9 @@
     "The Sad Cheese Seller": {
       "scenario": "A tiny mouse chef sits behind a lonely cheese cart. 'No one believes in artisinal forest cheese anymore...'",
       "options": {
-        "safe": ["Help redesign his stand", 1, "", "cheese-seller/Redesign.png"],
-        "risky": ["Question his business", 2, "", "cheese-seller/Question.png"],
-        "balanced": ["Sample the cheese", 0, "", "cheese-seller/Sample.png"]
+        "safe": ["Help redesign his stand", 1, "It looks amazing. Still no customers, but he does help you move along although you wasted some time.", "cheese-seller/Redesign.png"],
+        "risky": ["Question his business", 2, "He already doubts himself. He spent a long time crying about his problems and you felt like it was too rude to leave.", "cheese-seller/Question.png"],
+        "balanced": ["Sample the cheese", 0, "It is incredible. You feel inspired, thanking him and gaining a new found speed.", "cheese-seller/Sample.png"]
       },
       "sound": "",
       "background": "forest-day-cheese-seller.png",
@@ -223,9 +223,9 @@
     "The Whimsical Tree": {
       "scenario": "An ancient and mythical tree blocks your path. 'Answer my riddle,' it booms. 'I am always hungry, I must be fed. The finger I touch soon turns red.",
       "options": {
-        "safe": ["Fire", 0, "", "whimsical-tree/Fire.png"],
-        "balanced": ["A Rose", 1, "", "whimsical-tree/Rose.png"],
-        "risky": ["The Sunset", 2, "", "whimsical-tree/Sunset.png"]
+        "safe": ["Fire", 0, "The tree nods slowly. “Acceptable.” A path opens up.", "whimsical-tree/Fire.png"],
+        "balanced": ["A Rose", 1, "“Correct,” it says, pleased you chose something poetic. A shortcut is revealed.", "whimsical-tree/Rose.png"],
+        "risky": ["The Sunset", 2, "“No,” it sighs. “Not very smart…” It forces you to go a different path.", "whimsical-tree/Sunset.png"]
       },
       "sound": "",
       "background": "forest-day-whimsical-tree.png",
@@ -237,8 +237,8 @@
     "Trapped Ogre": {
       "scenario": "An ogre has fallen into a deep pit. 'HEY... little help here?' A glowing potion rests just outside the hole.",
       "options": {
-        "helpful": ["Help him climb out",0,  "", "ogre-pit/Helphim.png"],
-        "selfish": ["Steal the potion",0,  "", "ogre-pit/Potion.png"]
+        "helpful": ["Help him climb out",0,  "He says thanks, then remembers he’s an ogre and smacks you over the head. He then leaves out of respect.", "ogre-pit/Helphim.png"],
+        "selfish": ["Steal the potion",0,  "Finders keepers. The ogre respects the hustle.", "ogre-pit/Potion.png"]
       },
       "sound": "",
       "background": "ravine-nobridge.png",
@@ -248,8 +248,8 @@
     "Abandoned Cart": {
       "scenario": "A gnome's cart sits against a tree, a goblin is taking items from it and ushers you to help while the gnome doesn't notice.",
       "options": {
-        "helpful": ["Yell to the gnome and warn him",0,  "", "gnome-cart/Yell.png"],
-        "selfish": ["Raid the cart with the goblin",0,  "", "gnome-cart/Raid.png"]
+        "helpful": ["Yell to the gnome and warn him",0,  "The goblin flees. The gnome cries, thanking you and heals your injuries.", "gnome-cart/Yell.png"],
+        "selfish": ["Raid the cart with the goblin",0,  "The goblin judges your technique. You feel weirdly inadequate.", "gnome-cart/Raid.png"]
       },
       "sound": "",
       "background": "forest-day-goblin-thief.png",
@@ -259,8 +259,8 @@
     "Witch's Soup": {
       "scenario": "A witch stirs a bubbling pond of tadpoles. She claims she means no harm, they're only for soup.",
       "options": {
-        "helpful": ["Save the tadpoles", 0,  "", "witch-soup/Tadpole.png"],
-        "selfish": ["Indulge in the soup", 0,  "", "witch-soup/Soup.png"]
+        "helpful": ["Save the tadpoles", 0,  "The tadpoles respect you and open up a secret path in the pond, you lose a little time helping them but not too much.", "witch-soup/Tadpole.png"],
+        "selfish": ["Indulge in the soup", 0,  "It’s really bad and you feel sick. You manage to heal your injuries but you lost some time.", "witch-soup/Soup.png"]
       },
       "sound": "",
       "background": "pond-notadpoles-witch.png",
