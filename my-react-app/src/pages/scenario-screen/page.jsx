@@ -1,11 +1,13 @@
-import { Header } from "../../components/hud-ui/header/header.jsx";
-import { ScenarioOption } from "../../components/scenario-ui/scenario-option/scenarioOption.jsx";
-import { ScenarioBlock } from "../../components/scenario-ui/scenario-block/scenarioBlock.jsx";
-import { Options } from "../../components/scenario-ui/options/options.jsx";
-import jackalope from "../../media/assets/characters/jackalope.png";
-import "./page.css";
-import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
+import { Header } from '../../components/hud-ui/header/header.jsx'
+import { ScenarioOption } from '../../components/scenario-ui/scenario-option/scenarioOption.jsx'
+import { ScenarioBlock } from '../../components/scenario-ui/scenario-block/scenarioBlock.jsx'
+import ScenarioCard from '../../components/scenario-ui/scenario-card/scenarioCard.jsx'
+import { Options } from '../../components/scenario-ui/options/options.jsx'
+import { ResultBlock } from '../../components/result-ui/result-block/resultBlock.jsx'
+import { Game } from '../../logic/game.js'
+import jackalope from '../../media/assets/characters/jackalope.png'
+import './page.css'
+import { useState, useEffect } from 'react'
 
 const socket = io("http://localhost:3000");
 
@@ -57,6 +59,10 @@ export default function ScenarioScreen() {
 
         {!gameResult && mode === "scenario" && scenarioData && (
           <>
+            {/* <div className='header'>
+              
+
+            </div> */}
             <Header
               image={jackalope}
               creatureName={"Jackalope"}
@@ -64,11 +70,30 @@ export default function ScenarioScreen() {
               scenarioNumber={gameState.stage + 1}
               wizardsGrasp={gameState.wizardsGrasp}
             />
+            <div className='content'>
+              {/* <ScenarioCard
+                title={scenarioData.scenario.name}
+                description={scenarioData.scenario.text}
+                variant="block"
+              /> */}
+              <ScenarioBlock
+                title={scenarioData.scenario.name}
+                description={scenarioData.scenario.text}
+              />
+            </div>
+          </>
+        )}
 
-            <ScenarioBlock
-              title={scenarioData.name}
-              description={scenarioData.text}
+        {mode === 'exiting' && (
+          <>
+          <Header
+              image={jackalope}
+              creatureName={'Jackalope'}
+              timerStart={15}
+              scenarioNumber={game.stage + 1}
+              wizardsGrasp={game.wizardsGrasp}
             />
+          <ScenarioBlock title={scenarioData.scenarioName} description={scenarioData.scenario.text} />
           </>
         )}
 
@@ -76,22 +101,28 @@ export default function ScenarioScreen() {
           <>
             <Header
               image={jackalope}
-              creatureName={"Jackalope"}
-              timerStart={10}
-              scenarioNumber={gameState.stage + 1}
-              wizardsGrasp={gameState.wizardsGrasp}
+              creatureName={'Jackalope'}
+              timerStart={15}
+              scenarioNumber={game.stage + 1}
+              wizardsGrasp={game.wizardsGrasp}
             />
-            <ScenarioOption
-              title={scenarioData.name}
-              description={scenarioData.text}
-            />
+
+            <div className='content'>
+              <ScenarioOption title={scenarioData.scenarioName} description={scenarioData.scenario.text} />
+            </div>
+
             <Options
-              options={scenarioData.options.map((o) => o[0])}
-              //onSelect={handleSelectOption}
+              options={scenarioData.options}
+              onSelect={handleSelectOption}
             />
             {/* <button onClick={handleLockIn}>Lock In</button> */}
           </>
         )}
+
+        {mode === 'result' && scenarioData && selectedOption && (
+          <ResultBlock scenarioNum={game.stage + 1} resultText={selectedOption[2]} />
+        )}
+
       </div>
     </div>
   );

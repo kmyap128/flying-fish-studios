@@ -1,0 +1,28 @@
+@font-face {
+  font-family: "ChineseRocks";
+  src: url("/fonts/chinese-rocks.ttf") format("truetype");
+}
+
+.start-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+}
+
+.start-prompt p:first-child {
+  font-family: "ChineseRocks", sans-serif;
+  font-size: 3rem;
+  font-style: italic;
+  margin: 0;
+}
+
+.start-prompt p:last-child {
+  font-family: "ChineseRocks", sans-serif;
+  font-size: 3rem;
+  font-style: normal;
+  color: white;
+  margin: 0;
+}
