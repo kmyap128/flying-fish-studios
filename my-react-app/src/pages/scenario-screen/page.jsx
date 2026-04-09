@@ -4,44 +4,21 @@ import { ScenarioBlock } from '../../components/scenario-ui/scenario-block/scena
 import ScenarioCard from '../../components/scenario-ui/scenario-card/scenarioCard.jsx'
 import { Options } from '../../components/scenario-ui/options/options.jsx'
 import { ResultBlock } from '../../components/result-ui/result-block/resultBlock.jsx'
-import { Game } from '../../logic/game.js'
 import jackalope from '../../media/assets/characters/jackalope.png'
 import './page.css'
-import { useState, useEffect } from 'react'
 
-const socket = io("http://localhost:3000");
-
-export default function ScenarioScreen() {
-  const [scenarioData, setScenarioData] = useState(null);
-  const [gameResult, setGameResult] = useState(null);
-  const [mode, setMode] = useState("scenario");
-  const [gameState, setGameState] = useState({ stage: 0, wizardsGrasp: 0 });
-  const [countdown, setCountdown] = useState(5);
-
-  // Initialize game once
-  useEffect(() => {
-    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
-    socket.on("scenarioChange", ({ round, stage, wizardsGrasp }) => {
-      setScenarioData(round.scenarioData);
-      setGameState({ stage, wizardsGrasp });
-    });
-    socket.on("modeChange", ({ mode }) => {
-      setMode(newMode);
-    });
-    socket.on("timerTick", ({ remaining }) => {
-      setCountdown(remaining);
-    });
-    socket.on("gameEnd", (result) => {
-      setGameResult(result);
-    });
-    return () => {
-      socket.off("connect");
-      socket.off("scenarioChange");
-      socket.off("gameEnd");
-      socket.off("modeChange");
-      socket.off("timerTick");
+export default function ScenarioScreen({
+    socket,
+    scenarioData,
+    gameResult,
+    gameState,
+    mode,
+    countdown,
+    timerDuration,
+  }) {
+    const handleSelectOption = (optionIndex) => {
+      socket.emit("selectOption", { optionIndex });
     };
-  }, []);
 
   return (
     <div
@@ -66,19 +43,20 @@ export default function ScenarioScreen() {
             <Header
               image={jackalope}
               creatureName={"Jackalope"}
-              timerStart={countdown}
+              timerCurrent={countdown}
+              timerDuration={timerDuration}
               scenarioNumber={gameState.stage + 1}
               wizardsGrasp={gameState.wizardsGrasp}
             />
             <div className='content'>
               {/* <ScenarioCard
-                title={scenarioData.scenario.name}
-                description={scenarioData.scenario.text}
+                title={scenarioData.name}
+                description={scenarioData.text}
                 variant="block"
               /> */}
               <ScenarioBlock
-                title={scenarioData.scenario.name}
-                description={scenarioData.scenario.text}
+                title={scenarioData.name}
+                description={scenarioData.text}
               />
             </div>
           </>
@@ -88,12 +66,13 @@ export default function ScenarioScreen() {
           <>
           <Header
               image={jackalope}
-              creatureName={'Jackalope'}
-              timerStart={15}
-              scenarioNumber={game.stage + 1}
-              wizardsGrasp={game.wizardsGrasp}
+              creatureName={"Jackalope"}
+              timerCurrent={countdown}
+              timerDuration={timerDuration}
+              scenarioNumber={gameState.stage + 1}
+              wizardsGrasp={gameState.wizardsGrasp}
             />
-          <ScenarioBlock title={scenarioData.scenarioName} description={scenarioData.scenario.text} />
+          <ScenarioBlock title={scenarioData.scenarioName} description={scenarioData.text} />
           </>
         )}
 
@@ -101,26 +80,26 @@ export default function ScenarioScreen() {
           <>
             <Header
               image={jackalope}
-              creatureName={'Jackalope'}
-              timerStart={15}
-              scenarioNumber={game.stage + 1}
-              wizardsGrasp={game.wizardsGrasp}
+              creatureName={"Jackalope"}
+              timerCurrent={countdown}
+              timerDuration={timerDuration}
+              scenarioNumber={gameState.stage + 1}
+              wizardsGrasp={gameState.wizardsGrasp}
             />
 
             <div className='content'>
-              <ScenarioOption title={scenarioData.scenarioName} description={scenarioData.scenario.text} />
+              <ScenarioOption title={scenarioData.scenarioName} description={scenarioData.text} />
             </div>
 
             <Options
-              options={scenarioData.options}
-              onSelect={handleSelectOption}
+              options={Object.entries(scenarioData.options)}
+              onSelect={(key) => handleSelectOption(key)}
             />
-            {/* <button onClick={handleLockIn}>Lock In</button> */}
           </>
         )}
 
         {mode === 'result' && scenarioData && selectedOption && (
-          <ResultBlock scenarioNum={game.stage + 1} resultText={selectedOption[2]} />
+          <ResultBlock scenarioNum={gameState.stage + 1} resultText={selectedOption[2]} />
         )}
 
       </div>

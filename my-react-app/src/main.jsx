@@ -1,21 +1,68 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { io } from 'socket.io-client'
 import './index.css'
 import ScenarioScreen from './pages/scenario-screen/page.jsx'
-import ResultScreen from './pages/result-screen/page.jsx'
 import CharacterSelectionScreen from './pages/character-selection-screen/page.jsx'
 
+const socket = io("http://localhost:3000");
 
 function App() {
   const [screen, setScreen] = useState('character-selection');
+  const [scenarioData, setScenarioData] = useState(null);
+  const [gameResult, setGameResult] = useState(null);
+  const [gameState, setGameState] = useState({ stage: 0, wizardsGrasp: 0 });
+  const [mode, setMode] = useState("scenario");
+  const [countdown, setCountdown] = useState(5);
+  const [timerDuration, setTimerDuration] = useState(5);
+
+  useEffect(() => {
+    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
+
+    socket.on("scenarioChange", ({ round, stage, wizardsGrasp }) => {
+      setScenarioData(round.scenarioData);
+      setGameState({ stage, wizardsGrasp });
+    });
+
+    socket.on("modeChange", ({ newMode }) => {
+      setMode(newMode);
+      if (newMode === "scenario") setTimerDuration(5);
+      if (newMode === "options") setTimerDuration(10);
+    });
+    socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
+    socket.on("gameEnd", (result) => setGameResult(result));
+
+    return () => {
+      socket.off("connect");
+      socket.off("scenarioChange");
+      socket.off("modeChange");
+      socket.off("timerTick");
+      socket.off("gameEnd");
+    };
+  }, []);
+
+  const handleCharacterSelectComplete = (selectedCharacters) => {
+    socket.emit("startGame", { selectedCharacters });
+    setScreen('scenario');
+  };
 
   return (
     <>
-      {screen === 'character-selection' && (
-        <CharacterSelectionScreen onComplete={() => setScreen('scenario')} />
+      {/* {screen === 'character-selection' && (
+        <CharacterSelectionScreen onComplete={handleCharacterSelectComplete} />
       )}
-      {screen === 'scenario' && <ScenarioScreen />}
+      {screen === 'scenario' && ( */}
+        <ScenarioScreen
+          socket={socket}
+          scenarioData={scenarioData}
+          gameResult={gameResult}
+          gameState={gameState}
+          mode={mode}
+          countdown={countdown}
+          timerDuration={timerDuration}
+        />
+      {/* )} */}
     </>
   );
 }

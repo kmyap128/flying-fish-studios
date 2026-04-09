@@ -105,6 +105,8 @@ export class Game {
 
     this.players.forEach((p) => p.resetChoice());
 
+    if (this.onModeChange) this.onModeChange("scenario");
+
     if (this.onScenarioChange) {
       this.round = new Round(this.currentScenario);
       this.onScenarioChange(this.round);

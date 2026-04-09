@@ -42,7 +42,7 @@ game.onPlayerChoice = (choiceData) => {
   io.emit("playerChoice", choiceData);
 };
 game.onModeChange = (mode) => {
-  io.emit("modeChange", mode);
+  io.emit("modeChange", { newMode: mode });
 };
 game.onTimerTick = ({ mode, remaining }) => {
   io.emit("timerTick", { mode, remaining });
