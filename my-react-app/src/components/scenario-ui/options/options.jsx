@@ -1,4 +1,4 @@
-import './options.css'
+import "./options.css";
 
 export function Options({ options, onSelect }) {
     return (

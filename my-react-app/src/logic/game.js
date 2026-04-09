@@ -1,15 +1,14 @@
-import { Round } from "./round.js";
-import { STATES } from "./enums/enums.js";
+//import { Round } from "./round.js";
+import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
+import { Scenario } from "./scenario.js";
 
 export class Game {
   constructor() {
     //CONSTRUCTOR
     //players
-    // this.players = players;
-    // //impostor
-    // this.impostor = impostor;
+    this.players = [];
     this.state = STATES.START;
-    // stage 
+    // stage
     this.stage = 0;
     this.currentCategoryIndex = 0;
     this.wizardsGrasp = 0;
@@ -21,18 +20,12 @@ export class Game {
     this.currentOptions = null;
     this.currentType = null;
 
+    this.round = null;
+
     // Callbacks (React will assign these)
     this.onScenarioChange = null;
     this.onGameEnd = null;
   }
-
-  // update() {
-  //   //update round timer
-  //   if (this.round != null) {
-  //     this.round.update();
-  //   }
-  //   //update check trigger state change
-  // }
 
   async loadScenarios() {
     const res = await fetch("/data/scenarios.json");
@@ -40,62 +33,15 @@ export class Game {
 
     this.allScenarios = data;
 
-    // this.obstacleScenarios = Object.entries(data.obstacle || {});
-    // this.combatScenarios = Object.entries(data.combat || {});
-    // this.itemScenarios = Object.entries(data.item || {});
-    // this.sacrificeScenarios = Object.entries(data.sacrifice || {});
-    // this.bonusScenarios = Object.entries(data.bonus || {});
-    // this.dilemmaScenarios = Object.entries(data.dilemma || {});
-
-    // this.scenarioFlow = [
-    //   () => this.obstacleScenarios,
-    //   () => this.combatScenarios,
-    //   () => this.itemScenarios,
-    //   () => this.sacrificeScenarios,
-    //   () => this.bonusScenarios,
-    //   () => this.dilemmaScenarios
-    // ];
-
     this.scenarioFlow = [
       Object.entries(data.obstacle || {}),
       Object.entries(data.combat || {}),
       Object.entries(data.item || {}),
       Object.entries(data.sacrifice || {}),
       Object.entries(data.bonus || {}),
-      Object.entries(data.dilemma || {})
+      Object.entries(data.dilemma || {}),
     ];
   }
-
-  //  //FUNC start round
-  //   startRound(scenario, options, type, media) {
-  //     this.round = new Round(scenario, options, type, media);
-  //     this.state = STATES.SCENARIO;
-  //     this.currentOptions = options;
-  //     this.currentType = type;
-  
-  //     document.getElementById("scenario-name").textContent = scenario.name;
-  //     document.getElementById("scenario").textContent = scenario.text;
-  
-  //     this.optionButtons.forEach((button, index) => {
-  //       if (index < options.length) {
-  //         button.style.display = "inline-block";
-  //         button.textContent = options[index][0];
-  //         button.disabled = false;
-  //         button.classList.remove("selected");
-  //       } else {
-  //         button.style.display = "none";
-  //       }
-  //     });
-  
-  //     this.selectedOption = null;
-  //     this.lockInButton.disabled = true;
-  
-  //     this.round.startTimer(
-  //       this.timerElement,
-  //       this.circle,
-  //       () => this.showTimeUpLoseScreen()
-  //     );
-  //   }
 
   //FUNC load current scenario
   loadCurrentScenario() {
@@ -115,29 +61,12 @@ export class Game {
     const randomIndex = Math.floor(Math.random() * currentCategory.length);
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
 
-    const options = Object.values(scenarioData.options);
+    this.currentScenario = new Scenario(scenarioName, scenarioData);
 
-    this.currentScenario = {
-      name: scenarioName,
-      text: scenarioData.scenario,
-      media: {
-        background: scenarioData.background,
-        sound: scenarioData.sound,
-        images: scenarioData.images,
-        animation: scenarioData.animation
-      }
-    };
-
-    this.currentOptions = options;
-    this.currentType = scenarioData.type;
     this.state = STATES.SCENARIO;
 
     if (this.onScenarioChange) {
-      this.onScenarioChange({
-        scenario: this.currentScenario,
-        options: options,
-        type: this.currentType
-      });
+      this.onScenarioChange((this.round = new Round(this.currentScenario)));
     }
   }
 
@@ -174,43 +103,43 @@ export class Game {
     }
   }
 
+  //FUNC assign imposter
+  //chose random int between 1-3/1-4 (depending on number of players)
+  //assign imposter role (impostor redirect)
+  assignImpostor() {
+    let randomInt = (Math.random() * this.players.length()).floor();
+
+    this.players[randomInt].makeImpostor();
+  }
+
   // //FUNC win screen
   //   showWinScreen() {
   //     document.getElementById("scenario-name").textContent = "FREEDOM!!!";
   //     document.getElementById("scenario").textContent = "YOU SUCCESSFULLY MADE IT BACK HOME!! :DDDDDDD";
-  
+
   //     this.optionButtons.forEach(btn => btn.style.display = "none");
   //     this.lockInButton.style.display = "none";
-  
+
   //     clearInterval(this.round.countdown);
   //   }
-  
+
   //   //FUNC lose screen
   //   showLoseScreen() {
   //     document.getElementById("scenario-name").textContent = "YOU LOSE!!!";
   //     document.getElementById("scenario").textContent = "YOU GOT CAPTURED BY THE WIZARD! D:";
-  
+
   //     this.optionButtons.forEach(btn => btn.style.display = "none");
   //     this.lockInButton.style.display = "none";
-  
+
   //     clearInterval(this.round.countdown);
   //   }
-    
+
   //   //FUNC time up lose screen
   //   showTimeUpLoseScreen() {
   //     document.getElementById("scenario-name").textContent = "TOO SLOW!!";
   //     document.getElementById("scenario").textContent = "YOU TOOK TOO LONG AND THE WIZARD CAUGHT UP! ( x _ x )";
-  
+
   //     this.optionButtons.forEach(btn => btn.style.display = "none");
   //     this.lockInButton.style.display = "none";
   //   }
-  
-  //   //FUNC trigger state change
-  //   stateChange(state) {
-  //     this.state = STATES[state];
-  //   }
-  
-    //FUNC assign imposter
-    //chose random int between 1-3/1-4 (depending on number of players)
-    //assign imposter role (impostor redirect)
 }

@@ -9,88 +9,55 @@ import jackalope from '../../media/assets/characters/jackalope.png'
 import './page.css'
 import { useState, useEffect } from 'react'
 
+const socket = io("http://localhost:3000");
+
 export default function ScenarioScreen() {
-
-  const [game] = useState(() => new Game())
-  const [scenarioData, setScenarioData] = useState(null)
-  const [gameResult, setGameResult] = useState(null)
-
-  const [mode, setMode] = useState('scenario')
-  const [selectedOption, setSelectedOption] = useState(null)
-  const [countdown, setCountdown] = useState(5)
+  const [scenarioData, setScenarioData] = useState(null);
+  const [gameResult, setGameResult] = useState(null);
+  const [mode, setMode] = useState("scenario");
+  const [gameState, setGameState] = useState({ stage: 0, wizardsGrasp: 0 });
+  const [countdown, setCountdown] = useState(5);
 
   // Initialize game once
   useEffect(() => {
-    game.onScenarioChange = (data) => {
-      setScenarioData(data)
-    }
-
-    game.onGameEnd = (result) => {
-      setGameResult(result)
-    }
-
-    game.loadScenarios().then(() => {
-      game.loadCurrentScenario()
-    })
-  }, [game])
-
-  // Restart countdown every time scenario changes
-  useEffect(() => {
-    if (!scenarioData) return
-
-    setMode('scenario')
-    setCountdown(5)
-
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval)
-          handleTransition()
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [scenarioData])
-
-  const handleTransition = () => {
-    setMode('exiting')
-    setTimeout(() => setMode('options'), 400) 
-  }
-
-
-  const handleSelectOption = (index) => {
-    game.selectOption(index)
-  }
-
-  const handleLockIn = () => {
-    const option = scenarioData.options[game.selectedOptionIndex]
-
-    if (!option) return
-
-    setSelectedOption(option)
-    setMode('result')
-    setTimeout(() => game.endRound(), 10000)
-  }
+    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
+    socket.on("scenarioChange", ({ round, stage, wizardsGrasp }) => {
+      setScenarioData(round.scenarioData);
+      setGameState({ stage, wizardsGrasp });
+    });
+    socket.on("modeChange", ({ mode }) => {
+      setMode(newMode);
+    });
+    socket.on("timerTick", ({ remaining }) => {
+      setCountdown(remaining);
+    });
+    socket.on("gameEnd", (result) => {
+      setGameResult(result);
+    });
+    return () => {
+      socket.off("connect");
+      socket.off("scenarioChange");
+      socket.off("gameEnd");
+      socket.off("modeChange");
+      socket.off("timerTick");
+    };
+  }, []);
 
   return (
     <div
       className="app-container"
       style={{
         backgroundImage: scenarioData
-          ? `url(/backgrounds/${scenarioData.scenario.media.background})`
-          : 'none'
+          ? `url(/backgrounds/${scenarioData.media.background})`
+          : "none",
       }}
     >
       <div id="content-container">
-
         {gameResult && (
           <h1>{gameResult === "win" ? "YOU WIN!" : "YOU LOSE!"}</h1>
         )}
 
-        {!gameResult && mode === 'scenario' && scenarioData && (
+        {!gameResult && mode === "scenario" && scenarioData && (
           <>
             {/* <div className='header'>
               
@@ -98,10 +65,10 @@ export default function ScenarioScreen() {
             </div> */}
             <Header
               image={jackalope}
-              creatureName={'Jackalope'}
-              timerStart={5}
-              scenarioNumber={game.stage + 1}
-              wizardsGrasp={game.wizardsGrasp}
+              creatureName={"Jackalope"}
+              timerStart={countdown}
+              scenarioNumber={gameState.stage + 1}
+              wizardsGrasp={gameState.wizardsGrasp}
             />
             <div className='content'>
               {/* <ScenarioCard
@@ -130,7 +97,7 @@ export default function ScenarioScreen() {
           </>
         )}
 
-        {!gameResult && mode === 'options' && scenarioData && (
+        {!gameResult && mode === "options" && scenarioData && (
           <>
             <Header
               image={jackalope}
@@ -148,10 +115,7 @@ export default function ScenarioScreen() {
               options={scenarioData.options}
               onSelect={handleSelectOption}
             />
-
-            <button onClick={handleLockIn}>
-              Lock In
-            </button>
+            {/* <button onClick={handleLockIn}>Lock In</button> */}
           </>
         )}
 
@@ -161,5 +125,5 @@ export default function ScenarioScreen() {
 
       </div>
     </div>
-  )
+  );
 }
