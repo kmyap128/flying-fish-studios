@@ -197,7 +197,7 @@ if (process.stdin.isTTY) {
     }
   });
 
-  console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
+  //console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
 }
 
 SERVER.listen(port, () => {

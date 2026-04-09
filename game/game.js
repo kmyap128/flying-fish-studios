@@ -96,6 +96,7 @@ export class Game {
 
     this.currentScenarioCategory =
       SCENARIO_TYPES[this.categories[this.currentCategoryIndex]];
+    console.log("Scenario Category: ", this.currentScenarioCategory);
 
     const randomIndex = Math.floor(Math.random() * currentCategory.length);
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
@@ -150,7 +151,7 @@ export class Game {
     const tally = { best: 0, neutral: 0, worst: 0 };
     this.players.forEach((p) => {
       const choice = p.choice ?? "worst";
-      console.log(choice);
+      console.log("choice: ", choice);
       tally[choice] += 1;
     });
 
@@ -163,7 +164,7 @@ export class Game {
         winning = this.currentOptions[key];
       }
     }
-    console.log(winning);
+    console.log("winning option: ", winning);
 
     return winning;
   }
@@ -192,7 +193,7 @@ export class Game {
   endRound() {
     clearInterval(this.timerInterval);
 
-    if (this.currentType !== "solo") {
+    if (this.currentType == "synergy") {
       const winningChoice = this.getMajorityChoice();
       const value = winningChoice[1];
       if (this.currentScenarioCategory == SCENARIO_TYPES.SACRIFICE) {
@@ -204,8 +205,9 @@ export class Game {
       let total = 0;
       this.players.forEach((player) => {
         const choiceIndex = player.choice ?? "option 1";
-        console.log(this.currentOptions);
-        console.log(this.currentOptions[choiceIndex]);
+        //console.log(this.currentOptions);
+        //console.log(this.currentOptions[choiceIndex]);
+        console.log("choice index: ", choiceIndex);
         const value = this.currentOptions[choiceIndex][1];
         if (typeof value === "number") {
           total += value;
@@ -252,5 +254,7 @@ export class Game {
     let randomInt = Math.floor(Math.random() * this.players.length);
 
     this.players[randomInt].makeImpostor();
+
+    console.log(this.players[randomInt], " is impostor");
   }
 }
