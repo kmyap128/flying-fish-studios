@@ -7,6 +7,7 @@ import fs from "fs";
 import readline from "readline";
 import { fileURLToPath } from "url";
 import { Game } from "../game/game.js";
+import { SCENARIO_TYPES } from "../game/enums/enums.js";
 
 // ESM file paths
 const __filename = fileURLToPath(import.meta.url);
@@ -89,51 +90,99 @@ if (process.stdin.isTTY) {
   const keyMap = {
     1: {
       pedestal: 0,
-      option: game.currentType == "synergy" ? "best" : "option 3",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "best"
+          : "option 3",
     },
     2: {
       pedestal: 0,
-      option: game.currentType == "synergy" ? "neutral" : "option 2",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "neutral"
+          : "option 2",
     },
     3: {
       pedestal: 0,
-      option: game.currentType == "synergy" ? "worst" : "option 1",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "worst"
+          : "option 1",
     },
     q: {
       pedestal: 1,
-      option: game.currentType == "synergy" ? "best" : "option 3",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "best"
+          : "option 3",
     },
     w: {
       pedestal: 1,
-      option: game.currentType == "synergy" ? "neutral" : "option 2",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "neutral"
+          : "option 2",
     },
     e: {
       pedestal: 1,
-      option: game.currentType == "synergy" ? "worst" : "option 1",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "worst"
+          : "option 1",
     },
     a: {
       pedestal: 2,
-      option: game.currentType == "synergy" ? "best" : "option 3",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "best"
+          : "option 3",
     },
     s: {
       pedestal: 2,
-      option: game.currentType == "synergy" ? "neutral" : "option 2",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "neutral"
+          : "option 2",
     },
     d: {
       pedestal: 2,
-      option: game.currentType == "synergy" ? "worst" : "option 1",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "worst"
+          : "option 1",
     },
     z: {
       pedestal: 3,
-      option: game.currentType == "synergy" ? "best" : "option 3",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "best"
+          : "option 3",
     },
     x: {
       pedestal: 3,
-      option: game.currentType == "synergy" ? "neutral" : "option 2",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "neutral"
+          : "option 2",
     },
     c: {
       pedestal: 3,
-      option: game.currentType == "synergy" ? "worst" : "option 1",
+      option:
+        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
+        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
+          ? "worst"
+          : "option 1",
     },
   };
 

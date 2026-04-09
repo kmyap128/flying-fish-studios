@@ -16,8 +16,10 @@ export class Game {
 
     this.allScenarios = null;
     this.scenarioFlow = [];
+    this.categories = [];
 
     this.currentScenario = null;
+    this.currentScenarioCategory = null;
     this.currentOptions = null;
     this.currentType = null;
 
@@ -66,10 +68,11 @@ export class Game {
   loadScenarios(data) {
     this.allScenarios = data;
 
+    this.categories = Object.keys(this.allScenarios);
     this.scenarioFlow = [
       Object.entries(data.obstacle || {}),
       Object.entries(data.combat || {}),
-      Object.entries(data.item || {}),
+      /*Object.entries(data.item || {}), */
       Object.entries(data.sacrifice || {}),
       Object.entries(data.bonus || {}),
       Object.entries(data.dilemma || {}),
@@ -91,13 +94,16 @@ export class Game {
       return;
     }
 
+    this.currentScenarioCategory =
+      SCENARIO_TYPES[this.categories[this.currentCategoryIndex]];
+
     const randomIndex = Math.floor(Math.random() * currentCategory.length);
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
 
     this.currentScenario = new Scenario(
       scenarioName,
       scenarioData,
-      this.currentCategoryIndex,
+      this.currentScenarioCategory,
     );
     this.currentType = this.currentScenario.type;
     this.currentOptions = this.currentScenario.options;
@@ -187,7 +193,7 @@ export class Game {
     if (this.currentType !== "solo") {
       const winningChoice = this.getMajorityChoice();
       const value = winningChoice[1];
-      if (this.currentCategoryIndex == SCENARIO_TYPES.SACRIFICE) {
+      if (this.currentScenarioCategory == SCENARIO_TYPES.SACRIFICE) {
       }
       if (typeof value === "number") {
         this.wizardsGrasp += value;
@@ -202,9 +208,9 @@ export class Game {
         if (typeof value === "number") {
           total += value;
         }
-        if (this.currentCategoryIndex == SCENARIO_TYPES.ITEM) {
+        if (this.currentScenarioCategory == SCENARIO_TYPES.ITEM) {
           player.item == this.currentScenario.item;
-        } else if (this.currentCategoryIndex == SCENARIO_TYPES.SACRIFICE) {
+        } else if (this.currentScenarioCategory == SCENARIO_TYPES.SACRIFICE) {
           if ((choiceIndex = "option 1")) {
             player.disabled = 1;
           } else if ((choiceIndex = "option 2")) {
