@@ -37,6 +37,8 @@ game.onScenarioChange = (roundData) => {
     stage: game.stage,
     wizardsGrasp: game.wizardsGrasp,
   });
+  console.log("Category: ", game.currentScenarioCategory);
+  console.log("Options: ", game.currentOptions);
 };
 
 game.onPlayerChoice = (choiceData) => {
@@ -87,118 +89,58 @@ if (process.stdin.isTTY) {
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
 
-  const keyMap = {
-    1: {
-      pedestal: 0,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "best"
-          : "option 3",
-    },
-    2: {
-      pedestal: 0,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "neutral"
-          : "option 2",
-    },
-    3: {
-      pedestal: 0,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "worst"
-          : "option 1",
-    },
-    q: {
-      pedestal: 1,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "best"
-          : "option 3",
-    },
-    w: {
-      pedestal: 1,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "neutral"
-          : "option 2",
-    },
-    e: {
-      pedestal: 1,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "worst"
-          : "option 1",
-    },
-    a: {
-      pedestal: 2,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "best"
-          : "option 3",
-    },
-    s: {
-      pedestal: 2,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "neutral"
-          : "option 2",
-    },
-    d: {
-      pedestal: 2,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "worst"
-          : "option 1",
-    },
-    z: {
-      pedestal: 3,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "best"
-          : "option 3",
-    },
-    x: {
-      pedestal: 3,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "neutral"
-          : "option 2",
-    },
-    c: {
-      pedestal: 3,
-      option:
-        game.currentScenarioCategory != SCENARIO_TYPES.SACRIFICE &&
-        game.currentScenarioCategory != SCENARIO_TYPES.ITEM
-          ? "worst"
-          : "option 1",
-    },
-  };
-
   process.stdin.on("keypress", (str, key) => {
     if (key.ctrl && key.name === "c") process.exit();
     if (keyMap[str]) {
-      const { pedestal, option } = keyMap[str];
-      console.log(
-        `⌨️  Key ${str} → pedestal ${pedestal + 1}, option ${option}`,
-      );
+      const { pedestal, position } = keyMap[str];
+      const option = positionToOption(position);
       game.registerChoice(pedestal, option);
     }
   });
 
-  //console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
+  console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
 }
+
+const keyMap = {
+  1: { pedestal: 0, position: 0 },
+  2: { pedestal: 0, position: 1 },
+  3: { pedestal: 0, position: 2 },
+  q: { pedestal: 1, position: 0 },
+  w: { pedestal: 1, position: 1 },
+  e: { pedestal: 1, position: 2 },
+  a: { pedestal: 2, position: 0 },
+  s: { pedestal: 2, position: 1 },
+  d: { pedestal: 2, position: 2 },
+  z: { pedestal: 3, position: 0 },
+  x: { pedestal: 3, position: 1 },
+  c: { pedestal: 3, position: 2 },
+};
+
+const positionToOption = (position) => {
+  const isIndividual =
+    game.currentScenarioCategory === "sacrifice" ||
+    game.currentScenarioCategory === "item";
+  const isDilemma = game.currentScenarioCategory === "dilemma";
+
+  if (isIndividual) {
+    return ["option 1", "option 2", "option 3"][position];
+  } else if (isDilemma) {
+    return ["helpful", null, "selfish"][position];
+  } else {
+    return ["best", "neutral", "worst"][position];
+  }
+};
+
+process.stdin.on("keypress", (str, key) => {
+  if (key.ctrl && key.name === "c") process.exit();
+  if (keyMap[str]) {
+    const { pedestal, position } = keyMap[str];
+    const option = positionToOption(position); // evaluated fresh on every keypress
+    game.registerChoice(pedestal, option);
+  }
+});
+
+//console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
 
 SERVER.listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);

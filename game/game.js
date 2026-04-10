@@ -69,6 +69,7 @@ export class Game {
     this.allScenarios = data;
 
     this.categories = Object.keys(this.allScenarios);
+    this.categories.splice(2, 1);
     this.scenarioFlow = [
       Object.entries(data.obstacle || {}),
       Object.entries(data.combat || {}),
@@ -94,9 +95,7 @@ export class Game {
       return;
     }
 
-    this.currentScenarioCategory =
-      SCENARIO_TYPES[this.categories[this.currentCategoryIndex]];
-    console.log("Scenario Category: ", this.currentScenarioCategory);
+    this.currentScenarioCategory = this.categories[this.currentCategoryIndex];
 
     const randomIndex = Math.floor(Math.random() * currentCategory.length);
     const [scenarioName, scenarioData] = currentCategory[randomIndex];
@@ -148,22 +147,38 @@ export class Game {
   }
 
   getMajorityChoice() {
-    const tally = { best: 0, neutral: 0, worst: 0 };
-    this.players.forEach((p) => {
-      const choice = p.choice ?? "worst";
-      console.log("choice: ", choice);
-      tally[choice] += 1;
-    });
-
+    let winning;
+    let tally;
     let maxVotes = 0;
-    let winning = "";
-
+    if (this.currentScenarioCategory == "dilemma") {
+      tally = { helpful: 0, selfish: 0 };
+      this.players.forEach((p) => {
+        const choice = p.choice ?? "selfish";
+        console.log("choice: ", choice);
+        tally[choice] += 1;
+      });
+    } else if (this.currentScenarioCategory == "sacrifice") {
+      tally = { "option 1": 0, "option 2": 0, "option 3": 0 };
+      this.players.forEach((p) => {
+        const choice = p.choice ?? "option 1";
+        console.log("choice: ", choice);
+        tally[choice] += 1;
+      });
+    } else {
+      tally = { best: 0, neutral: 0, worst: 0 };
+      this.players.forEach((p) => {
+        const choice = p.choice ?? "worst";
+        console.log("choice: ", choice);
+        tally[choice] += 1;
+      });
+    }
     for (const [key, votes] of Object.entries(tally)) {
       if (votes > maxVotes) {
         maxVotes = votes;
         winning = this.currentOptions[key];
       }
     }
+
     console.log("winning option: ", winning);
 
     return winning;
@@ -196,7 +211,7 @@ export class Game {
     if (this.currentType == "synergy") {
       const winningChoice = this.getMajorityChoice();
       const value = winningChoice[1];
-      if (this.currentScenarioCategory == SCENARIO_TYPES.SACRIFICE) {
+      if (this.currentScenarioCategory == "sacrifice") {
       }
       if (typeof value === "number") {
         this.wizardsGrasp += value;
@@ -205,19 +220,17 @@ export class Game {
       let total = 0;
       this.players.forEach((player) => {
         const choiceIndex = player.choice ?? "option 1";
-        //console.log(this.currentOptions);
-        //console.log(this.currentOptions[choiceIndex]);
         console.log("choice index: ", choiceIndex);
         const value = this.currentOptions[choiceIndex][1];
         if (typeof value === "number") {
           total += value;
         }
-        if (this.currentScenarioCategory == SCENARIO_TYPES.ITEM) {
+        if (this.currentScenarioCategory == "item") {
           player.item == this.currentScenario.item;
-        } else if (this.currentScenarioCategory == SCENARIO_TYPES.SACRIFICE) {
-          if ((choiceIndex = "option 1")) {
+        } else if (this.currentScenarioCategory == "sacrifice") {
+          if (choiceIndex == "option 1") {
             player.disabled = 1;
-          } else if ((choiceIndex = "option 2")) {
+          } else if (choiceIndex == "option 2") {
             player.disabled = 2;
           } else {
             player.disabled = 3;
