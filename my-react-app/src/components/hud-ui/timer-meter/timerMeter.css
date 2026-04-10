@@ -1,0 +1,20 @@
+.timer-meter-bar-container {
+  position: relative;
+  display: inline-flex;
+
+}
+
+.timer-meter-bg {
+  display: block;
+}
+
+.timer-meter-fill-wrapper {
+  position: absolute;
+  overflow: hidden;  
+  transform: translateY(70%);
+}
+
+.timer-meter-fill {
+  display: block;
+  transform: translateX(1.5%);
+}

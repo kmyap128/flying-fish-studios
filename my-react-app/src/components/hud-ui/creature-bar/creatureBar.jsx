@@ -1,26 +1,16 @@
 import './creatureBar.css'
 
 export function CreatureBar({ image, creatureName }) {
-    return (  
-        <div className="creature-wrapper">
-
-            <div className="creature-bg">
-                <img className="creature-icon" src={image} alt="creature thumbnail" />
-            </div>
-
-            <div className="creature-bars-wrapper">
-                <div className="name-bar">
-                    <p className='creature-name'>
-                        {creatureName}
-                    </p>
-                </div>
-
-                <div className="item-bar">
-                    <div className="item"></div>
-                    <div className="item"></div>
-                </div>
-            </div>
-
+  return (
+    <div className="creature-wrapper">
+      <img className="creature-bg" src={image} alt="" />
+      <div className="creature-content">
+        <p className="creature-name">{creatureName}</p>
+        <div className="item-bar">
+          <div className="item" />
+          <div className="item" />
         </div>
-    )
+      </div>
+    </div>
+  )
 }

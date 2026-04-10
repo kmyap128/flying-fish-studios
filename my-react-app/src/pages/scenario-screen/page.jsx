@@ -1,10 +1,14 @@
 import { Header } from '../../components/hud-ui/header/header.jsx'
+import { CreatureBar } from '../../components/hud-ui/creature-bar/creatureBar.jsx'
+import { WizardBar } from '../../components/hud-ui/wizard-bar/wizardBar.jsx'
+import { Timer } from '../../components/hud-ui/timer/timer.jsx'
+import { TimerMeter } from '../../components/hud-ui/timer-meter/timerMeter.jsx'
 import { ScenarioOption } from '../../components/scenario-ui/scenario-option/scenarioOption.jsx'
 import { ScenarioBlock } from '../../components/scenario-ui/scenario-block/scenarioBlock.jsx'
 import ScenarioCard from '../../components/scenario-ui/scenario-card/scenarioCard.jsx'
 import { Options } from '../../components/scenario-ui/options/options.jsx'
 import { ResultBlock } from '../../components/result-ui/result-block/resultBlock.jsx'
-import jackalope from '../../media/assets/characters/jackalope.png'
+import waddles from '/UI_Assets/Corner_UI/Character_UI/Waddles_UI.png'
 import './page.css'
 
 export default function ScenarioScreen({
@@ -40,14 +44,14 @@ export default function ScenarioScreen({
               
 
             </div> */}
-            <Header
-              image={jackalope}
-              creatureName={"Jackalope"}
-              timerCurrent={countdown}
-              timerDuration={timerDuration}
-              scenarioNumber={gameState.stage + 1}
-              wizardsGrasp={gameState.wizardsGrasp}
-            />
+            <div className="header-wrapper">
+              <div id="creature-bar-container">
+                <CreatureBar image={waddles} creatureName={"Waddles"} />
+              </div>
+              <div id="wizard-bar-container">
+                <WizardBar wizardsGrasp={gameState.wizardsGrasp} scenarioNumber={gameState.stage + 1} />
+              </div>
+            </div>
             <div className='content'>
               {/* <ScenarioCard
                 title={scenarioData.name}
@@ -59,47 +63,61 @@ export default function ScenarioScreen({
                 description={scenarioData.text}
               />
             </div>
+            <TimerMeter timerCurrent={countdown} timerDuration={timerDuration} />
           </>
         )}
 
         {mode === 'exiting' && (
           <>
-          <Header
-              image={jackalope}
-              creatureName={"Jackalope"}
-              timerCurrent={countdown}
-              timerDuration={timerDuration}
-              scenarioNumber={gameState.stage + 1}
-              wizardsGrasp={gameState.wizardsGrasp}
-            />
+          <div className="header-wrapper">
+              <div id="creature-bar-container">
+                <CreatureBar image={waddles} creatureName={"Waddles"} />
+              </div>
+              <div id="timer-container">
+                <Timer timerCurrent={countdown} />
+              </div>
+              <div id="wizard-bar-container">
+                <WizardBar wizardsGrasp={gameState.wizardsGrasp} scenarioNumber={gameState.stage + 1} />
+              </div>
+            </div>
           <ScenarioBlock title={scenarioData.scenarioName} description={scenarioData.text} />
           </>
         )}
 
         {!gameResult && mode === "options" && scenarioData && (
           <>
-            <Header
-              image={jackalope}
-              creatureName={"Jackalope"}
-              timerCurrent={countdown}
-              timerDuration={timerDuration}
-              scenarioNumber={gameState.stage + 1}
-              wizardsGrasp={gameState.wizardsGrasp}
-            />
+            <div className="header-wrapper">
+              <div id="creature-bar-container">
+                <CreatureBar image={waddles} creatureName={"Waddles"} />
+              </div>
+              <div id="timer-container">
+                <Timer timerCurrent={countdown} />
+              </div>
+              <div id="wizard-bar-container">
+                <WizardBar wizardsGrasp={gameState.wizardsGrasp} scenarioNumber={gameState.stage + 1} />
+              </div>
+            </div>
 
-            <div className='content'>
+            <div className='option-content'>
               <ScenarioOption title={scenarioData.scenarioName} description={scenarioData.text} />
             </div>
 
-            <Options
-              options={Object.entries(scenarioData.options)}
-              onSelect={(key) => handleSelectOption(key)}
-            />
+            <div className='options-container'>
+              <Options
+                options={Object.entries(scenarioData.options)}
+                onSelect={(key) => handleSelectOption(key)}
+              />
+            </div>
           </>
         )}
 
         {mode === 'result' && scenarioData && selectedOption && (
-          <ResultBlock scenarioNum={gameState.stage + 1} resultText={selectedOption[2]} />
+          <>
+            <ResultBlock scenarioNum={gameState.stage + 1} resultText={selectedOption[2]} />
+            <div id='timer-meter-container'>
+              <TimerMeter timerCurrent={countdown} timerDuration={timerDuration} />
+            </div>
+          </>
         )}
 
       </div>

@@ -1,13 +1,4 @@
-@font-face {
-  font-family: 'Chinese Rocks';
-  src: url('../../../media/fonts/chinese-rocks-rg.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
- 
-
 .header-wrapper {
-    font-family: 'Chinese Rocks', system-ui, Avenir, Helvetica, Arial, sans-serif;
     position: relative;  
     width: 100%;
     height: 20vh;

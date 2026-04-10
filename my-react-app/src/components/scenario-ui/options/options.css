@@ -1,43 +1,52 @@
 #options-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
 }
 
 .option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-
-    padding: 20px;
-    width: 30%;
-    font-size: 1.2em;
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.8);
-
-    box-shadow:
-        inset 0 0 0 2px black,
-        0 0 20px rgba(76, 46, 110, 0.9),
-        0 0 30px rgba(76, 46, 110, 0.7),
-        0 0 40px rgba(76, 46, 110, 0.5);
-
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: box-shadow 0.3s ease;
+  position: relative;
+  display: inline-flex;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-.option img {
-    width: 100%;
-    max-width: 180px;
-    height: auto;
-    object-fit: contain;
-    pointer-events: none;
+.option-bg {
+  display: block;
+  height: auto;
 }
 
-.option span {
-    text-align: center;
+.option-button-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-rows: 1fr 1fr;  
+  align-items: center;
+  justify-items: center;
+  padding: 10% 10%;
+}
+
+.option-icon {
+  width:auto;
+  height: 20vh;
+  align-self: end;   
+}
+
+.option-label {
+  font-family: 'LondrinaSolid', sans-serif;
+  font-weight: 900;
+  font-size: 5em;
+  color: #fff;
+  -webkit-text-stroke: 2px black;
+  paint-order: stroke fill;
+  text-align: center;
+  max-width: 80%;
+  align-self: start;  
+  line-height: 1.2;
 }
