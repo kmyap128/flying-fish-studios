@@ -1,7 +1,7 @@
 import EXPRESS from "express";
 import HTTP, { get } from "http";
 import { Server } from "socket.io";
-import { subscribe } from "./arduino.js";
+//import { subscribe } from "./arduino.js";
 import path from "path";
 import fs from "fs";
 import readline from "readline";
@@ -133,40 +133,40 @@ io.on("connection", (socket) => {
   }
 
   socket.on("disconnect", () => {
-    delete playerSockets[socketPedestalIndex];
+    delete playerSockets[socket.pedestalIndex];
     console.log(`Disconnected: pedestal ${socket.pedestalIndex + 1}`);
     io.emit("lobby", getLobbyState());
   });
 });
 
-[0, 1, 2, 3].forEach((pedestalIndex) => {
-  subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag }) => {
-    const species = RFID_MAP[rfidTag];
-    if (!species) {
-      console.warn(`unknown RFID tag: ${rfidTag}`);
-      return;
-    }
+// [0, 1, 2, 3].forEach((pedestalIndex) => {
+//   subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag }) => {
+//   const species = RFID_MAP[rfidTag];
+//   if (!species) {
+//     console.warn(`unknown RFID tag: ${rfidTag}`);
+//     return;
+//   }
 
-    game.assignCharacterToPedestal(pedestalIndex, species);
-    console.log(`RFID: pedestal ${pedestalIndex + 1} -> ${species}`);
+//   game.assignCharacterToPedestal(pedestalIndex, species);
+//   console.log(`RFID: pedestal ${pedestalIndex + 1} -> ${species}`);
 
-    io.emit("lobby", getLobbyState());
-    tryStartGame();
-  });
-});
+//   io.emit("lobby", getLobbyState());
+//   tryStartGame();
+//    });
+// });
 
-subscribe("pedestal1", ({ selectedChoice }) =>
-  game.registerChoice(0, selectedChoice),
-);
-subscribe("pedestal2", ({ selectedChoice }) =>
-  game.registerChoice(0, selectedChoice),
-);
-subscribe("pedestal3", ({ selectedChoice }) =>
-  game.registerChoice(0, selectedChoice),
-);
-subscribe("pedestal4", ({ selectedChoice }) =>
-  game.registerChoice(0, selectedChoice),
-);
+// subscribe("pedestal1", ({ selectedChoice }) =>
+//   game.registerChoice(0, selectedChoice),
+// );
+// subscribe("pedestal2", ({ selectedChoice }) =>
+//   game.registerChoice(0, selectedChoice),
+// );
+// subscribe("pedestal3", ({ selectedChoice }) =>
+//   game.registerChoice(0, selectedChoice),
+// );
+// subscribe("pedestal4", ({ selectedChoice }) =>
+//   game.registerChoice(0, selectedChoice),
+// );
 
 const keyMap = {
   1: { pedestal: 0, position: 0 },
@@ -232,14 +232,14 @@ if (process.stdin.isTTY) {
   console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
 }
 
-process.stdin.on("keypress", (str, key) => {
-  if (key.ctrl && key.name === "c") process.exit();
-  if (keyMap[str]) {
-    const { pedestal, position } = keyMap[str];
-    const option = positionToOption(position); // evaluated fresh on every keypress
-    game.registerChoice(pedestal, option);
-  }
-});
+// process.stdin.on("keypress", (str, key) => {
+//   if (key.ctrl && key.name === "c") process.exit();
+//   if (keyMap[str]) {
+//     const { pedestal, position } = keyMap[str];
+//     const option = positionToOption(position); // evaluated fresh on every keypress
+//     game.registerChoice(pedestal, option);
+//   }
+// });
 
 //console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
 

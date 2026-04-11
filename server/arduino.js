@@ -23,7 +23,7 @@ const SUBSCRIBERS = {
 // map/trim
 // notify
 PORT1.on("open", () => console.log("Port1 open"));
-PORT1.on("error", (err) => console.error("Port1 error", err.message));
+PORT1.on("error", (err) => console.error("Port error", err.message));
 
 PARSER1.on("data", (data) => {
   let newData = data.split(" | ");

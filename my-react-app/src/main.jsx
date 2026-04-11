@@ -12,7 +12,7 @@ const socket = io("http://localhost:3000");
 function App() {
   const [screen, setScreen] = useState("character-selection");
   const [myPedestalIndex, setMyPedestalIndex] = useState(null);
-  const [lobbyState, setLobyState] = useState({
+  const [lobbyState, setLobbyState] = useState({
     status: "waiting",
     connectedSlots: [],
     players: [],
