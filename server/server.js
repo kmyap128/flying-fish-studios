@@ -30,6 +30,7 @@ APP.use("/data", EXPRESS.static(path.join(__dirname, "../data")));
 
 // Single game instance
 const game = new Game();
+const playerSockets = {};
 
 game.onScenarioChange = (roundData) => {
   io.emit("scenarioChange", {
@@ -66,6 +67,17 @@ game.loadScenarios(scenarioData);
 game.loadCurrentScenario();
 
 io.on("connection", (socket) => {
+  const takenSlots = Object.keys(playerSockets).map(Number);
+  const availableSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
+
+  if(availableSlot === undefined) {
+    socket.emit("lobby", { status: "full" });
+    return;
+  }
+
+  playerSockets[availableSlot] = socket.id;
+  socket.pedestalIndex = availableSlot;
+
   console.log("🔌 Client connected:", socket.id);
 
   if (game.currentScenario) {
