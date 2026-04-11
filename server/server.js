@@ -1,13 +1,12 @@
 import EXPRESS from "express";
-import HTTP from "http";
+import HTTP, { get } from "http";
 import { Server } from "socket.io";
-// import ARDUINO_PARSER from "./arduino";
+import { subscribe } from "./arduino.js";
 import path from "path";
 import fs from "fs";
 import readline from "readline";
 import { fileURLToPath } from "url";
 import { Game } from "../game/game.js";
-import { SCENARIO_TYPES } from "../game/enums/enums.js";
 
 // ESM file paths
 const __filename = fileURLToPath(import.meta.url);
@@ -28,90 +27,146 @@ APP.use(EXPRESS.static("client"));
 APP.use("/media", EXPRESS.static("media"));
 APP.use("/data", EXPRESS.static(path.join(__dirname, "../data")));
 
+const RFID_MAP = {
+  "TAG-001": "Nine-Tailed Fish",
+  "TAG-002": "Jackalope",
+  "TAG-003": "Duck Duck Goose",
+  "TAG-004": "Dinogon",
+};
 // Single game instance
 const game = new Game();
-const playerSockets = {};
 
 game.onScenarioChange = (roundData) => {
   io.emit("scenarioChange", {
     round: roundData,
     stage: game.stage,
     wizardsGrasp: game.wizardsGrasp,
+    optionsOrder: game.currentOptionsOrder,
   });
   console.log("Category: ", game.currentScenarioCategory);
   console.log("Options: ", game.currentOptions);
 };
 
-game.onPlayerChoice = (choiceData) => {
-  io.emit("playerChoice", choiceData);
-};
 game.onModeChange = (mode) => {
   io.emit("modeChange", { newMode: mode });
 };
 game.onTimerTick = ({ mode, remaining }) => {
   io.emit("timerTick", { mode, remaining });
 };
+game.onPlayerChoice = (choiceData) => {
+  io.emit("playerChoice", choiceData);
+};
+game.onRoundResult = (resultData) => {
+  io.emit("roundResult", resultData);
+  io.emit("modeChange", { newMode: "result" });
+};
 game.onGameEnd = (result) => {
   io.emit("gameEnd", result);
 };
-
-const creaturesPath = path.join(__dirname, "../data/creatures.json");
-const creaturesData = JSON.parse(fs.readFileSync(creaturesPath, "utf-8"));
-game.generateCreatures(creaturesData);
-game.assignImpostor();
 
 //Load scenarios and start
 const scenariosPath = path.join(__dirname, "../data/scenarios.json");
 const scenarioData = JSON.parse(fs.readFileSync(scenariosPath, "utf-8"));
 game.loadScenarios(scenarioData);
-game.loadCurrentScenario();
+
+const playerSockets = {};
+let gameStarted = false;
+
+const getLobbyState = () => ({
+  connectedSlots: Object.keys(playerSockets).map(Number),
+  players: game.players.map((p) => ({
+    species: p.species,
+    name: p.name,
+    image: p.image,
+    pedestalIndex: p.pedestalIndex,
+    hasCharacter: !!p.species,
+  })),
+  status:
+    Object.keys(playerSockets).length === 4 &&
+    game.players.every((p) => p.species)
+      ? "ready"
+      : "waiting",
+});
+
+const tryStartGame = () => {
+  if (gameStarted) return;
+  const allConnected = Object.keys(playerSockets).length === 4;
+  const allHaveCharacters = game.players.every((p) => p.species);
+  if (allConnected && allHaveCharacters) {
+    gameStarted = true;
+    console.log("All players ready - starteng game");
+    io.emit("gameStarting");
+    setTimeout(() => game.loadCurrentScenario(), 3000);
+  }
+};
 
 io.on("connection", (socket) => {
   const takenSlots = Object.keys(playerSockets).map(Number);
   const availableSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
 
-  if(availableSlot === undefined) {
-    socket.emit("lobby", { status: "full" });
+  if (availableSlot === undefined) {
+    socket.emit("lobbyFull");
     return;
   }
 
   playerSockets[availableSlot] = socket.id;
   socket.pedestalIndex = availableSlot;
 
-  console.log("🔌 Client connected:", socket.id);
+  console.log(
+    `🔌 Client connected: ${socket.id} -> pedestal ${availableSlot + 1}`,
+  );
 
-  if (game.currentScenario) {
+  socket.emit("identity", { pedestalIndex: availableSlot });
+
+  io.emit("lobby", getLobbyState());
+
+  if (gameStarted && game.currentScenario) {
     socket.emit("scenarioChange", {
       round: game.round,
       stage: game.stage,
       wizardsGrasp: game.wizardsGrasp,
-      mode: game.mode,
-      timerTick: game.timerTick,
-      remaining: game.remaining,
+      optionsOrder: game.currentOptionsOrder,
+      // mode: game.mode,
+      // timerTick: game.timerTick,
+      // remaining: game.remaining,
     });
   }
+
+  socket.on("disconnect", () => {
+    delete playerSockets[socketPedestalIndex];
+    console.log(`Disconnected: pedestal ${socket.pedestalIndex + 1}`);
+    io.emit("lobby", getLobbyState());
+  });
 });
 
-// parse arduino data (option selections and button press)
-// ARDUINO_PARSER.subscribe("pedestal1", (data) => io.emit("pedestal1Data", data));
-// ARDUINO_PARSER.subscribe("pedestal2", (data) => io.emit("pedestal2Data", data));
-// ARDUINO_PARSER.subscribe("pedestal3", (data) => io.emit("pedestal3Data", data));
-// ARDUINO_PARSER.subscribe("pedestal4", (data) => io.emit("pedestal4Data", data));
-if (process.stdin.isTTY) {
-  readline.emitKeypressEvents(process.stdin);
-  process.stdin.setRawMode(true);
-
-  process.stdin.on("keypress", (str, key) => {
-    if (key.ctrl && key.name === "c") process.exit();
-    if (keyMap[str]) {
-      const { pedestal, position } = keyMap[str];
-      const option = positionToOption(position);
-      game.registerChoice(pedestal, option);
+[0, 1, 2, 3].forEach((pedestalIndex) => {
+  subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag }) => {
+    const species = RFID_MAP[rfidTag];
+    if (!species) {
+      console.warn(`unknown RFID tag: ${rfidTag}`);
+      return;
     }
-  });
 
-  console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
-}
+    game.assignCharacterToPedestal(pedestalIndex, species);
+    console.log(`RFID: pedestal ${pedestalIndex + 1} -> ${species}`);
+
+    io.emit("lobby", getLobbyState());
+    tryStartGame();
+  });
+});
+
+subscribe("pedestal1", ({ selectedChoice }) =>
+  game.registerChoice(0, selectedChoice),
+);
+subscribe("pedestal2", ({ selectedChoice }) =>
+  game.registerChoice(0, selectedChoice),
+);
+subscribe("pedestal3", ({ selectedChoice }) =>
+  game.registerChoice(0, selectedChoice),
+);
+subscribe("pedestal4", ({ selectedChoice }) =>
+  game.registerChoice(0, selectedChoice),
+);
 
 const keyMap = {
   1: { pedestal: 0, position: 0 },
@@ -142,6 +197,40 @@ const positionToOption = (position) => {
     return ["best", "neutral", "worst"][position];
   }
 };
+
+const DEV_RFID = [
+  "Nine-Tailed Fish",
+  "Jackalope",
+  "Duck Duck Goose",
+  "Dinogon",
+];
+
+if (process.stdin.isTTY) {
+  readline.emitKeypressEvents(process.stdin);
+  process.stdin.setRawMode(true);
+
+  process.stdin.on("keypress", (str, key) => {
+    if (key.ctrl && key.name === "c") process.exit();
+
+    if (str === "r") {
+      DEV_RFID.forEach((species, i) => {
+        game.assignCharacterToPedestal(i, species);
+      });
+      io.emit("lobby", getLobbyState());
+      console.log("🪪 Dev: all RFID taps simulated");
+      tryStartGame();
+      return;
+    }
+
+    if (keyMap[str]) {
+      const { pedestal, position } = keyMap[str];
+      const option = positionToOption(position);
+      game.registerChoice(pedestal, option);
+    }
+  });
+
+  console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
+}
 
 process.stdin.on("keypress", (str, key) => {
   if (key.ctrl && key.name === "c") process.exit();

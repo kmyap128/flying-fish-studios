@@ -7,9 +7,7 @@ export class Game {
   constructor() {
     //CONSTRUCTOR
     //players
-    this.players = [];
     this.state = STATES.START;
-    // stage
     this.stage = 0;
     this.currentCategoryIndex = 0;
     this.wizardsGrasp = 0;
@@ -21,53 +19,76 @@ export class Game {
     this.currentScenario = null;
     this.currentScenarioCategory = null;
     this.currentOptions = null;
+    this.currentOptionsOrder = [];
     this.currentType = null;
 
     this.round = null;
     this.timerInterval = null;
+
+    this.players = [
+      new CreaturePlayer(null, null, null, null, null, 0),
+      new CreaturePlayer(null, null, null, null, null, 1),
+      new CreaturePlayer(null, null, null, null, null, 2),
+      new CreaturePlayer(null, null, null, null, null, 3),
+    ];
 
     // Callbacks (Server sends these to react)
     this.onScenarioChange = null;
     this.onGameEnd = null;
     this.onModeChange = null;
     this.onTimerTick = null;
-    this.onPlayerChoice;
+    this.onPlayerChoice = null;
+    this.onRoundResult = null;
   }
 
-  generateCreatures(data) {
-    const entries = Object.entries(data);
+  assignCharacterToPedestal(pedestalIndex, species) {
+    const allCharacters = {
+      "Nine-Tailed Fish": {
+        name: "Finley",
+        image: "finley.png",
+        description: "",
+        item: "",
+      },
+      Jackalope: {
+        name: "Sprig",
+        image: "sprig.png",
+        description: "",
+        item: "",
+      },
+      "Duck Duck Goose": {
+        name: "Waddles",
+        image: "waddles.png",
+        description: "",
+        item: "",
+      },
+      Dinogon: {
+        name: "Smoulder",
+        image: "smoulder.png",
+        description: "",
+        item: "",
+      },
+    };
 
-    for (let i = entries.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [entries[i], entries[j]] = [entries[j], entries[i]];
+    const character = allCharacters[species];
+    if (!character) {
+      console.warn(`Unknown species: ${species}`);
+      return;
     }
 
-    this.players = entries.map(([species, character], index) => {
-      return new CreaturePlayer(
-        character.name,
-        species,
-        character.image,
-        character.description,
-        character.item,
-        index,
-      );
-    });
-
-    // this.players.forEach((player) => {
-    //   let pedestals = [1, 2, 3, 4];
-    //   let randomInt = Math.floor(Math.random() * this.players.length);
-    //   player.pedestal = pedestals.splice(randomInt, 1)[0];
-    // });
+    const player = this.players[pedestalIndex];
+    player.name = character.name;
+    player.species = species;
+    player.image = character.image;
+    player.description = character.description;
+    player.item = ITEMS[character.item] || null;
 
     console.log(
-      "🐾 Players assigned:",
-      this.players.map((p) => `${p.species} → pedestal ${p.pedestalIndex + 1}`),
+      `Pedestal ${pedestalIndex + 1} -> ${species} (${character.name})`,
     );
   }
 
   loadScenarios(data) {
     this.allScenarios = data;
-
     this.categories = Object.keys(this.allScenarios);
     this.categories.splice(2, 1);
     this.scenarioFlow = [
@@ -78,6 +99,15 @@ export class Game {
       Object.entries(data.bonus || {}),
       Object.entries(data.dilemma || {}),
     ];
+  }
+
+  shuffleOptionKeys(options) {
+    const keys = Object.keys(options);
+    for (let i = keys.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [keys[i], keys[j]] = [keys[j], keys[i]];
+    }
+    return keys;
   }
 
   //FUNC load current scenario
@@ -107,6 +137,7 @@ export class Game {
     );
     this.currentType = this.currentScenario.type;
     this.currentOptions = this.currentScenario.options;
+    this.currentOptionsOrder = this.shuffleOptionKeys(this.currentOptions);
     this.state = STATES.SCENARIO;
 
     this.players.forEach((p) => p.resetChoice());
@@ -126,17 +157,17 @@ export class Game {
     });
   }
 
-  registerChoice(pedestalIndex, optionIndex) {
-    const player = this.players.find((p) => p.pedestalIndex === pedestalIndex);
+  registerChoice(pedestalIndex, optionKey) {
+    const player = this.players[pedestalIndex];
     if (!player) return;
 
-    player.setChoice(optionIndex);
+    player.setChoice(optionKey);
 
     if (this.onPlayerChoice) {
       this.onPlayerChoice({
         pedestalIndex,
         species: player.species,
-        optionIndex,
+        optionKey,
         choices: this.players.map((p) => ({
           species: p.species,
           pedestalIndex: p.pedestalIndex,
@@ -147,15 +178,15 @@ export class Game {
   }
 
   getMajorityChoice() {
-    let winning;
     let tally;
-    let maxVotes = 0;
+    let impostorChoice;
     if (this.currentScenarioCategory == "dilemma") {
       tally = { helpful: 0, selfish: 0 };
       this.players.forEach((p) => {
         const choice = p.choice ?? "selfish";
         console.log("choice: ", choice);
         tally[choice] += 1;
+        if (p.isImpostor) impostorChoice = p.choice;
       });
     } else if (this.currentScenarioCategory == "sacrifice") {
       tally = { "option 1": 0, "option 2": 0, "option 3": 0 };
@@ -163,6 +194,7 @@ export class Game {
         const choice = p.choice ?? "option 1";
         console.log("choice: ", choice);
         tally[choice] += 1;
+        if (p.isImpostor) impostorChoice = p.choice;
       });
     } else {
       tally = { best: 0, neutral: 0, worst: 0 };
@@ -170,12 +202,18 @@ export class Game {
         const choice = p.choice ?? "worst";
         console.log("choice: ", choice);
         tally[choice] += 1;
+        if (p.isImpostor) impostorChoice = p.choice;
       });
     }
+
+    let winning;
+    let maxVotes = 0;
     for (const [key, votes] of Object.entries(tally)) {
       if (votes > maxVotes) {
         maxVotes = votes;
         winning = this.currentOptions[key];
+      } else if (votes === maxVotes) {
+        winning = impostorChoice;
       }
     }
 
@@ -212,6 +250,7 @@ export class Game {
       const winningChoice = this.getMajorityChoice();
       const value = winningChoice[1];
       if (this.currentScenarioCategory == "sacrifice") {
+        handleSacrificeScenario();
       }
       if (typeof value === "number") {
         this.wizardsGrasp += value;
@@ -269,5 +308,15 @@ export class Game {
     this.players[randomInt].makeImpostor();
 
     console.log(this.players[randomInt], " is impostor");
+  }
+
+  handleSacrificeScenario(name, choice) {
+    if (name == "The Statue of the Greedy King") {
+      if (choice == "option 1") {
+        
+      }
+    } else if (name == "The Glowing Bridge") {
+    } else if (name == "The Illuminated Portal") {
+    }
   }
 }
