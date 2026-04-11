@@ -1,248 +1,28 @@
-import EXPRESS from "express";
-import HTTP, { get } from "http";
-import { Server } from "socket.io";
-//import { subscribe } from "./arduino.js";
-import path from "path";
-import fs from "fs";
-import readline from "readline";
-import { fileURLToPath } from "url";
-import { Game } from "../game/game.js";
-
-// ESM file paths
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const APP = EXPRESS();
-const SERVER = HTTP.createServer(APP);
-const io = new Server(SERVER, {
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-  },
+// Arduino button press — sensorIndex (0/1/2) maps to option position
+subscribe("pedestal1", ({ sensorIndex, isActive }) => {
+  if (isActive) game.registerChoice(0, positionToOption(sensorIndex));
+});
+subscribe("pedestal2", ({ sensorIndex, isActive }) => {
+  if (isActive) game.registerChoice(1, positionToOption(sensorIndex));
+});
+subscribe("pedestal3", ({ sensorIndex, isActive }) => {
+  if (isActive) game.registerChoice(2, positionToOption(sensorIndex));
+});
+subscribe("pedestal4", ({ sensorIndex, isActive }) => {
+  if (isActive) game.registerChoice(3, positionToOption(sensorIndex));
 });
 
-const port = process.env.PORT || process.env.NODE_PORT || 3000;
-
-APP.use(EXPRESS.static("client"));
-APP.use("/media", EXPRESS.static("media"));
-APP.use("/data", EXPRESS.static(path.join(__dirname, "../data")));
-
-const RFID_MAP = {
-  "TAG-001": "Nine-Tailed Fish",
-  "TAG-002": "Jackalope",
-  "TAG-003": "Duck Duck Goose",
-  "TAG-004": "Dinogon",
-};
-// Single game instance
-const game = new Game();
-
-game.onScenarioChange = (roundData) => {
-  io.emit("scenarioChange", {
-    round: roundData,
-    stage: game.stage,
-    wizardsGrasp: game.wizardsGrasp,
-    optionsOrder: game.currentOptionsOrder,
-  });
-  console.log("Category: ", game.currentScenarioCategory);
-  console.log("Options: ", game.currentOptions);
-};
-
-game.onModeChange = (mode) => {
-  io.emit("modeChange", { newMode: mode });
-};
-game.onTimerTick = ({ mode, remaining }) => {
-  io.emit("timerTick", { mode, remaining });
-};
-game.onPlayerChoice = (choiceData) => {
-  io.emit("playerChoice", choiceData);
-};
-game.onRoundResult = (resultData) => {
-  io.emit("roundResult", resultData);
-  io.emit("modeChange", { newMode: "result" });
-};
-game.onGameEnd = (result) => {
-  io.emit("gameEnd", result);
-};
-
-//Load scenarios and start
-const scenariosPath = path.join(__dirname, "../data/scenarios.json");
-const scenarioData = JSON.parse(fs.readFileSync(scenariosPath, "utf-8"));
-game.loadScenarios(scenarioData);
-
-const playerSockets = {};
-let gameStarted = false;
-
-const getLobbyState = () => ({
-  connectedSlots: Object.keys(playerSockets).map(Number),
-  players: game.players.map((p) => ({
-    species: p.species,
-    name: p.name,
-    image: p.image,
-    pedestalIndex: p.pedestalIndex,
-    hasCharacter: !!p.species,
-  })),
-  status:
-    Object.keys(playerSockets).length === 4 &&
-    game.players.every((p) => p.species)
-      ? "ready"
-      : "waiting",
-});
-
-const tryStartGame = () => {
-  if (gameStarted) return;
-  const allConnected = Object.keys(playerSockets).length === 4;
-  const allHaveCharacters = game.players.every((p) => p.species);
-  if (allConnected && allHaveCharacters) {
-    gameStarted = true;
-    console.log("All players ready - starteng game");
-    io.emit("gameStarting");
-    setTimeout(() => game.loadCurrentScenario(), 3000);
-  }
-};
-
-io.on("connection", (socket) => {
-  const takenSlots = Object.keys(playerSockets).map(Number);
-  const availableSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
-
-  if (availableSlot === undefined) {
-    socket.emit("lobbyFull");
-    return;
-  }
-
-  playerSockets[availableSlot] = socket.id;
-  socket.pedestalIndex = availableSlot;
-
-  console.log(
-    `🔌 Client connected: ${socket.id} -> pedestal ${availableSlot + 1}`,
-  );
-
-  socket.emit("identity", { pedestalIndex: availableSlot });
-
-  io.emit("lobby", getLobbyState());
-
-  if (gameStarted && game.currentScenario) {
-    socket.emit("scenarioChange", {
-      round: game.round,
-      stage: game.stage,
-      wizardsGrasp: game.wizardsGrasp,
-      optionsOrder: game.currentOptionsOrder,
-      // mode: game.mode,
-      // timerTick: game.timerTick,
-      // remaining: game.remaining,
-    });
-  }
-
-  socket.on("disconnect", () => {
-    delete playerSockets[socket.pedestalIndex];
-    console.log(`Disconnected: pedestal ${socket.pedestalIndex + 1}`);
-    io.emit("lobby", getLobbyState());
-  });
-});
-
-// [0, 1, 2, 3].forEach((pedestalIndex) => {
-//   subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag }) => {
-//   const species = RFID_MAP[rfidTag];
-//   if (!species) {
-//     console.warn(`unknown RFID tag: ${rfidTag}`);
-//     return;
-//   }
-
-//   game.assignCharacterToPedestal(pedestalIndex, species);
-//   console.log(`RFID: pedestal ${pedestalIndex + 1} -> ${species}`);
-
-//   io.emit("lobby", getLobbyState());
-//   tryStartGame();
-//    });
-// });
-
-// subscribe("pedestal1", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
-// subscribe("pedestal2", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
-// subscribe("pedestal3", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
-// subscribe("pedestal4", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
-
-const keyMap = {
-  1: { pedestal: 0, position: 0 },
-  2: { pedestal: 0, position: 1 },
-  3: { pedestal: 0, position: 2 },
-  q: { pedestal: 1, position: 0 },
-  w: { pedestal: 1, position: 1 },
-  e: { pedestal: 1, position: 2 },
-  a: { pedestal: 2, position: 0 },
-  s: { pedestal: 2, position: 1 },
-  d: { pedestal: 2, position: 2 },
-  z: { pedestal: 3, position: 0 },
-  x: { pedestal: 3, position: 1 },
-  c: { pedestal: 3, position: 2 },
-};
-
-const positionToOption = (position) => {
-  const isIndividual =
-    game.currentScenarioCategory === "sacrifice" ||
-    game.currentScenarioCategory === "item";
-  const isDilemma = game.currentScenarioCategory === "dilemma";
-
-  if (isIndividual) {
-    return ["option 1", "option 2", "option 3"][position];
-  } else if (isDilemma) {
-    return ["helpful", null, "selfish"][position];
-  } else {
-    return ["best", "neutral", "worst"][position];
-  }
-};
-
-const DEV_RFID = [
-  "Nine-Tailed Fish",
-  "Jackalope",
-  "Duck Duck Goose",
-  "Dinogon",
-];
-
-if (process.stdin.isTTY) {
-  readline.emitKeypressEvents(process.stdin);
-  process.stdin.setRawMode(true);
-
-  process.stdin.on("keypress", (str, key) => {
-    if (key.ctrl && key.name === "c") process.exit();
-
-    if (str === "r") {
-      DEV_RFID.forEach((species, i) => {
-        game.assignCharacterToPedestal(i, species);
-      });
-      io.emit("lobby", getLobbyState());
-      console.log("🪪 Dev: all RFID taps simulated");
-      tryStartGame();
+// RFID — same as before
+[0, 1, 2, 3].forEach((pedestalIndex) => {
+  subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag }) => {
+    const species = RFID_MAP[rfidTag];
+    if (!species) {
+      console.warn(`⚠️ Unknown RFID tag: ${rfidTag}`);
       return;
     }
-
-    if (keyMap[str]) {
-      const { pedestal, position } = keyMap[str];
-      const option = positionToOption(position);
-      game.registerChoice(pedestal, option);
-    }
+    game.assignCharacterToPedestal(pedestalIndex, species);
+    console.log(`🪪 RFID: pedestal ${pedestalIndex + 1} → ${species}`);
+    io.emit("lobby", getLobbyState());
+    tryStartGame();
   });
-
-  console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
-}
-
-// process.stdin.on("keypress", (str, key) => {
-//   if (key.ctrl && key.name === "c") process.exit();
-//   if (keyMap[str]) {
-//     const { pedestal, position } = keyMap[str];
-//     const option = positionToOption(position); // evaluated fresh on every keypress
-//     game.registerChoice(pedestal, option);
-//   }
-// });
-
-//console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
-
-SERVER.listen(port, () => {
-  console.log(`Listening on 127.0.0.1: ${port}`);
 });

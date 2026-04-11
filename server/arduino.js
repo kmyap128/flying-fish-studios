@@ -1,11 +1,11 @@
-//use serial port
 import { SerialPort } from "serialport";
 import { ReadlineParser } from "@serialport/parser-readline";
 
-//track port (2)
 const PORT1 = new SerialPort({ path: "COM3", baudRate: 115200 });
-//create parsers (2)
 const PARSER1 = PORT1.pipe(new ReadlineParser({ delimiter: "\n" }));
+
+PORT1.on("open", () => console.log("Port1 open"));
+PORT1.on("error", (err) => console.error("Port1 error:", err.message));
 
 const SUBSCRIBERS = {
   pedestal1: [],
@@ -18,45 +18,63 @@ const SUBSCRIBERS = {
   rfid4: [],
 };
 
-//create data arrays through splitting (on "|" ?)
-//assign data to creatures through arrays indexes (PARSER.on)
-// map/trim
-// notify
-PORT1.on("open", () => console.log("Port1 open"));
-PORT1.on("error", (err) => console.error("Port error", err.message));
+// Track previous states to only fire on changes
+const prevSensors = {
+  pedestal1: [false, false, false],
+  pedestal2: [false, false, false],
+  pedestal3: [false, false, false],
+  pedestal4: [false, false, false],
+};
 
-PARSER1.on("data", (data) => {
-  let newData = data.split(" | ");
-  let data1 = newData[0].split(" ");
-  let data2 = newData[1].split(" ");
-  let data3 = newData[2].split(" ");
-  let data4 = newData[3].split(" ");
-  notify("pedestal1", {
-    rfidTag: data1[0],
-    selectedChoice: data1[1],
-  });
-  notify("pedestal2", {
-    rfidTag: data2[0],
-    selectedChoice: data2[1],
-  });
-  notify("pedestal3", {
-    rfidTag: data3[0],
-    selectedChoice: data3[1],
-  });
-  notify("pedestal4", {
-    rfidTag: data4[0],
-    selectedChoice: data4[1],
-  });
-});
+const prevRFID = {
+  pedestal1: "NONE",
+  pedestal2: "NONE",
+  pedestal3: "NONE",
+  pedestal4: "NONE",
+};
 
-//NOTIFY/SUBSCRIBE FUNCTIONALITY
+// Parse one pedestal chunk: "RFID S0 S1 S2"
+function parsePedestalChunk(chunk) {
+  const parts = chunk.trim().split(" ");
+  return {
+    rfid: parts[0],
+    sensors: [parts[1] === "1", parts[2] === "1", parts[3] === "1"],
+  };
+}
+
+function handleLine(line) {
+  const chunks = line.trim().split(" | ");
+  if (chunks.length !== 4) return;
+
+  const pedestalNames = ["pedestal1", "pedestal2", "pedestal3", "pedestal4"];
+
+  pedestalNames.forEach((name, i) => {
+    const { rfid, sensors } = parsePedestalChunk(chunks[i]);
+
+    // Fire RFID event only when a new card is tapped
+    if (rfid !== "NONE" && rfid !== prevRFID[name]) {
+      prevRFID[name] = rfid;
+      notify(`rfid${i + 1}`, { rfidTag: rfid });
+    }
+
+    // Fire sensor event only when state changes
+    sensors.forEach((isActive, sensorIndex) => {
+      if (isActive !== prevSensors[name][sensorIndex]) {
+        prevSensors[name][sensorIndex] = isActive;
+        notify(name, { sensorIndex, isActive });
+      }
+    });
+  });
+}
+
+PARSER1.on("data", handleLine);
+
 function notify(type, data) {
-  SUBSCRIBERS[type]?.forEach((callback) => callback(data));
+  SUBSCRIBERS[type]?.forEach((cb) => cb(data));
 }
 
 function subscribe(type, callback) {
   if (SUBSCRIBERS[type]) SUBSCRIBERS[type].push(callback);
 }
 
-//export subscribe
 export { subscribe };
