@@ -1,6 +1,6 @@
 //use serial port
-const { SerialPort } = require("serialport");
-const { ReadlineParser } = require("@serialport/parser-readline");
+import { SerialPort } from "serialport";
+import { ReadlineParser } from "@serialport/parser-readline";
 
 //track port (2)
 const PORT1 = new SerialPort({ path: "COM3", baudRate: 115200 });
