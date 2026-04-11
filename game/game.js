@@ -246,14 +246,15 @@ export class Game {
   endRound() {
     clearInterval(this.timerInterval);
 
+    let winningChoice;
     if (this.currentType == "synergy") {
-      const winningChoice = this.getMajorityChoice();
+      winningChoice = this.getMajorityChoice();
       const value = winningChoice[1];
-      if (this.currentScenarioCategory == "sacrifice") {
-        handleSacrificeScenario();
-      }
       if (typeof value === "number") {
         this.wizardsGrasp += value;
+      }
+      if (this.currentScenarioCategory == "sacrifice") {
+        handleSacrificeScenario();
       }
     } else {
       let total = 0;
@@ -267,16 +268,23 @@ export class Game {
         if (this.currentScenarioCategory == "item") {
           player.item == this.currentScenario.item;
         } else if (this.currentScenarioCategory == "sacrifice") {
-          if (choiceIndex == "option 1") {
-            player.disabled = 1;
-          } else if (choiceIndex == "option 2") {
-            player.disabled = 2;
-          } else {
-            player.disabled = 3;
-          }
+          this.handleSacrificeScenario();
         }
       });
       this.wizardsGrasp += total / this.players.length;
+    }
+
+    if (this.onRoundResult) {
+      this.onRoundResult({
+        winningChoice,
+        wizardsGrasp: this.wizardsGrasp,
+        playerChoices: this.players.map((p) => ({
+          species: p.species,
+          pedestalIndex: p.pedestalIndex,
+          choice: p.choice,
+          option: p.choice ? this.currentOptions[p.choice] : null,
+        })),
+      });
     }
 
     // Lose Condition
@@ -285,9 +293,11 @@ export class Game {
       return;
     }
 
-    this.stage++;
-    this.currentCategoryIndex++;
-    this.loadCurrentScenario();
+    setTimeout(() => {
+      this.stage++;
+      this.currentCategoryIndex++;
+      this.loadCurrentScenario();
+    }, 5000);
   }
 
   endGame(result) {
@@ -310,11 +320,14 @@ export class Game {
     console.log(this.players[randomInt], " is impostor");
   }
 
-  handleSacrificeScenario(name, choice) {
+  handleSacrificeScenario(name) {
     if (name == "The Statue of the Greedy King") {
-      if (choice == "option 1") {
-        
-      }
+      this.players.forEach((player) => {
+        const choice = player.choice ?? "option 1";
+        if (choice == "option 1") player.disabled = 1;
+        else if (choice == "option 2") player.disabled = 2;
+        else player.disabled = 3;
+      });
     } else if (name == "The Glowing Bridge") {
     } else if (name == "The Illuminated Portal") {
     }
