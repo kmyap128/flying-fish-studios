@@ -222,6 +222,19 @@ export class Game {
     return winning;
   }
 
+  handleSacrificeScenario(name) {
+    if (name == "The Statue of the Greedy King") {
+      this.players.forEach((player) => {
+        const choice = player.choice ?? "option 1";
+        if (choice == "option 1") player.disabled = 1;
+        else if (choice == "option 2") player.disabled = 2;
+        else player.disabled = 3;
+      });
+    } else if (name == "The Glowing Bridge") {
+    } else if (name == "The Illuminated Portal") {
+    }
+  }
+
   startTimer(duration, mode, onComplete) {
     clearInterval(this.timerInterval);
     let remaining = duration;
@@ -318,18 +331,5 @@ export class Game {
     this.players[randomInt].makeImpostor();
 
     console.log(this.players[randomInt], " is impostor");
-  }
-
-  handleSacrificeScenario(name) {
-    if (name == "The Statue of the Greedy King") {
-      this.players.forEach((player) => {
-        const choice = player.choice ?? "option 1";
-        if (choice == "option 1") player.disabled = 1;
-        else if (choice == "option 2") player.disabled = 2;
-        else player.disabled = 3;
-      });
-    } else if (name == "The Glowing Bridge") {
-    } else if (name == "The Illuminated Portal") {
-    }
   }
 }

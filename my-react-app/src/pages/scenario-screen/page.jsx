@@ -142,11 +142,11 @@ export default function ScenarioScreen({
           </>
         )}
 
-        {mode === "result" && scenarioData && selectedOption && (
+        {mode === "result" && roundResult && (
           <>
             <ResultBlock
               scenarioNum={gameState.stage + 1}
-              resultText={selectedOption[2]}
+              resultText={roundResult.winningOption?.[2]}
             />
             <div id="timer-meter-container">
               <TimerMeter
