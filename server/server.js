@@ -93,6 +93,7 @@ const tryStartGame = () => {
   const allConnected = Object.keys(playerSockets).length === 4;
   const allHaveCharacters = game.players.every((p) => p.species);
   if (allConnected && allHaveCharacters) {
+    game.assignImpostor();
     gameStarted = true;
     console.log("All players ready - starteng game");
     io.emit("gameStarting");
@@ -138,35 +139,6 @@ io.on("connection", (socket) => {
     io.emit("lobby", getLobbyState());
   });
 });
-
-// [0, 1, 2, 3].forEach((pedestalIndex) => {
-//   subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag }) => {
-//   const species = RFID_MAP[rfidTag];
-//   if (!species) {
-//     console.warn(`unknown RFID tag: ${rfidTag}`);
-//     return;
-//   }
-
-//   game.assignCharacterToPedestal(pedestalIndex, species);
-//   console.log(`RFID: pedestal ${pedestalIndex + 1} -> ${species}`);
-
-//   io.emit("lobby", getLobbyState());
-//   tryStartGame();
-//    });
-// });
-
-// subscribe("pedestal1", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
-// subscribe("pedestal2", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
-// subscribe("pedestal3", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
-// subscribe("pedestal4", ({ selectedChoice }) =>
-//   game.registerChoice(0, selectedChoice),
-// );
 
 const keyMap = {
   1: { pedestal: 0, position: 0 },
@@ -231,17 +203,6 @@ if (process.stdin.isTTY) {
 
   console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
 }
-
-// process.stdin.on("keypress", (str, key) => {
-//   if (key.ctrl && key.name === "c") process.exit();
-//   if (keyMap[str]) {
-//     const { pedestal, position } = keyMap[str];
-//     const option = positionToOption(position); // evaluated fresh on every keypress
-//     game.registerChoice(pedestal, option);
-//   }
-// });
-
-//console.log("⌨️  Keyboard input active (1/2/3, q/w/e, a/s/d, z/x/c)");
 
 SERVER.listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);

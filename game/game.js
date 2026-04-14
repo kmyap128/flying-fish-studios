@@ -101,6 +101,55 @@ export class Game {
     ];
   }
 
+  handleSacrificeScenario(newChoice) {
+    let choice = newChoice;
+    if (newChoice == null) {
+      choice = player.choice ?? "option 1";
+    }
+    if (this.currentScenario.name == "The Statue of the Greedy King") {
+      this.players.forEach((player) => {
+        if (choice == "option 1") player.disabled = 1;
+        else if (choice == "option 2") player.disabled = 2;
+        else player.disabled = 3;
+      });
+    } else if (this.currentScenario.name == "The Glowing Bridge") {
+      if (choice == "option 1") {
+      } else if (choice == "option 2") {
+      } else {
+      }
+    } else if (this.currentScenario.name == "The Illuminated Portal") {
+      if (choice == "option 1") {
+        this.players.forEach((player) => {
+          player.item == null;
+        });
+      } else if (choice == "option 2") {
+        this.wizardsGrasp += 4;
+      } else {
+      }
+    }
+  }
+
+  handleDilemmaScenario(newChoice) {
+    let choice = newChoice;
+    if (newChoice == null) {
+      choice = player.choice ?? "selfish";
+    }
+
+    if (choice == "selfish") {
+      let chance = Math.random();
+      let result;
+      let wg;
+      let resultText;
+      if (chance < 0.3) {
+        result = choice[1];
+      } else {
+        result = choice[2];
+      }
+      wg = result[0];
+      resultText = result[1];
+    }
+  }
+
   shuffleOptionKeys(options) {
     const keys = Object.keys(options);
     for (let i = keys.length - 1; i > 0; i--) {
@@ -186,7 +235,7 @@ export class Game {
         const choice = p.choice ?? "selfish";
         console.log("choice: ", choice);
         tally[choice] += 1;
-        if (p.isImpostor) impostorChoice = p.choice;
+        if (p.isImpostor) impostorChoice = choice;
       });
     } else if (this.currentScenarioCategory == "sacrifice") {
       tally = { "option 1": 0, "option 2": 0, "option 3": 0 };
@@ -194,7 +243,7 @@ export class Game {
         const choice = p.choice ?? "option 1";
         console.log("choice: ", choice);
         tally[choice] += 1;
-        if (p.isImpostor) impostorChoice = p.choice;
+        if (p.isImpostor) impostorChoice = choice;
       });
     } else {
       tally = { best: 0, neutral: 0, worst: 0 };
@@ -202,7 +251,7 @@ export class Game {
         const choice = p.choice ?? "worst";
         console.log("choice: ", choice);
         tally[choice] += 1;
-        if (p.isImpostor) impostorChoice = p.choice;
+        if (p.isImpostor) impostorChoice = choice;
       });
     }
 
@@ -220,19 +269,6 @@ export class Game {
     console.log("winning option: ", winning);
 
     return winning;
-  }
-
-  handleSacrificeScenario(name) {
-    if (name == "The Statue of the Greedy King") {
-      this.players.forEach((player) => {
-        const choice = player.choice ?? "option 1";
-        if (choice == "option 1") player.disabled = 1;
-        else if (choice == "option 2") player.disabled = 2;
-        else player.disabled = 3;
-      });
-    } else if (name == "The Glowing Bridge") {
-    } else if (name == "The Illuminated Portal") {
-    }
   }
 
   startTimer(duration, mode, onComplete) {
@@ -264,10 +300,14 @@ export class Game {
       winningChoice = this.getMajorityChoice();
       const value = winningChoice[1];
       if (typeof value === "number") {
+      if (this.currentScenarioCategory == "sacrifice") {
+        this.handleSacrificeScenario(winningChoice);
+        this.wizardsGrasp += value;
+      } else if (this.currentScenarioCategory == "dilemma") {
+        this.handleDilemmaScenario(winningChoice);
+      } else {
         this.wizardsGrasp += value;
       }
-      if (this.currentScenarioCategory == "sacrifice") {
-        handleSacrificeScenario();
       }
     } else {
       let total = 0;
@@ -281,7 +321,7 @@ export class Game {
         if (this.currentScenarioCategory == "item") {
           player.item == this.currentScenario.item;
         } else if (this.currentScenarioCategory == "sacrifice") {
-          this.handleSacrificeScenario();
+          this.handleSacrificeScenario(null);
         }
       });
       this.wizardsGrasp += total / this.players.length;

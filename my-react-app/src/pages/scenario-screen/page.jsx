@@ -135,7 +135,11 @@ export default function ScenarioScreen({
 
             <div className="options-container">
               <Options
-                options={Object.entries(scenarioData.options)}
+                options={optionsOrder.map((key) => [
+                  key,
+                  scenarioData.options[key],
+                ])}
+                myChoice={myChoice?.choice ?? null}
                 onSelect={(key) => handleSelectOption(key)}
               />
             </div>

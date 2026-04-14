@@ -17,7 +17,7 @@
 TMAG5273 sensors[NUMBER_OF_MAGS];
 uint8_t i2cAddress = TMAG5273_I2C_ADDRESS_INITIAL;
 // Fixed array declaration — missing [] and braces were wrong
-int magToMuxNum[] = { 1, 2, 3, 5, 6, 7, 1, 2, 3, 5, 6, 7 }; // 12 entries for NUMBER_OF_MAGS
+int magToMuxPort[] = { 1, 2, 3, 5, 6, 7, 1, 2, 3, 5, 6, 7 }; // 12 entries for NUMBER_OF_MAGS
 int threshold = NUMBER_OF_MAGS / 2;
 
 MFRC522 mfrc522[NUMBER_OF_RFID] = {
@@ -28,10 +28,10 @@ MFRC522 mfrc522[NUMBER_OF_RFID] = {
 };
 
 // Removed unused pedestal RFID strings — data arrays handle everything
-String pedestal1Data[2] = {"", ""};
-String pedestal2Data[2] = {"", ""};
-String pedestal3Data[2] = {"", ""};
-String pedestal4Data[2] = {"", ""};
+String pedestal1Data[2] = {"null", "null"};
+String pedestal2Data[2] = {"null", "null"};
+String pedestal3Data[2] = {"null", "null"};
+String pedestal4Data[2] = {"null", "null"};
 
 // Added missing key declaration
 MFRC522::MIFARE_Key key;
@@ -65,7 +65,7 @@ Serial.println("Scanning I2C...");
 
   magIndex = 0; // reset before loop
   for (byte x = 0; x < NUMBER_OF_MAGS; x++) {
-    int port = magToMuxNum[x] % 8;
+    int port = magToMuxPort[x] % 8;
     uint8_t mux_addr = (x < threshold) ? 0x70 : 0x71;
 
     enableMuxPort(port, mux_addr);
@@ -83,18 +83,18 @@ Serial.println("Scanning I2C...");
     disableMuxPort(port, mux_addr); // moved inside loop
   }
 
-  for (byte y = 0; y < NUMBER_OF_RFID; y++) {
-    mfrc522[y].PCD_Init(); // removed extra SPI.begin() — only needed once
-    for (byte i = 0; i < 6; i++) {
-      key.keyByte[i] = 0xFF; // fixed: was keyBite (typo)
-    }
-  }
+  // for (byte y = 0; y < NUMBER_OF_RFID; y++) {
+  //   mfrc522[y].PCD_Init(); // removed extra SPI.begin() — only needed once
+  //   for (byte i = 0; i < 6; i++) {
+  //     key.keyByte[i] = 0xFF; // fixed: was keyBite (typo)
+  //   }
+  // }
 }
 
 void loop() {
   // Read magnetometer sensors
   for (byte x = 0; x < NUMBER_OF_MAGS; x++) {
-    int port = magToMuxNum[x]; // fixed: was magToMuxNum[magIndex] but magIndex isn't updated here
+    int port = magToMuxPort[x]; // fixed: was magToMuxPort[magIndex] but magIndex isn't updated here
     uint8_t mux_addr = (x < threshold) ? 0x70 : 0x71;
 
     enableMuxPort(port, mux_addr);
@@ -122,18 +122,18 @@ void loop() {
   }
 
   // Read RFID sensors
-  for (byte y = 0; y < NUMBER_OF_RFID; y++) {
-    if (mfrc522[y].PICC_IsNewCardPresent() && mfrc522[y].PICC_ReadCardSerial()) {
-      // Fixed: combined into one if — ReadCardSerial must succeed too
-      String uid = readBytes(mfrc522[y].uid.uidByte, mfrc522[y].uid.size);
-      if (y == 0) pedestal1Data[0] = uid;
-      else if (y == 1) pedestal2Data[0] = uid;
-      else if (y == 2) pedestal3Data[0] = uid;
-      else if (y == 3) pedestal4Data[0] = uid;
+  // for (byte y = 0; y < NUMBER_OF_RFID; y++) {
+  //   if (mfrc522[y].PICC_IsNewCardPresent() && mfrc522[y].PICC_ReadCardSerial()) {
+  //     // Fixed: combined into one if — ReadCardSerial must succeed too
+  //     String uid = readBytes(mfrc522[y].uid.uidByte, mfrc522[y].uid.size);
+  //     if (y == 0) pedestal1Data[0] = uid;
+  //     else if (y == 1) pedestal2Data[0] = uid;
+  //     else if (y == 2) pedestal3Data[0] = uid;
+  //     else if (y == 3) pedestal4Data[0] = uid;
 
-      mfrc522[y].PICC_HaltA(); // added — stops the card read cleanly
-    }
-  }
+  //     mfrc522[y].PICC_HaltA(); // added — stops the card read cleanly
+  //   }
+  // }
 
   // Print all pedestal data on one line for Node to parse
   printPedestalData(1, pedestal1Data);

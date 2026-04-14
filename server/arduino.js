@@ -32,19 +32,19 @@ PARSER1.on("data", (data) => {
   let data3 = newData[2].split(" ");
   let data4 = newData[3].split(" ");
   notify("pedestal1", {
-    rfidTag: data1[0],
+    //rfidTag: data1[0],
     selectedChoice: data1[1],
   });
   notify("pedestal2", {
-    rfidTag: data2[0],
+    //rfidTag: data2[0],
     selectedChoice: data2[1],
   });
   notify("pedestal3", {
-    rfidTag: data3[0],
+    //rfidTag: data3[0],
     selectedChoice: data3[1],
   });
   notify("pedestal4", {
-    rfidTag: data4[0],
+    //rfidTag: data4[0],
     selectedChoice: data4[1],
   });
 });
