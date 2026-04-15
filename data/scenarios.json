@@ -62,17 +62,20 @@
         "worst": [
           "Let the flowers tighten.",
           2,
-          "Congratulations, you are now trapped and take forever to rip off all of the flowers.", "floral-grasp/Tighten.png"
+          "Congratulations, you are now trapped and take forever to rip off all of the flowers.",
+          "floral-grasp/Tighten.png"
         ],
         "best": [
           "Sing a soft, calm song.",
           0,
-          "The flowers loosened, they release you and create a beautiful pathway.", "floral-grasp/Sing.png"
+          "The flowers loosened, they release you and create a beautiful pathway.",
+          "floral-grasp/Sing.png"
         ],
         "neutral": [
           "Move slowly and carefully.",
           1,
-          "They loosened slightly, impressed by your patience, but it does take a while.", "floral-grasp/Slowly.png"
+          "They loosened slightly, impressed by your patience, but it does take a while.",
+          "floral-grasp/Slowly.png"
         ]
       },
       "type": "synergy",
@@ -89,17 +92,20 @@
         "worst": [
           "Gently offer to pet him",
           2,
-          "He is strictly professional and finds this extremely disrespectful. He claws your hand and roars.", "wolf-guardian/Pet.png"
+          "He is strictly professional and finds this extremely disrespectful. He claws your hand and roars.",
+          "wolf-guardian/Pet.png"
         ],
         "best": [
           "Throw a stick at him",
           0,
-          "Despite everything, he is still a wolf. Instincts surpass honor, he playfully runs after it, making an opening.", "wolf-guardian/Stick.png"
+          "Despite everything, he is still a wolf. Instincts surpass honor, he playfully runs after it, making an opening.",
+          "wolf-guardian/Stick.png"
         ],
         "neutral": [
           "Challenge him to a duel",
           1,
-          "He accepts. It is an exhausting fight and you sustain injuries, but he guides you along as a reward.", "wolf-guardian/Duel.png"
+          "He accepts. It is an exhausting fight and you sustain injuries, but he guides you along as a reward.",
+          "wolf-guardian/Duel.png"
         ]
       },
       "type": "synergy",
@@ -114,17 +120,20 @@
         "best": [
           "Punch it in the stomach",
           0,
-          "A giant fish flew out of its mouth, it was choking and only wanted your help. It shows you a shortcut.", "angry-shroombear/Punch.png"
+          "A giant fish flew out of its mouth, it was choking and only wanted your help. It shows you a shortcut.",
+          "angry-shroombear/Punch.png"
         ],
         "worst": [
           "Throw mushrooms at it",
           2,
-          "The bear gets annoyed and claws at you.", "shroombear/Throw.png"
+          "The bear gets annoyed and claws at you.",
+          "shroombear/Throw.png"
         ],
         "neutral": [
           "Stand tall and indimidate it",
           1,
-          "It’s confused. You’re confused. The bear walks away in confusion.", "shroombear/Strong.png"
+          "It’s confused. You’re confused. The bear walks away in confusion.",
+          "shroombear/Strong.png"
         ]
       },
       "type": "synergy",
@@ -139,17 +148,20 @@
         "worst": [
           "Make stupid faces at it.",
           2,
-          "It copies you perfectly. You both lose respect for yourselves and sit there in silence for a while.", "mirror-image/Stupid.png"
+          "It copies you perfectly. You both lose respect for yourselves and sit there in silence for a while.",
+          "mirror-image/Stupid.png"
         ],
         "best": [
           "Sacrifice your Reflection.",
           0,
-          "It dramatically fades, “I was cooler” You win anyway.", "mirror-image/Goodbye.png"
+          "It dramatically fades, “I was cooler” You win anyway.",
+          "mirror-image/Goodbye.png"
         ],
         "neutral": [
           "Fight your reflection.",
           1,
-          "It mirrors every move. Eventually, this tires it out after a long battle.", "mirror-image/Reflect.png"
+          "It mirrors every move. Eventually, this tires it out after a long battle.",
+          "mirror-image/Reflect.png"
         ]
       },
       "type": "synergy",
@@ -212,9 +224,24 @@
     "The Statue of the Greedy King": {
       "scenario": "A golden statue blocks the path, its mouth open. It will only move if it 'tastes' something incredibly valuable",
       "options": {
-        "option 1": ["Lose the ability to choose answer one", 1,  "", "statue/No1.png"],
-        "option 2": ["Lose the ability to choose answer three", 1, "", "statue/No3.png"],
-        "option 3": ["Lose the ability to choose answer two", 1, "", "statue/No2.png"]
+        "option 1": [
+          "Lose the ability to choose answer one",
+          1,
+          "",
+          "statue/No1.png"
+        ],
+        "option 2": [
+          "Lose the ability to choose answer three",
+          1,
+          "",
+          "statue/No3.png"
+        ],
+        "option 3": [
+          "Lose the ability to choose answer two",
+          1,
+          "",
+          "statue/No2.png"
+        ]
       },
       "type": "solo",
       "sound": "",
@@ -225,9 +252,19 @@
     "The Glowing Bridge": {
       "scenario": "A narrow bridge made of shimmering blue light stretches over a bottomless ravine, its glow flickering unpredictably.",
       "options": {
-        "option 1": ["Drop your items to reduce weight",0,  "", "glowing-bridge/Drop.png"],
-        "option 2": ["Vote someone to stay behind", 1, "", "glowing-bridge/Vote.png"],
-        "option 3": ["Cross anyways", 1, "", "glowing-bridge/Cross.png"]
+        "option 1": [
+          "Drop your items to reduce weight",
+          0,
+          "",
+          "glowing-bridge/Drop.png"
+        ],
+        "option 2": [
+          "Leave a companion behind",
+          1,
+          "",
+          "glowing-bridge/Vote.png"
+        ],
+        "option 3": ["Cross anyways", 2, "", "glowing-bridge/Cross.png"]
       },
       "type": "synergy",
       "sound": "",
@@ -239,8 +276,18 @@
       "scenario": "A mesmerizing portal hums in the woods, pulling at your mind. You cannot look away unless you please it.",
       "options": {
         "option 1": ["Toss in your item", 1, "", "illuminated-portal/Toss.png"],
-        "option 2": ["Sacrifice Wizard's Grasp", 1, "", "illuminated-portal/WG.png"],
-        "option 3": ["Throw in a companion", 1, "", "illuminated-portal/Companion.png"]
+        "option 2": [
+          "Throw in a companion",
+          1,
+          "",
+          "illuminated-portal/Companion.png"
+        ],
+        "option 3": [
+          "Sacrifice Wizard's Grasp",
+          4,
+          "",
+          "illuminated-portal/WG.png"
+        ]
       },
       "type": "synergy",
       "sound": "",
@@ -256,17 +303,20 @@
         "worst": [
           "Take a flyer and encourage them",
           2,
-          "The goblins were secretly working for the wizard and the flyers were coated with magic that traps you briefly.", "goblin-interns/TakeIt.png"
+          "The goblins were secretly working for the wizard and the flyers were coated with magic that traps you briefly.",
+          "goblin-interns/TakeIt.png"
         ],
         "best": [
           "Smack the flyers away",
           0,
-          "The goblins panic, they were secretly working for the wizard to sabotage you. You have successfully thwarted their attempt.", "goblin-interns/Smack.png"
+          "The goblins panic, they were secretly working for the wizard to sabotage you. You have successfully thwarted their attempt.",
+          "goblin-interns/Smack.png"
         ],
         "neutral": [
           "Listen to their long sales pitch",
           1,
-          "The goblins trap you there for a long time, this was all a set up to stall for the wizard and you fell for it but you managed to get out of there.", "goblin-interns/Listen.png"
+          "The goblins trap you there for a long time, this was all a set up to stall for the wizard and you fell for it but you managed to get out of there.",
+          "goblin-interns/Listen.png"
         ]
       },
       "type": "synergy",
@@ -281,17 +331,20 @@
         "neutral": [
           "Help redesign his stand",
           1,
-          "It looks amazing. Still no customers, but he does help you move along although you wasted some time.", "cheese-seller/Redesign.png"
+          "It looks amazing. Still no customers, but he does help you move along although you wasted some time.",
+          "cheese-seller/Redesign.png"
         ],
         "worst": [
           "Question his business",
           2,
-          "He already doubts himself. He spent a long time crying about his problems and you felt like it was too rude to leave.", "cheese-seller/Question.png"
+          "He already doubts himself. He spent a long time crying about his problems and you felt like it was too rude to leave.",
+          "cheese-seller/Question.png"
         ],
         "best": [
           "Sample the cheese",
           0,
-          "It is incredible. You feel inspired, thanking him and gaining a new found speed.", "cheese-seller/Sample.png"
+          "It is incredible. You feel inspired, thanking him and gaining a new found speed.",
+          "cheese-seller/Sample.png"
         ]
       },
       "type": "synergy",
@@ -306,17 +359,20 @@
         "neutral": [
           "Fire",
           1,
-          "The tree nods slowly. “Acceptable.” A path opens up.", "whimsical-tree/Fire.png"
+          "The tree nods slowly. “Acceptable.” A path opens up.",
+          "whimsical-tree/Fire.png"
         ],
         "best": [
           "A Rose",
           0,
-          "“Correct,” it says, pleased you chose something poetic. A shortcut is revealed.", "whimsical-tree/Rose.png"
+          "“Correct,” it says, pleased you chose something poetic. A shortcut is revealed.",
+          "whimsical-tree/Rose.png"
         ],
         "worst": [
           "The Sunset",
           2,
-          "“No,” it sighs. “Not very smart…” It forces you to go a different path.", "whimsical-tree/Sunset.png"
+          "“No,” it sighs. “Not very smart…” It forces you to go a different path.",
+          "whimsical-tree/Sunset.png"
         ]
       },
       "type": "synergy",
@@ -333,17 +389,20 @@
         "helpful": [
           "Help him climb out",
           1,
-          "He says thanks, then remembers he’s an ogre and smacks you over the head. He then leaves out of respect.", "trapped-ogre/Helphim.png"
+          "He says thanks, then remembers he’s an ogre and smacks you over the head. He then leaves out of respect.",
+          "trapped-ogre/Helphim.png"
         ],
         "selfish": [
           "Steal the potion",
           [
             0,
-            "Finders keepers. The ogre respects the hustle.", "ogre-pit/Potion.png"
+            "Finders keepers. The ogre respects the hustle.",
+            "ogre-pit/Potion.png"
           ],
           [
             2,
-            "You try to grab the potion, but slip and fall in the hole too. The ogre knocks you out and then leaves the hole. You're stuck there for a while.", "ogre-pit/Potion.png"
+            "You try to grab the potion, but slip and fall in the hole too. The ogre knocks you out and then leaves the hole. You're stuck there for a while.",
+            "ogre-pit/Potion.png"
           ]
         ]
       },
@@ -359,17 +418,20 @@
         "helpful": [
           "Yell to the gnome and warn him",
           1,
-          "The goblin flees. The gnome cries, thanking you and heals your injuries.", "gnome-cart/Yell.png"
+          "The goblin flees. The gnome cries, thanking you and heals your injuries.",
+          "gnome-cart/Yell.png"
         ],
         "selfish": [
           "Raid the cart with the goblin",
           [
             0,
-            "The goblin judges your technique. You feel weirdly inadequate, but manage to find a potion to heal your injuries.", "gnome-cart/Raid.png"
+            "The goblin judges your technique. You feel weirdly inadequate, but manage to find a potion to heal your injuries.",
+            "gnome-cart/Raid.png"
           ],
           [
             2,
-            "The goblin is mad that you're stealing his loot, and he throws a potion that immobilizes you for a while.", "gnome-cart/Raid.png"
+            "The goblin is mad that you're stealing his loot, and he throws a potion that immobilizes you for a while.",
+            "gnome-cart/Raid.png"
           ]
         ]
       },
@@ -385,17 +447,20 @@
         "helpful": [
           "Save the tadpoles",
           1,
-          "The tadpoles respect you and open up a secret path in the pond, you lose a little time helping them but not too much.", "witch-soup/Tadpole.png"
+          "The tadpoles respect you and open up a secret path in the pond, you lose a little time helping them but not too much.",
+          "witch-soup/Tadpole.png"
         ],
         "selfish": [
           "Indulge in the soup",
           [
             0,
-            "The soup invigorates you, giving you the energy to keep moving foward quickly.", "witch-soup/Soup.png"
+            "The soup invigorates you, giving you the energy to keep moving foward quickly.",
+            "witch-soup/Soup.png"
           ],
           [
             2,
-            "It’s really bad and you feel sick. You manage to heal your injuries but you lost some time.", "witch-soup/Soup.png"
+            "It’s really bad and you feel sick. You manage to heal your injuries but you lost some time.",
+            "witch-soup/Soup.png"
           ]
         ]
       },

@@ -15,6 +15,7 @@ export class CreaturePlayer {
     this.pedestalIndex = pedestalIndex;
 
     this.isImpostor = false;
+    this.out = false;
 
     this.choice = null;
     this.disabled = null;
