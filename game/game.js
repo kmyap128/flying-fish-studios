@@ -254,26 +254,32 @@ export class Game {
     if (this.currentScenarioCategory == "dilemma") {
       tally = { helpful: 0, selfish: 0 };
       this.players.forEach((p) => {
-        const choice = p.choice ?? "selfish";
-        console.log("choice: ", choice);
-        tally[choice] += 1;
-        if (p.isImpostor) impostorChoice = choice;
+        if (!p.out) {
+          const choice = p.choice ?? "selfish";
+          console.log("choice: ", choice);
+          tally[choice] += 1;
+          if (p.isImpostor) impostorChoice = choice;
+        }
       });
     } else if (this.currentScenarioCategory == "sacrifice") {
       tally = { "option 1": 0, "option 2": 0, "option 3": 0 };
       this.players.forEach((p) => {
-        const choice = p.choice ?? "option 1";
-        console.log("choice: ", choice);
-        tally[choice] += 1;
-        if (p.isImpostor) impostorChoice = choice;
+        if (!p.out) {
+          const choice = p.choice ?? "option 1";
+          console.log("choice: ", choice);
+          tally[choice] += 1;
+          if (p.isImpostor) impostorChoice = choice;
+        }
       });
     } else {
       tally = { best: 0, neutral: 0, worst: 0 };
       this.players.forEach((p) => {
-        const choice = p.choice ?? "worst";
-        console.log("choice: ", choice);
-        tally[choice] += 1;
-        if (p.isImpostor) impostorChoice = choice;
+        if (!p.out) {
+          const choice = p.choice ?? "worst";
+          console.log("choice: ", choice);
+          tally[choice] += 1;
+          if (p.isImpostor) impostorChoice = choice;
+        }
       });
     }
 
@@ -338,20 +344,22 @@ export class Game {
     } else {
       let total = 0;
       this.players.forEach((player) => {
-        const choiceIndex = player.choice ?? "option 1";
-        console.log("choice index: ", choiceIndex);
-        let value = this.currentOptions[choiceIndex];
-        if (this.currentScenarioCategory == "item") {
-          player.item == this.currentScenario.item;
-          this.resultText = value[2];
-          total += value[1];
-        } else if (this.currentScenarioCategory == "sacrifice") {
-          value = this.handleSacrificeScenario(null);
-          this.resultText = value[1];
-          total += value[0];
-        } else {
-          this.resultText = value[2];
-          total += value[1];
+        if (!p.out) {
+          const choiceIndex = player.choice ?? "option 1";
+          console.log("choice index: ", choiceIndex);
+          let value = this.currentOptions[choiceIndex];
+          if (this.currentScenarioCategory == "item") {
+            player.item == this.currentScenario.item;
+            this.resultText = value[2];
+            total += value[1];
+          } else if (this.currentScenarioCategory == "sacrifice") {
+            value = this.handleSacrificeScenario(null);
+            this.resultText = value[1];
+            total += value[0];
+          } else {
+            this.resultText = value[2];
+            total += value[1];
+          }
         }
       });
       this.wizardsGrasp += total / this.players.length;
