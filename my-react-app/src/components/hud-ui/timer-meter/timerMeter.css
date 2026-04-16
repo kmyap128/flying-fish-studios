@@ -1,11 +1,12 @@
 .timer-meter-bar-container {
   position: relative;
   display: inline-flex;
-
+  width: 100vw;
 }
 
 .timer-meter-bg {
   display: block;
+  width: 100%;
 }
 
 .timer-meter-fill-wrapper {

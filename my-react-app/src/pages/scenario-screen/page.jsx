@@ -32,7 +32,7 @@ export default function ScenarioScreen({
     ? `url(/backgrounds/${scenarioData.media.background})`
     : "none";
 
-  const playerImage = myPlayer?.image ? `/characters/${myPlayer.image}` : null;
+  const playerImage = myPlayer?.image ? `/UI_Assets/Corner_UI/Character_UI/${myPlayer.image}` : null;
 
   return (
     <div
@@ -56,10 +56,10 @@ export default function ScenarioScreen({
             </div> */}
             <div className="header-wrapper">
               <div id="creature-bar-container">
-                <CreatureBar image={waddles} creatureName={"Waddles"} />
+                <CreatureBar image={playerImage} creatureName={myPlayer?.name} />
               </div>
               <div id="wizard-bar-container">
-                <WizardBar
+                <WizardBar  
                   wizardsGrasp={gameState.wizardsGrasp}
                   scenarioNumber={gameState.stage + 1}
                 />

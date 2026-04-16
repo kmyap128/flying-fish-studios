@@ -3,6 +3,7 @@
   gap: 16px;
   justify-content: center;
   align-items: center;
+  width: 80vw;
 }
 
 .option {
@@ -17,6 +18,7 @@
 .option-bg {
   display: block;
   height: auto;
+  width: 100%;
 }
 
 .option-button-content {
@@ -34,19 +36,19 @@
 
 .option-icon {
   width:auto;
-  height: 20vh;
+  height: 15vh;
   align-self: end;   
 }
 
 .option-label {
   font-family: 'LondrinaSolid', sans-serif;
   font-weight: 900;
-  font-size: 5em;
+  font-size: 2em;
   color: #fff;
   -webkit-text-stroke: 2px black;
   paint-order: stroke fill;
   text-align: center;
-  max-width: 80%;
+  max-width: 90%;
   align-self: start;  
   line-height: 1.2;
 }

@@ -6,6 +6,7 @@
 .wizard-bg {
   display: block;
   height: auto;
+  width: 30vw;
 }
 
 .wizard-content {
@@ -25,6 +26,7 @@
   position: absolute;
   transform: translate(13%, -140%) rotate(180deg);
   height: auto;
+  width: 50%;
 }
 
 .wizard-diamond {
@@ -38,7 +40,7 @@
   margin: 0;
   transform: translateX(20%);
   font-family: 'LondrinaSolid', sans-serif;
-  font-size: 10em;
+  font-size: 5em;
 
   background: linear-gradient(to bottom, #FFF1BD 50%, #FFCD9D 50%);
   -webkit-background-clip: text;
@@ -58,7 +60,7 @@
   margin: 0;
   transform: translate(-160%, 15%);
   font-family: 'LondrinaSolid', sans-serif;
-  font-size: 8em;
+  font-size: 4em;
 
   background: white;
   -webkit-background-clip: text;

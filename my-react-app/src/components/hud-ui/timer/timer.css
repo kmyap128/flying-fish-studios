@@ -8,11 +8,13 @@
 .timer-circle {
   position: relative;
   display: inline-flex;
+  width: 15vw;
 }
 
 .timer-bg {
   display: block;
   height: auto;
+  width: 100%
 }
 
 .timer-content {
@@ -28,7 +30,7 @@
 
 .timer-number {
   font-family: 'LondrinaSolid', sans-serif;
-  font-size: 20em;
+  font-size: 10em;
 
   background: linear-gradient(to bottom, #FFF1BD 50%, #FFCD9D 50%);
   -webkit-background-clip: text;

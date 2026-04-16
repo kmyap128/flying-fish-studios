@@ -23,6 +23,7 @@
   display: block;
   height: auto;
   z-index: 1;
+  width: 50%;
 }
 
 .scenario-option-content {
@@ -43,12 +44,12 @@
 }
 
 #scenario-option {
-  font-size: 7em;
+  font-size: 3em;
   color: #fff;
   margin: 0;
   padding-top: 20px;
   padding-left: 60px;
   padding-right: 60px;
   text-align: center;
-  -webkit-text-stroke: 5px black;
+  -webkit-text-stroke: 3px black;
 }

@@ -1,7 +1,7 @@
 {
   "Finley": {
     "species": "The Nine-Tailed Fish",
-    "image": "finley.png",
+    "image": "Finley_UI.png",
     "animation": "finley.gif",
     "bio": "bio about finley",
     "itemImage": "",
@@ -10,7 +10,7 @@
   },
   "Sprig": {
     "species": "The Jubilant Jackalope",  
-    "image": "sprig.png",
+    "image": "Sprig_UI.png",
     "animation": "sprig.gif",
     "bio": "bio about sprig",
     "itemImage": "",
@@ -19,7 +19,7 @@
   },
   "Waddles": {
     "species": "The Duck Duck Goose",
-    "image": "waddles.png",
+    "image": "Waddles_UI.png",
     "animation": "waddles.gif",
     "bio": "bio about waddles",
     "itemImage": "",
@@ -28,7 +28,7 @@
   },
   "Smoulder": {
     "species": "",
-    "image": "smoulder.png",
+    "image": "Smoulder_UI.png",
     "animation": "smoulder.gif",
     "bio": "",
     "itemImage": "",
