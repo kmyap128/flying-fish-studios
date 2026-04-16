@@ -95,7 +95,7 @@ const tryStartGame = () => {
   if (allConnected && allHaveCharacters) {
     game.assignImpostor();
     gameStarted = true;
-    console.log("All players ready - starteng game");
+    console.log("All players ready - starting game");
     io.emit("gameStarting");
     setTimeout(() => game.loadCurrentScenario(), 3000);
   }
