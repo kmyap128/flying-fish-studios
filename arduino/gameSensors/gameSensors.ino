@@ -28,10 +28,10 @@ MFRC522 mfrc522[NUMBER_OF_RFID] = {
 };
 
 // Removed unused pedestal RFID strings — data arrays handle everything
-String pedestal1Data[2] = {"null", "null"};
-String pedestal2Data[2] = {"null", "null"};
-String pedestal3Data[2] = {"null", "null"};
-String pedestal4Data[2] = {"null", "null"};
+String pedestal1Data[2] = {"TAG-001", "null"};
+String pedestal2Data[2] = {"TAG-002", "null"};
+String pedestal3Data[2] = {"TAG-003", "null"};
+String pedestal4Data[2] = {"TAG-004", "null"};
 
 // Added missing key declaration
 MFRC522::MIFARE_Key key;
@@ -46,7 +46,7 @@ void setup() {
   Serial.begin(115200);
   Wire.begin();
 
-Serial.println("Scanning I2C...");
+  Serial.println("Scanning I2C...");
   for (byte addr = 1; addr < 127; addr++) {
     Wire.beginTransmission(addr);
     if (Wire.endTransmission() == 0) {
