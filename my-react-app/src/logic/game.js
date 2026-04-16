@@ -97,6 +97,11 @@ export class Game {
   //     );
   //   }
 
+  //ITEMS LOGIC!!!!!!!!
+  // possible item effects: heal injury, add 5s to timer, remove 25% WG,
+  // prevent an injury, Mystery box ( can be used for WG gain/reduce )
+  // if all 4 players choose the same answer, remove all wizard's grasp
+
   //FUNC load current scenario
   loadCurrentScenario() {
     if (this.currentCategoryIndex >= this.scenarioFlow.length) {
@@ -174,43 +179,4 @@ export class Game {
     }
   }
 
-  // //FUNC win screen
-  //   showWinScreen() {
-  //     document.getElementById("scenario-name").textContent = "FREEDOM!!!";
-  //     document.getElementById("scenario").textContent = "YOU SUCCESSFULLY MADE IT BACK HOME!! :DDDDDDD";
-  
-  //     this.optionButtons.forEach(btn => btn.style.display = "none");
-  //     this.lockInButton.style.display = "none";
-  
-  //     clearInterval(this.round.countdown);
-  //   }
-  
-  //   //FUNC lose screen
-  //   showLoseScreen() {
-  //     document.getElementById("scenario-name").textContent = "YOU LOSE!!!";
-  //     document.getElementById("scenario").textContent = "YOU GOT CAPTURED BY THE WIZARD! D:";
-  
-  //     this.optionButtons.forEach(btn => btn.style.display = "none");
-  //     this.lockInButton.style.display = "none";
-  
-  //     clearInterval(this.round.countdown);
-  //   }
-    
-  //   //FUNC time up lose screen
-  //   showTimeUpLoseScreen() {
-  //     document.getElementById("scenario-name").textContent = "TOO SLOW!!";
-  //     document.getElementById("scenario").textContent = "YOU TOOK TOO LONG AND THE WIZARD CAUGHT UP! ( x _ x )";
-  
-  //     this.optionButtons.forEach(btn => btn.style.display = "none");
-  //     this.lockInButton.style.display = "none";
-  //   }
-  
-  //   //FUNC trigger state change
-  //   stateChange(state) {
-  //     this.state = STATES[state];
-  //   }
-  
-    //FUNC assign imposter
-    //chose random int between 1-3/1-4 (depending on number of players)
-    //assign imposter role (impostor redirect)
 }

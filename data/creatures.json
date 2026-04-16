@@ -2,21 +2,21 @@
   "Nine-Tailed Fish": {
     "image": "",
     "description": "",
-    "item": ""
+    "passive": "Finley's Fizzy Soda"
   },
   "Jackalope": {
     "image": "",
     "description": "",
-    "item": ""
+    "passive": "Sprig's Special Soup"
   },
   "Duck Duck Goose": {
     "image": "",
     "description": "",
-    "item": ""
+    "passive": "Waddles' Warm Wisdom"
   },
   "Dinogon": {
     "image": "",
     "description": "",
-    "item": ""
+    "passive": "Smoulder's Spicy Knapsack"
   }
 }
