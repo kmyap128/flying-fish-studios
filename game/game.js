@@ -104,9 +104,6 @@ export class Game {
 
   handleSacrificeScenario(newChoice) {
     let choice = newChoice;
-    if (newChoice == null) {
-      choice = player.choice ?? "option 1";
-    }
     if (this.currentScenario.name == "The Statue of the Greedy King") {
       this.players.forEach((player) => {
         if (choice == "option 1") player.disabled = 1;
@@ -343,17 +340,17 @@ export class Game {
       }
     } else {
       let total = 0;
-      this.players.forEach((player) => {
+      this.players.forEach((p) => {
         if (!p.out) {
-          const choiceIndex = player.choice ?? "option 1";
+          const choiceIndex = p.choice ?? "option 1";
           console.log("choice index: ", choiceIndex);
           let value = this.currentOptions[choiceIndex];
           if (this.currentScenarioCategory == "item") {
-            player.item == this.currentScenario.item;
+            p.item == this.currentScenario.item;
             this.resultText = value[2];
             total += value[1];
           } else if (this.currentScenarioCategory == "sacrifice") {
-            value = this.handleSacrificeScenario(null);
+            value = this.handleSacrificeScenario(p.choice);
             this.resultText = value[1];
             total += value[0];
           } else {
