@@ -124,20 +124,20 @@ export class Game {
         let impostor;
         let out;
         this.players.forEach((player) => {
-          if (player.isImpostor()) {
+          if (player.isImpostor) {
             impostor = player;
           } else {
             normalPlayers.push(player);
           }
         });
         if (chance < 0.15) {
-          normalPlayers[0].out;
+          normalPlayers[0].out = true;
           out = normalPlayers[0];
         } else if (chance < 0.3) {
-          normalPlayers[1].out;
+          normalPlayers[1].out = true;
           out = normalPlayers[1];
         } else if (chance < 0.45) {
-          normalPlayers[2].out;
+          normalPlayers[2].out = true;
           out = normalPlayers[2];
         } else {
           impostor.out;
@@ -160,9 +160,15 @@ export class Game {
     if (choice == "selfish") {
       let chance = Math.random();
       if (chance < 0.3) {
-        result = this.currentOptions[choice][1];
+        result = [
+          this.currentOptions[choice][1][0],
+          this.currentOptions[choice][1][1],
+        ];
       } else {
-        result = this.currentOptions[choice][2];
+        result = [
+          this.currentOptions[choice][2][0],
+          this.currentOptions[choice][2][1],
+        ];
       }
     } else {
       result = [this.currentOptions[choice][1], this.currentOptions[choice][2]];
@@ -292,7 +298,7 @@ export class Game {
       }
     }
 
-    //console.log("winning option: ", winning);
+    console.log("winning option: ", winning);
 
     return winning;
   }
@@ -320,24 +326,22 @@ export class Game {
   //FUNC end round?
   endRound() {
     clearInterval(this.timerInterval);
-
     let winningChoice;
+    let value;
     if (this.currentType == "synergy") {
       winningChoice = this.getMajorityChoice();
-      let value = [];
-      if (typeof value === "number") {
-        if (this.currentScenarioCategory == "sacrifice") {
-          value = this.handleSacrificeScenario(winningChoice);
-          this.resultText = value[1];
-          this.wizardsGrasp += value[0];
-        } else if (this.currentScenarioCategory == "dilemma") {
-          value = this.handleDilemmaScenario(winningChoice);
-          this.resultText = value[1];
-          this.wizardsGrasp += value[0];
-        } else {
-          this.resultText = value[2];
-          this.wizardsGrasp += value[1];
-        }
+      value = [];
+      if (this.currentScenarioCategory == "sacrifice") {
+        value = this.handleSacrificeScenario(winningChoice);
+        this.resultText = value[1];
+        this.wizardsGrasp += value[0];
+      } else if (this.currentScenarioCategory == "dilemma") {
+        value = this.handleDilemmaScenario(winningChoice);
+        this.resultText = value[1];
+        this.wizardsGrasp += value[0];
+      } else {
+        this.resultText = value[2];
+        this.wizardsGrasp += value[1];
       }
       console.log(value);
     } else {
@@ -345,8 +349,8 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choiceIndex = p.choice ?? "option 1";
-          //console.log("choice index: ", choiceIndex);
-          let value = this.currentOptions[choiceIndex];
+          console.log("choice index: ", choiceIndex);
+          value = this.currentOptions[choiceIndex];
           if (this.currentScenarioCategory == "item") {
             p.item == this.currentScenario.item;
             this.resultText = value[2];
@@ -362,10 +366,15 @@ export class Game {
           console.log(value);
         }
       });
+      console.log("1!!!!!!!!")
       console.log(winningChoice);
+      console.log("2!!!!!!!!!!!")
       console.log(this.currentOptions);
+      console.log("3!!!!!!!!!!")
       console.log(this.currentOptions[winningChoice]);
       this.wizardsGrasp += total / this.players.length;
+      console.log("4!!!!!!!!!!!!")
+      console.log(this.wizardsGrasp);
     }
 
     console.log(this.resultText);
