@@ -26,6 +26,9 @@ MFRC522 mfrc522[NUMBER_OF_RFID] = {
   MFRC522(SS_PIN_3, RST_PIN),
   MFRC522(SS_PIN_4, RST_PIN)
 };
+MFRC522::MIFARE_Key key;
+
+bool magnetState[NUMBER_OF_MAGS] = { false };
 
 // Removed unused pedestal RFID strings — data arrays handle everything
 String pedestal1Data[2] = {"TAG-001", "null"};
@@ -34,7 +37,6 @@ String pedestal3Data[2] = {"TAG-003", "null"};
 String pedestal4Data[2] = {"TAG-004", "null"};
 
 // Added missing key declaration
-MFRC522::MIFARE_Key key;
 
 // Added missing magIndex
 int magIndex = 0;
@@ -103,6 +105,9 @@ void loop() {
       float magX = sensors[x].getXData();
       float magY = sensors[x].getYData();
       float magZ = sensors[x].getZData();
+
+      float strength = sqrt(magX * magX + magY * magY + magZ * magZ);
+      magnetState[x] = (strength >= MAGNET_THRESHOLD);
 
       // Fixed: threshold comparisons were using threshold/2 inconsistently
       // Pedestal assignment based on which mux and which port half
