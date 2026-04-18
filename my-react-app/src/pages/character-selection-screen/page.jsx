@@ -3,23 +3,20 @@ import { useState, useEffect } from "react";
 import { StartPrompt } from "../../components/start-screen-ui/start-prompt/prompt.jsx";
 import { CharacterInfo } from "../../components/start-screen-ui/character-info/characterInfo.jsx";
 
-export default function CharacterSelectionScreen( { onComplete } ) {
+export default function CharacterSelectionScreen( { onComplete, myPlayer } ) {
   const [stage, setStage] = useState('prompt'); 
   const [shaking, setShaking] = useState(false);
-  const character = {
-    name: "Sprig",
-    species: "The Jubilant Jackalope",
-    image: "sprig.png",
-    animation: "sprig.gif",
-    bio: "bio about sprig",
-    itemImage: "",
-    item: "item name",
-    itemDescription: "description of the item"
-  };
   const handlePromptClick = () => {
-      setStage("image");
-      setShaking(true);
-    };
+    setStage("image");
+    setShaking(true);
+  };
+  
+
+    useEffect(() => {
+      if (myPlayer?.species && stage === "prompt") {
+        handlePromptClick();
+      }
+    }, [myPlayer]);
 
     useEffect(() => {
       if (stage !== "image") return;
@@ -41,7 +38,7 @@ export default function CharacterSelectionScreen( { onComplete } ) {
       }}>
       <div id="content-container">
         {stage === "prompt" && (
-          <div onClick={handlePromptClick} style={{ cursor: "pointer" }}>
+          <div onClick={handlePromptClick}>
             <StartPrompt />
           </div>
         )}
@@ -63,8 +60,8 @@ export default function CharacterSelectionScreen( { onComplete } ) {
 
         {stage === "character" && (
           <CharacterInfo
-            character={character}
-            onComplete={() => onComplete(character)}  
+            character={myPlayer}
+            onComplete={() => onComplete(myPlayer)}
           />
         )}
       </div>

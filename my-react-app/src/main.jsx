@@ -104,10 +104,12 @@ function App() {
 
   return (
     <>
-      {/* {screen === 'character-selection' && (
-        <CharacterSelectionScreen onComplete={handleCharacterSelectComplete} />
+      {screen === 'character-selection' && (
+        <CharacterSelectionScreen 
+        onComplete={handleCharacterSelectComplete}
+        myPlayer={myPlayer}  
+        />
       )}
-      {screen === 'scenario' && ( */}
       {screen === "lobby" && (
         <LobbyScreen
           lobbyState={lobbyState}

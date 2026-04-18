@@ -78,6 +78,8 @@ const getLobbyState = () => ({
     species: p.species,
     name: p.name,
     image: p.image,
+    portrait: p.portrait,
+    nameBoard: p.nameBoard,
     pedestalIndex: p.pedestalIndex,
     hasCharacter: !!p.species,
   })),
