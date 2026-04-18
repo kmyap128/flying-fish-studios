@@ -104,7 +104,7 @@ export class Game {
 
   handleSacrificeScenario(newChoice) {
     let choice = newChoice;
-    let response = this.currentOptions[choice];
+    let response = choice;
     if (this.currentScenario.name == "The Statue of the Greedy King") {
       this.players.forEach((player) => {
         if (choice == "option 1") player.disabled = 1;
@@ -124,20 +124,20 @@ export class Game {
         let impostor;
         let out;
         this.players.forEach((player) => {
-          if (player.isImpostor()) {
+          if (player.isImpostor) {
             impostor = player;
           } else {
             normalPlayers.push(player);
           }
         });
         if (chance < 0.15) {
-          normalPlayers[0].out;
+          normalPlayers[0].out = true;
           out = normalPlayers[0];
         } else if (chance < 0.3) {
-          normalPlayers[1].out;
+          normalPlayers[1].out = true;
           out = normalPlayers[1];
         } else if (chance < 0.45) {
-          normalPlayers[2].out;
+          normalPlayers[2].out = true;
           out = normalPlayers[2];
         } else {
           impostor.out;
@@ -150,22 +150,27 @@ export class Game {
     }
   }
 
-  handleDilemmaScenario(newChoice) {
+  handleDilemmaScenario(newChoice, newKey) {
     let choice = newChoice;
     let result;
-    if (newChoice == null) {
-      choice = player.choice ?? "selfish";
-    }
-
-    if (choice == "selfish") {
+    console.log("DILEMMA CHOICE");
+    console.log(choice);
+    if (newKey == "selfish") {
       let chance = Math.random();
       if (chance < 0.3) {
-        result = this.currentOptions[choice][1];
+        console.log("choice[1][0] ", choice[1][0]);
+        console.log("choice[1][1] ", choice[1][1]);
+        result = [choice[1][0],
+          choice[1][1],
+        ];
       } else {
-        result = this.currentOptions[choice][2];
+        console.log("choice[2][0] ", choice[2][0]);
+        console.log("choice[2][1] ", choice[2][1]);
+        result = [choice[2][0], choice[2][1],
+        ];
       }
     } else {
-      result = [this.currentOptions[choice][1], this.currentOptions[choice][2]];
+      result = [choice[0], choice[1]];
     }
     return result;
   }
@@ -282,19 +287,20 @@ export class Game {
     }
 
     let winning;
+    let winningKey;
     let maxVotes = 0;
     for (const [key, votes] of Object.entries(tally)) {
       if (votes > maxVotes) {
         maxVotes = votes;
         winning = this.currentOptions[key];
+        winningKey = key;
       } else if (votes === maxVotes) {
-        winning = impostorChoice;
+        winning = this.currentOptions[impostorChoice];
+        winningKey = key;
       }
     }
 
-    //console.log("winning option: ", winning);
-
-    return winning;
+    return [winning, winningKey];
   }
 
   startTimer(duration, mode, onComplete) {
@@ -320,55 +326,61 @@ export class Game {
   //FUNC end round?
   endRound() {
     clearInterval(this.timerInterval);
-
     let winningChoice;
+    let winningChoices = [];
+    let winningKey;
+    let value;
     if (this.currentType == "synergy") {
-      winningChoice = this.getMajorityChoice();
-      let value = [];
-      if (typeof value === "number") {
-        if (this.currentScenarioCategory == "sacrifice") {
-          value = this.handleSacrificeScenario(winningChoice);
-          this.resultText = value[1];
-          this.wizardsGrasp += value[0];
-        } else if (this.currentScenarioCategory == "dilemma") {
-          value = this.handleDilemmaScenario(winningChoice);
-          this.resultText = value[1];
-          this.wizardsGrasp += value[0];
-        } else {
-          this.resultText = value[2];
-          this.wizardsGrasp += value[1];
-        }
+      winningChoice = this.getMajorityChoice()[0];
+      winningKey = this.getMajorityChoice()[1];
+      value = [winningChoice[1], winningChoice[2]];
+      if (this.currentScenarioCategory == "sacrifice") {
+        value = this.handleSacrificeScenario(winningChoice);
+        this.resultText = value[1];
+        this.wizardsGrasp += value[0];
+      } else if (this.currentScenarioCategory == "dilemma") {
+        value = this.handleDilemmaScenario(winningChoice, winningKey);
+        this.resultText = value[1];
+        this.wizardsGrasp += value[0];
+      } else {
+        this.resultText = value[1];
+        this.wizardsGrasp += value[0];
       }
-      console.log(value);
     } else {
       let total = 0;
+      let value = [];
       this.players.forEach((p) => {
         if (!p.out) {
           const choiceIndex = p.choice ?? "option 1";
-          //console.log("choice index: ", choiceIndex);
-          let value = this.currentOptions[choiceIndex];
+          console.log("choice index: ", choiceIndex);
+          winningChoices.push(this.currentOptions[choiceIndex]);
+          value = this.currentOptions[choiceIndex];
           if (this.currentScenarioCategory == "item") {
             p.item == this.currentScenario.item;
             this.resultText = value[2];
-            total += value[1];
+            total += 1;
           } else if (this.currentScenarioCategory == "sacrifice") {
-            value = this.handleSacrificeScenario(p.choice);
+            value = this.handleSacrificeScenario(this.currentOptions[choiceIndex]);
             this.resultText = value[1];
             total += value[0];
           } else {
             this.resultText = value[2];
             total += value[1];
           }
-          console.log(value);
         }
       });
-      console.log(winningChoice);
-      console.log(this.currentOptions);
-      console.log(this.currentOptions[winningChoice]);
+      if (typeof total === "number") {
       this.wizardsGrasp += total / this.players.length;
+      }
     }
+      console.log("1!!!!!!!!");
+      console.log(winningChoice);
+      console.log(winningChoices);
+      console.log("2!!!!!!!!!!!");
 
     console.log(this.resultText);
+      console.log("5!!!!!!!!!!!!");
+      console.log(this.wizardsGrasp);
 
     if (this.onRoundResult) {
       this.onRoundResult({
