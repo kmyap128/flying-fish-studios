@@ -1,4 +1,5 @@
 import './characterInfo.css';
+import itembg from '/Character_Select/ItemBoard.png'
 
 export function CharacterInfo({ character, onComplete }) {
     const playerPortrait = character?.portrait ? `/Character_Select/Large_Portraits/${character.portrait}` : null;
@@ -19,6 +20,7 @@ export function CharacterInfo({ character, onComplete }) {
                 </div>
                 <div className='character-item'>
                     {/* <img src={`/item-icons/${character.item.icon}`} alt={character.item.name} /> */}
+                    <img className='item-bg' src={itembg} alt="" />
                     <p className='item-name'>{character.item}</p>
                     {/* <p className='item-description'>{character.itemDescription}</p> */}
                 </div>

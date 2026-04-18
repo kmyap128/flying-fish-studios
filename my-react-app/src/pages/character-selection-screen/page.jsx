@@ -59,10 +59,13 @@ export default function CharacterSelectionScreen( { onComplete, myPlayer } ) {
         )}
 
         {stage === "character" && (
-          <CharacterInfo
-            character={myPlayer}
-            onComplete={() => onComplete(myPlayer)}
-          />
+          <div className="character-info">
+            <CharacterInfo
+              character={myPlayer}
+              onComplete={() => onComplete(myPlayer)}
+            />
+          </div>
+          
         )}
       </div>
     </div>
