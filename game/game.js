@@ -47,25 +47,25 @@ export class Game {
     const allCharacters = {
       "Nine-Tailed Fish": {
         name: "Finley",
-        image: "finley.png",
+        image: "Finley_UI.png",
         description: "",
         item: "",
       },
       Jackalope: {
         name: "Sprig",
-        image: "sprig.png",
+        image: "Sprig_UI.png",
         description: "",
         item: "",
       },
       "Duck Duck Goose": {
         name: "Waddles",
-        image: "waddles.png",
+        image: "Waddles_UI.png",
         description: "",
         item: "",
       },
       Dinogon: {
         name: "Smoulder",
-        image: "smoulder.png",
+        image: "Smoulder_UI.png",
         description: "",
         item: "",
       },

@@ -24,9 +24,9 @@
 
 .wizard-fill-img {
   position: absolute;
-  transform: translate(13%, -140%) rotate(180deg);
+  transform: translate(14%, -140%) rotate(180deg);
   height: auto;
-  width: 50%;
+  width: 52%;
 }
 
 .wizard-diamond {
