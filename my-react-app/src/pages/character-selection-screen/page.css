@@ -8,6 +8,12 @@
   90%        { transform: translateX(3px); }
 }
 
+.character-info {
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
 .egg-anim {
   display: flex;
   align-items: center;

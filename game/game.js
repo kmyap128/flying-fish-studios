@@ -49,26 +49,34 @@ export class Game {
       "Nine-Tailed Fish": {
         name: "Finley",
         image: "Finley_UI.png",
-        description: "",
-        item: "",
+        portrait: "Finley_LargePortrait.png",
+        nameBoard: "Finley_NameBoard.png",
+        description: "insert description here",
+        item: "item name",
       },
       Jackalope: {
         name: "Sprig",
         image: "Sprig_UI.png",
-        description: "",
-        item: "",
+        portrait: "Sprig_LargePortrait.png",
+        nameBoard: "Sprig_NameBoard.png",
+        description: "insert desciption here",
+        item: "item name",
       },
       "Duck Duck Goose": {
         name: "Waddles",
         image: "Waddles_UI.png",
-        description: "",
-        item: "",
+        portrait: "Waddles_LargePortrait.png",
+        nameBoard: "Waddles_NameBoard.png",
+        description: "insert description here",
+        item: "item name",
       },
       Dinogon: {
         name: "Smoulder",
         image: "Smoulder_UI.png",
-        description: "",
-        item: "",
+        portrait: "Smoulder_LargePortrait.png",
+        nameBoard: "Smoulder_NameBoard.png",
+        description: "insert description here",
+        item: "item name",
       },
     };
 
@@ -82,6 +90,8 @@ export class Game {
     player.name = character.name;
     player.species = species;
     player.image = character.image;
+    player.portrait = character.portrait;
+    player.nameBoard = character.nameBoard;
     player.description = character.description;
     player.item = ITEMS[character.item] || null;
 
