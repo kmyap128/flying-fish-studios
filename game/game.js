@@ -25,6 +25,7 @@ export class Game {
     this.round = null;
     this.timerInterval = null;
 
+    this.chosen = [false, false, false, false];
     this.resultText = "";
 
     this.players = [
@@ -160,14 +161,11 @@ export class Game {
       if (chance < 0.3) {
         console.log("choice[1][0] ", choice[1][0]);
         console.log("choice[1][1] ", choice[1][1]);
-        result = [choice[1][0],
-          choice[1][1],
-        ];
+        result = [choice[1][0], choice[1][1]];
       } else {
         console.log("choice[2][0] ", choice[2][0]);
         console.log("choice[2][1] ", choice[2][1]);
-        result = [choice[2][0], choice[2][1],
-        ];
+        result = [choice[2][0], choice[2][1]];
       }
     } else {
       result = [choice[0], choice[1]];
@@ -248,6 +246,18 @@ export class Game {
           choice: p.choice,
         })),
       });
+      this.chosen[pedestalIndex] = true;
+    }
+
+    let choices = 0;
+    this.chosen.forEach((choice) => {
+      if (choice) {
+        choices += 1;
+      }
+    });
+
+    if (choices >= 4) {
+      this.endRound();
     }
   }
 
@@ -360,7 +370,9 @@ export class Game {
             this.resultText = value[2];
             total += 1;
           } else if (this.currentScenarioCategory == "sacrifice") {
-            value = this.handleSacrificeScenario(this.currentOptions[choiceIndex]);
+            value = this.handleSacrificeScenario(
+              this.currentOptions[choiceIndex],
+            );
             this.resultText = value[1];
             total += value[0];
           } else {
@@ -370,17 +382,17 @@ export class Game {
         }
       });
       if (typeof total === "number") {
-      this.wizardsGrasp += total / this.players.length;
+        this.wizardsGrasp += total / this.players.length;
       }
     }
-      console.log("1!!!!!!!!");
-      console.log(winningChoice);
-      console.log(winningChoices);
-      console.log("2!!!!!!!!!!!");
+    console.log("1!!!!!!!!");
+    console.log(winningChoice);
+    console.log(winningChoices);
+    console.log("2!!!!!!!!!!!");
 
     console.log(this.resultText);
-      console.log("5!!!!!!!!!!!!");
-      console.log(this.wizardsGrasp);
+    console.log("5!!!!!!!!!!!!");
+    console.log(this.wizardsGrasp);
 
     if (this.onRoundResult) {
       this.onRoundResult({
@@ -400,6 +412,8 @@ export class Game {
       this.endGame("lose");
       return;
     }
+
+    this.chosen = [false, false, false, false];
 
     setTimeout(() => {
       this.stage++;
