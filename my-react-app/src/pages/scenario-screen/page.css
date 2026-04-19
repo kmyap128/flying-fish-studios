@@ -47,14 +47,14 @@ body {
 .header-wrapper {
   position: relative;  
   width: 100%;
+  transform: translateY(-50%);
   height: 20vh;
+  z-index: 3;
 }
 
 #creature-bar-container,
 #wizard-bar-container {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 #creature-bar-container {
@@ -70,8 +70,7 @@ body {
 #timer-container {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
+  transform: translateX(-50%);
 }
 
 #timer-meter-container {

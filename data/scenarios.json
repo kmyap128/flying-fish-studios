@@ -275,7 +275,7 @@
     "The Illuminated Portal": {
       "scenario": "A mesmerizing portal hums in the woods, pulling at your mind. You cannot look away unless you please it.",
       "options": {
-        "option 1": ["Toss in your item", 1, "", "illuminated-portal/Toss.png"],
+        "option 1": ["Toss in your items", 1, "", "illuminated-portal/Toss.png"],
         "option 2": [
           "Throw in a companion",
           1,
