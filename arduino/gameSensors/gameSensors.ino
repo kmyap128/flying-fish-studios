@@ -8,7 +8,6 @@
 #define NUMBER_OF_RFID 4
 
 #define RST_PIN 9
-// Removed semicolons from #define — they're not valid here
 #define SS_PIN_1 4
 #define SS_PIN_2 5
 #define SS_PIN_3 6
@@ -18,7 +17,8 @@ TMAG5273 sensors[NUMBER_OF_MAGS];
 uint8_t i2cAddress = TMAG5273_I2C_ADDRESS_INITIAL;
 // Fixed array declaration — missing [] and braces were wrong
 int magToMuxPort[] = { 1, 2, 3, 5, 6, 7, 1, 2, 3, 5, 6, 7 }; // 12 entries for NUMBER_OF_MAGS
-int threshold = NUMBER_OF_MAGS / 2;
+int magToMuxAdd[] = { 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x71, 0x71, 0x71, 0x71, 0x71, 0x71, };
+int threshold = ceil(NUMBER_OF_MAGS / 2);
 
 MFRC522 mfrc522[NUMBER_OF_RFID] = {
   MFRC522(SS_PIN_1, RST_PIN),
@@ -28,10 +28,10 @@ MFRC522 mfrc522[NUMBER_OF_RFID] = {
 };
 
 // Removed unused pedestal RFID strings — data arrays handle everything
-String pedestal1Data[2] = {"TAG-001", "null"};
-String pedestal2Data[2] = {"TAG-002", "null"};
-String pedestal3Data[2] = {"TAG-003", "null"};
-String pedestal4Data[2] = {"TAG-004", "null"};
+String pedestal1Data[2] = {"TAG-001", ""};
+String pedestal2Data[2] = {"TAG-002", ""};
+String pedestal3Data[2] = {"TAG-003", ""};
+String pedestal4Data[2] = {"TAG-004", ""};
 
 // Added missing key declaration
 MFRC522::MIFARE_Key key;
@@ -65,17 +65,22 @@ void setup() {
 
   magIndex = 0; // reset before loop
   for (byte x = 0; x < NUMBER_OF_MAGS; x++) {
-    int port = magToMuxPort[x] % 8;
-    uint8_t mux_addr = (x < threshold) ? 0x70 : 0x71;
+    int port = magToMuxPort[x];
+    uint8_t mux_addr = magToMuxAdd[x];
 
     enableMuxPort(port, mux_addr);
 
     // Fixed: was "TMAG5273 sensor" which is a declaration, not assignment
     if (sensors[x].begin(i2cAddress, Wire) == 1) {
-      Serial.println("Begin"); // Fixed: was serial.println (lowercase)
+      Serial.print("Begin");
+      Serial.print(mux_addr);
+      Serial.print(" ");
+      Serial.println(port);
     } else {
       Serial.print("FAIL ");
-      Serial.println(x);
+      Serial.print(mux_addr);
+      Serial.print(" ");
+      Serial.println(port);
       while(1);
     }
 
@@ -92,10 +97,15 @@ void setup() {
 }
 
 void loop() {
+  pedestal1Data[1] = "";
+  pedestal2Data[1] = "";
+  pedestal3Data[1] = "";
+  pedestal4Data[1] = "";
   // Read magnetometer sensors
   for (byte x = 0; x < NUMBER_OF_MAGS; x++) {
-    int port = magToMuxPort[x]; // fixed: was magToMuxPort[magIndex] but magIndex isn't updated here
-    uint8_t mux_addr = (x < threshold) ? 0x70 : 0x71;
+    int port = magToMuxPort[x];
+    uint8_t mux_addr = magToMuxAdd[x];
+    String magData;
 
     enableMuxPort(port, mux_addr);
 
@@ -106,17 +116,19 @@ void loop() {
 
       // Fixed: threshold comparisons were using threshold/2 inconsistently
       // Pedestal assignment based on which mux and which port half
-      String magData = String(magX) + " " + String(magY) + " " + String(magZ);
-      if (mux_addr == 0x70 && x < threshold / 2) {
-        pedestal1Data[1] = magData;
-      } else if (mux_addr == 0x70 && x >= threshold / 2) {
-        pedestal2Data[1] = magData;
-      } else if (mux_addr == 0x71 && x < threshold / 2) {
-        pedestal3Data[1] = magData;
-      } else if (mux_addr == 0x71 && x >= threshold / 2) {
-        pedestal4Data[1] = magData;
-      }
+      magData = String(magX); //+ " " + String(magY) + " " + String(magZ);
+    } else {
+      magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
     }
+      if (mux_addr == 0x70 && (x == 1 || x == 2 || x == 3)) {
+        pedestal1Data[1] += magData + " ";
+      } else if (mux_addr == 0x70 && (x == 5 || x == 6 || x == 7)) {
+        pedestal2Data[1] += magData + " ";
+      } else if (mux_addr == 0x71 && (x == 1 || x == 2 || x == 3)) {
+        pedestal3Data[1] += magData + " ";
+      } else if (mux_addr == 0x71 && (x == 5 || x == 6 || x == 7)) {
+        pedestal4Data[1] += magData;
+      }
 
     disableMuxPort(port, mux_addr); // fixed: was disableMuxPort(x, mux_addr) — should use port
   }
@@ -136,13 +148,13 @@ void loop() {
   // }
 
   // Print all pedestal data on one line for Node to parse
-  printPedestalData(1, pedestal1Data);
+  printPedestalData(pedestal1Data);
   Serial.print(" | ");
-  printPedestalData(2, pedestal2Data);
+  printPedestalData(pedestal2Data);
   Serial.print(" | ");
-  printPedestalData(3, pedestal3Data);
+  printPedestalData(pedestal3Data);
   Serial.print(" | ");
-  printPedestalData(4, pedestal4Data);
+  printPedestalData(pedestal4Data);
   Serial.println();
 
   delay(10); // increased from 1 — 1ms is too fast and can cause serial buffer issues
@@ -157,10 +169,7 @@ String readBytes(byte *uidByte, byte uidSize) {
 }
 
 // Consolidated print functions into one
-void printPedestalData(int num, String data[]) {
-  Serial.print("Pedestal ");
-  Serial.print(num);
-  Serial.print(": ");
+void printPedestalData(String data[]) {
   Serial.print(data[0]); // RFID
   Serial.print(" ");
   Serial.print(data[1]); // mag data
