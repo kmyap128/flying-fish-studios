@@ -15,6 +15,16 @@
   cursor: pointer;
 }
 
+.option--chosen {
+  filter: drop-shadow(0 0 12px gold);
+}
+
+.option--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .option-bg {
   display: block;
   height: auto;
