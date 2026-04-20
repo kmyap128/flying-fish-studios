@@ -52,8 +52,7 @@ export class Game {
         traitorImage: "Fin_Trait.png",
         portrait: "Finley_LargePortrait.png",
         nameBoard: "Finley_NameBoard.png",
-        heroInfoBoard: "",
-        traitorInfoBoard: "",
+        infoBlock: "Fin_Block.png",
       },
       Jackalope: {
         name: "Sprig",
@@ -61,8 +60,7 @@ export class Game {
         traitorImage: "Spr_Trait.png",
         portrait: "Sprig_LargePortrait.png",
         nameBoard: "Sprig_NameBoard.png",
-        heroInfoBoard: "",
-        traitorInfoBoard: "",
+        infoBlock: "Spr_Block.png",
       },
       "Duck Duck Goose": {
         name: "Waddles",
@@ -70,8 +68,7 @@ export class Game {
         traitorImage: "Wad_Trait.png",
         portrait: "Waddles_LargePortrait.png",
         nameBoard: "Waddles_NameBoard.png",
-        heroInfoBoard: "",
-        traitorInfoBoard: "",
+        infoBlock: "Wad_Block.png",
       },
       Dinogon: {
         name: "Smoulder",
@@ -79,8 +76,7 @@ export class Game {
         traitorImage: "Smo_Trait.png",
         portrait: "Smoulder_LargePortrait.png",
         nameBoard: "Smoulder_NameBoard.png",
-        heroInfoBoard: "",
-        traitorInfoBoard: "",
+        infoBlock: "Smo_Block.png",
       },
     };
 
@@ -97,8 +93,7 @@ export class Game {
     player.traitorImage = character.traitorImage;
     player.portrait = character.portrait;
     player.nameBoard = character.nameBoard;
-    player.heroInfoBoard = character.heroInfoBoard;
-    player.traitorInfoBoard = character.traitorInfoBoard;
+    player.infoBlock = character.infoBlock;
     player.description = character.description;
     player.item = ITEMS[character.item] || null;
 
@@ -432,7 +427,7 @@ export class Game {
 
     this.chosen = [false, false, false, false];
 
-    if (this.onModeChange) this.onModeChange = "result";
+    if (this.onModeChange) this.onModeChange("result");
 
     this.startTimer(5, "result", () => {
       this.stage++;

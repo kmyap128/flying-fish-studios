@@ -4,7 +4,9 @@ import itembg from '/UI_Assets/Character_Select/ItemBoard.png'
 export function CharacterInfo({ character, onComplete }) {
     const playerPortrait = character?.portrait ? `/UI_Assets/Character_Select/Large_Portraits/${character.portrait}` : null;
     const playerNameBoard = character?.nameBoard ? `/UI_Assets/Character_Select/Character_Name_Boards/${character.nameBoard}` : null;
-    // const playerInfoBoard = character?.heroInfoBoard ? `/UI_Assets/Character_Select/Character_Info_Boards/${character.heroInfoBoard}` : null;
+    // add logic to check for traitor
+    // isTraitor ? traitorBlock: infoBlock
+    const playerInfoBoard = character?.infoBlock ? `/UI_Assets/Character_Select/Bio_Blocks/${character.infoBlock}` : null;
 
     return (
         <div className="character-info-container" onClick={onComplete} style={{ cursor: "pointer" }}>
@@ -16,11 +18,8 @@ export function CharacterInfo({ character, onComplete }) {
                 <div className="character-name">
                     <img src={playerNameBoard} alt={character.name} />
                 </div>
-                <div className="character-bio">
-                    <p>{character.desciption}</p>
-                </div>
-                <div className='character-item'>
-                    <img className='item-bg' src={itembg} alt="" />
+                <div className='character-info'>
+                    <img className='info-bg' src={playerInfoBoard} alt="" />
                 </div>
             </div>
                 

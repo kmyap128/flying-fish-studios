@@ -10,7 +10,7 @@ import LobbyScreen from "./pages/lobby-screen/page.jsx";
 const socket = io("http://localhost:3000");
 
 function App() {
-  const [screen, setScreen] = useState("character-selection-screen");
+  const [screen, setScreen] = useState("character-selection");
   const [myPedestalIndex, setMyPedestalIndex] = useState(null);
   const [lobbyState, setLobbyState] = useState({
     status: "waiting",

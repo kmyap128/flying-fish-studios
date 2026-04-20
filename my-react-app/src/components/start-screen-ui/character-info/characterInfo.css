@@ -44,12 +44,7 @@
     display: block;
 }
 
-.character-bio {
-    display: flex;
-    flex-direction: column;
-}
-
-.character-item {
+.character-info {
     position: relative;
     display: flex;
     justify-content: center;
@@ -57,24 +52,8 @@
     width: 100%;
 }
 
-.character-item img {
+.character-info img {
     width: 100%;
     height: auto;
     z-index: 1;
-    transform: translateX(-7%);
 }
-
-.item-name {
-    position: absolute;
-    margin: 0;
-    z-index: 2;
-}
-
-/* .character-bio,
-.character-item {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    width: 100%;
-} */
