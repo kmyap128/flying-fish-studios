@@ -1,7 +1,7 @@
 import EXPRESS from "express";
 import HTTP, { get } from "http";
 import { Server } from "socket.io";
-//import { subscribe } from "./arduino.js";
+import { subscribe } from "./arduino.js";
 import path from "path";
 import fs from "fs";
 import readline from "readline";
@@ -145,6 +145,25 @@ io.on("connection", (socket) => {
   });
 });
 
+[0, 1, 2, 3].forEach((pedestalIndex) => {
+  subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag, selectedChoice }) => {
+    const species = RFID_MAP[rfid];
+    if (selectedChoice != 0) {
+      game.assignCharacterToPedestal(pedestalIndex, species);
+      io.emit("lobby", getLobbyState());
+      tryStartGame();
+    }
+  });
+});
+
+[0, 1, 2, 3].forEach((pedestalIndex) => {
+  subscribe(`pedestal${pedestalIndex + 1}`, ({ selectedChoice }) => {
+    const optionKey = game.currentOptionsOrder[selectedChoice - 1];
+    if (!optionKey) return;
+    game.registerChoice(pedestalIndex, optionKey);
+  });
+});
+
 const keyMap = {
   1: { pedestal: 0, position: 0 },
   2: { pedestal: 0, position: 1 },
@@ -161,18 +180,7 @@ const keyMap = {
 };
 
 const positionToOption = (position) => {
-  const isIndividual =
-    game.currentScenarioCategory === "sacrifice" ||
-    game.currentScenarioCategory === "item";
-  const isDilemma = game.currentScenarioCategory === "dilemma";
-
-  if (isIndividual) {
-    return ["option 1", "option 2", "option 3"][position];
-  } else if (isDilemma) {
-    return ["helpful", null, "selfish"][position];
-  } else {
-    return ["best", "neutral", "worst"][position];
-  }
+  return game.currentOptionsOrder[position] ?? null;
 };
 
 const DEV_RFID = [
