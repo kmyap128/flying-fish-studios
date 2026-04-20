@@ -425,7 +425,9 @@ export class Game {
 
     this.chosen = [false, false, false, false];
 
-    this.startTimer(5, "results", () => {
+    if (this.onModeChange) this.onModeChange = "result";
+
+    this.startTimer(5, "result", () => {
       this.stage++;
       this.currentCategoryIndex++;
       this.loadCurrentScenario();
