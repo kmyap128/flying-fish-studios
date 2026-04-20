@@ -124,6 +124,8 @@ void loop() {
         magData = String(strength);
         // if (strength > 5) {
         //   magData = port % 4;
+        // } else {
+        //   magData = 0;
         // }
       } else {
         magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
