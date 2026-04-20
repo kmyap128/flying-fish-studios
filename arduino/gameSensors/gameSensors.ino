@@ -111,7 +111,6 @@ void loop() {
 
     enableMuxPort(port, mux_addr);
 
-    if (sensors[x].getMagneticChannel() != 0) {
       float magX = sensors[x].getXData();
       float magY = sensors[x].getYData();
       float magZ = sensors[x].getZData();
@@ -121,10 +120,15 @@ void loop() {
 
       // Fixed: threshold comparisons were using threshold/2 inconsistently
       // Pedestal assignment based on which mux and which port half
-      magData = String(magX); //+ " " + String(magY) + " " + String(magZ);
-    } else {
-      magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
-    }
+      if (magX != 0.0) {
+        magData = String(strength);
+        // if (strength > 5) {
+        //   magData = port % 4;
+        // }
+      } else {
+        magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
+      }
+
       if (mux_addr == 0x70 && (x == 1 || x == 2 || x == 3)) {
         pedestal1Data[1] += magData + " ";
       } else if (mux_addr == 0x70 && (x == 5 || x == 6 || x == 7)) {
