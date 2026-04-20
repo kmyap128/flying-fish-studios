@@ -44,12 +44,12 @@
 }
 
 #scenario-option {
-  font-size: 3em;
+  font-size: 2.5em;
   color: #fff;
   margin: 0;
   padding-top: 20px;
   padding-left: 60px;
   padding-right: 60px;
   text-align: center;
-  -webkit-text-stroke: 3px black;
+  -webkit-text-stroke: 2px black;
 }

@@ -77,9 +77,12 @@ const getLobbyState = () => ({
   players: game.players.map((p) => ({
     species: p.species,
     name: p.name,
-    image: p.image,
+    heroImage: p.heroImage,
+    traitorImage: p.traitorImage,
     portrait: p.portrait,
     nameBoard: p.nameBoard,
+    heroInfoBoard: p.heroInfoBoard,
+    traitorInfoBoard: p.traitorInfoBoard,
     pedestalIndex: p.pedestalIndex,
     hasCharacter: !!p.species,
   })),

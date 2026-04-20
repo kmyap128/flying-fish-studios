@@ -47,35 +47,39 @@ export class Game {
     const allCharacters = {
       "Nine-Tailed Fish": {
         name: "Finley",
-        image: "Finley_UI.png",
+        heroImage: "Fin_Hero.png",
+        traitorImage: "Fin_Trait.png",
         portrait: "Finley_LargePortrait.png",
         nameBoard: "Finley_NameBoard.png",
-        description: "insert description here",
-        item: "item name",
+        heroInfoBoard: "",
+        traitorInfoBoard: "",
       },
       Jackalope: {
         name: "Sprig",
-        image: "Sprig_UI.png",
+        heroImage: "Spr_Hero.png",
+        traitorImage: "Spr_Trait.png",
         portrait: "Sprig_LargePortrait.png",
         nameBoard: "Sprig_NameBoard.png",
-        description: "insert desciption here",
-        item: "item name",
+        heroInfoBoard: "",
+        traitorInfoBoard: "",
       },
       "Duck Duck Goose": {
         name: "Waddles",
-        image: "Waddles_UI.png",
+        heroImage: "Wad_Hero.png",
+        traitorImage: "Wad_Trait.png",
         portrait: "Waddles_LargePortrait.png",
         nameBoard: "Waddles_NameBoard.png",
-        description: "insert description here",
-        item: "item name",
+        heroInfoBoard: "",
+        traitorInfoBoard: "",
       },
       Dinogon: {
         name: "Smoulder",
-        image: "Smoulder_UI.png",
+        heroImage: "Smo_Hero.png",
+        traitorImage: "Smo_Trait.png",
         portrait: "Smoulder_LargePortrait.png",
         nameBoard: "Smoulder_NameBoard.png",
-        description: "insert description here",
-        item: "item name",
+        heroInfoBoard: "",
+        traitorInfoBoard: "",
       },
     };
 
@@ -88,9 +92,12 @@ export class Game {
     const player = this.players[pedestalIndex];
     player.name = character.name;
     player.species = species;
-    player.image = character.image;
+    player.heroImage = character.heroImage;
+    player.traitorImage = character.traitorImage;
     player.portrait = character.portrait;
     player.nameBoard = character.nameBoard;
+    player.heroInfoBoard = character.heroInfoBoard;
+    player.traitorInfoBoard = character.traitorInfoBoard;
     player.description = character.description;
     player.item = ITEMS[character.item] || null;
 

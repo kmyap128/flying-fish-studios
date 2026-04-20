@@ -33,7 +33,7 @@ export default function CharacterSelectionScreen( { onComplete, myPlayer } ) {
   return (
     <div className="app-container"
       style={{
-        backgroundImage: `url(/backgrounds/character-select.png)`,
+        backgroundImage: `url(/backgrounds/forest-day.png)`,
         backgroundSize: "cover",
       }}>
       <div id="content-container">
