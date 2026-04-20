@@ -20,6 +20,8 @@ int magToMuxPort[] = { 1, 2, 3, 5, 6, 7, 1, 2, 3, 5, 6, 7 }; // 12 entries for N
 int magToMuxAdd[] = { 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x71, 0x71, 0x71, 0x71, 0x71, 0x71, };
 int threshold = ceil(NUMBER_OF_MAGS / 2);
 
+bool magMap[] = { {false, false, false}, {false, false, false}, {false, false, false}, {false, false, false} } 
+
 // MFRC522 mfrc522[NUMBER_OF_RFID] = {
 //   MFRC522(SS_PIN_1, RST_PIN),
 //   MFRC522(SS_PIN_2, RST_PIN),
@@ -176,6 +178,15 @@ void printPedestalData(String data[]) {
   Serial.print(data[0]); // RFID
   Serial.print(" ");
   Serial.print(data[1]); // mag data
+}
+
+bool checkMagStrength(float magStrength) {
+  if (magStrength != 0.0) {
+        //magData = String(strength);
+        return magStrength > 20;
+      } else {
+        magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
+      }
 }
 
 String readBytes(byte *uidByte, byte uidSize) {

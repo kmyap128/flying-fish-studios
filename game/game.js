@@ -425,11 +425,11 @@ export class Game {
 
     this.chosen = [false, false, false, false];
 
-    setTimeout(() => {
+    this.startTimer(5, "results", () => {
       this.stage++;
       this.currentCategoryIndex++;
       this.loadCurrentScenario();
-    }, 5000);
+    });
   }
 
   endGame(result) {
