@@ -20,13 +20,13 @@ int magToMuxPort[] = { 1, 2, 3, 5, 6, 7, 1, 2, 3, 5, 6, 7 }; // 12 entries for N
 int magToMuxAdd[] = { 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x71, 0x71, 0x71, 0x71, 0x71, 0x71, };
 int threshold = ceil(NUMBER_OF_MAGS / 2);
 
-MFRC522 mfrc522[NUMBER_OF_RFID] = {
-  MFRC522(SS_PIN_1, RST_PIN),
-  MFRC522(SS_PIN_2, RST_PIN),
-  MFRC522(SS_PIN_3, RST_PIN),
-  MFRC522(SS_PIN_4, RST_PIN)
-};
-MFRC522::MIFARE_Key key;
+// MFRC522 mfrc522[NUMBER_OF_RFID] = {
+//   MFRC522(SS_PIN_1, RST_PIN),
+//   MFRC522(SS_PIN_2, RST_PIN),
+//   MFRC522(SS_PIN_3, RST_PIN),
+//   MFRC522(SS_PIN_4, RST_PIN)
+// };
+// MFRC522::MIFARE_Key key;
 
 bool magnetState[NUMBER_OF_MAGS] = { false };
 
@@ -121,12 +121,12 @@ void loop() {
       // Fixed: threshold comparisons were using threshold/2 inconsistently
       // Pedestal assignment based on which mux and which port half
       if (magX != 0.0) {
-        magData = String(strength);
-        // if (strength > 5) {
-        //   magData = port % 4;
-        // } else {
-        //   magData = 0;
-        // }
+        //magData = String(strength);
+        if (strength > 5) {
+          magData = port % 4;
+        } else {
+          magData = 0;
+        }
       } else {
         magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
       }
@@ -171,19 +171,19 @@ void loop() {
   delay(10); // increased from 1 — 1ms is too fast and can cause serial buffer issues
 }
 
+// Consolidated print functions into one
+void printPedestalData(String data[]) {
+  Serial.print(data[0]); // RFID
+  Serial.print(" ");
+  Serial.print(data[1]); // mag data
+}
+
 String readBytes(byte *uidByte, byte uidSize) {
   String idString = "";
   for (int i = 0; i < uidSize; i++) {
     idString += String(uidByte[i]); // fixed: was (String)uidByte[i] — use String() instead
   }
   return idString;
-}
-
-// Consolidated print functions into one
-void printPedestalData(String data[]) {
-  Serial.print(data[0]); // RFID
-  Serial.print(" ");
-  Serial.print(data[1]); // mag data
 }
 
 // Fixed: Arduino doesn't support [int] as a type — use int* and pass size separately
