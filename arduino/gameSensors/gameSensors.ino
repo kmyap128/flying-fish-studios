@@ -14,13 +14,26 @@
 #define SS_PIN_4 7
 
 TMAG5273 sensors[NUMBER_OF_MAGS];
-uint8_t i2cAddress = TMAG5273_I2C_ADDRESS_INITIAL;
+uint8_t i2cAddress = 0x22;
 // Fixed array declaration — missing [] and braces were wrong
-int magToMuxPort[] = { 1, 2, 3, 5, 6, 7, 1, 2, 3, 5, 6, 7 }; // 12 entries for NUMBER_OF_MAGS
-int magToMuxAdd[] = { 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x71, 0x71, 0x71, 0x71, 0x71, 0x71, };
+int magToMuxPort[] = { 1, 2, 3, 5, 6, 7, 1, 2, 3, 5, 6, 7 };  // 12 entries for NUMBER_OF_MAGS
+int magToMuxAdd[] = {
+  0x70,
+  0x70,
+  0x70,
+  0x70,
+  0x70,
+  0x70,
+  0x71,
+  0x71,
+  0x71,
+  0x71,
+  0x71,
+  0x71,
+};
 int threshold = ceil(NUMBER_OF_MAGS / 2);
 
-bool magMap[] = { {false, false, false}, {false, false, false}, {false, false, false}, {false, false, false} } 
+bool magMap[4][3] = { { false, false, false }, { false, false, false }, { false, false, false }, { false, false, false } };
 
 // MFRC522 mfrc522[NUMBER_OF_RFID] = {
 //   MFRC522(SS_PIN_1, RST_PIN),
@@ -33,10 +46,10 @@ bool magMap[] = { {false, false, false}, {false, false, false}, {false, false, f
 bool magnetState[NUMBER_OF_MAGS] = { false };
 
 // Removed unused pedestal RFID strings — data arrays handle everything
-String pedestal1Data[2] = {"TAG-001", ""};
-String pedestal2Data[2] = {"TAG-002", ""};
-String pedestal3Data[2] = {"TAG-003", ""};
-String pedestal4Data[2] = {"TAG-004", ""};
+String pedestal1Data[2] = { "TAG-001", "" };
+String pedestal2Data[2] = { "TAG-002", "" };
+String pedestal3Data[2] = { "TAG-003", "" };
+String pedestal4Data[2] = { "TAG-004", "" };
 
 // Added missing key declaration
 
@@ -51,6 +64,7 @@ void setup() {
   Wire.begin();
 
   Serial.println("Scanning I2C...");
+  Serial.flush();
   for (byte addr = 1; addr < 127; addr++) {
     Wire.beginTransmission(addr);
     if (Wire.endTransmission() == 0) {
@@ -67,7 +81,6 @@ void setup() {
     disableMuxPort(x, 0x71);
   }
 
-  magIndex = 0; // reset before loop
   for (byte x = 0; x < NUMBER_OF_MAGS; x++) {
     int port = magToMuxPort[x];
     uint8_t mux_addr = magToMuxAdd[x];
@@ -80,16 +93,16 @@ void setup() {
       Serial.print(mux_addr);
       Serial.print(" ");
       Serial.println(port);
+      Serial.flush();
     } else {
       Serial.print("FAIL ");
       Serial.print(mux_addr);
       Serial.print(" ");
       Serial.println(port);
-      while(1);
+      Serial.flush();
     }
 
-    magIndex++;
-    disableMuxPort(port, mux_addr); // moved inside loop
+    disableMuxPort(port, mux_addr);  // moved inside loop
   }
 
   // for (byte y = 0; y < NUMBER_OF_RFID; y++) {
@@ -113,37 +126,44 @@ void loop() {
 
     enableMuxPort(port, mux_addr);
 
-      float magX = sensors[x].getXData();
-      float magY = sensors[x].getYData();
-      float magZ = sensors[x].getZData();
+    float magX = sensors[x].getXData();
+    float magY = sensors[x].getYData();
+    float magZ = sensors[x].getZData();
 
-      float strength = sqrt(magX * magX + magY * magY + magZ * magZ);
-      magnetState[x] = (strength >= MAGNET_THRESHOLD);
+    float strength = sqrt(magX * magX + magY * magY + magZ * magZ);
 
-      // Fixed: threshold comparisons were using threshold/2 inconsistently
-      // Pedestal assignment based on which mux and which port half
-      if (magX != 0.0) {
-        //magData = String(strength);
-        if (strength > 5) {
-          magData = port % 4;
-        } else {
-          magData = 0;
-        }
-      } else {
-        magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
+    // Fixed: threshold comparisons were using threshold/2 inconsistently
+    // Pedestal assignment based on which mux and which port half
+
+    if (mux_addr == 0x70 && (port < 4)) {
+      magMap[0][(port - 1)%4] = checkMagStrength(strength, mux_addr, port);
+    } else if (mux_addr == 0x70) {
+      magMap[1][(port - 1)%4] = checkMagStrength(strength, mux_addr, port);
+    } else if (mux_addr == 0x71 && (port < 4)) {
+      magMap[2][(port - 1)%4] = checkMagStrength(strength, mux_addr, port);
+    } else if (mux_addr == 0x71) {
+      magMap[3][(port - 1)%4] = checkMagStrength(strength, mux_addr, port);
+    }
+
+    disableMuxPort(port, mux_addr);  // fixed: was disableMuxPort(x, mux_addr) — should use port
+  }
+
+  for (int i = 0; i < 4; i++) {
+    int choice = 0;
+    for (int j = 0; j < 3; j++) {
+      if (magMap[i][j] == true) {
+        choice = j+1;
       }
-
-      if (mux_addr == 0x70 && (x == 1 || x == 2 || x == 3)) {
-        pedestal1Data[1] += magData + " ";
-      } else if (mux_addr == 0x70 && (x == 5 || x == 6 || x == 7)) {
-        pedestal2Data[1] += magData + " ";
-      } else if (mux_addr == 0x71 && (x == 1 || x == 2 || x == 3)) {
-        pedestal3Data[1] += magData + " ";
-      } else if (mux_addr == 0x71 && (x == 5 || x == 6 || x == 7)) {
-        pedestal4Data[1] += magData;
-      }
-
-    disableMuxPort(port, mux_addr); // fixed: was disableMuxPort(x, mux_addr) — should use port
+    }
+    if (i == 0) {
+      pedestal1Data[1] = choice;
+    } else if (i == 1) {
+      pedestal2Data[1] = choice;
+    } else if (i == 2) {
+      pedestal3Data[1] = choice;
+    } else if (i == 3) {
+      pedestal4Data[1] = choice;
+    }
   }
 
   // Read RFID sensors
@@ -170,29 +190,31 @@ void loop() {
   printPedestalData(pedestal4Data);
   Serial.println();
 
-  delay(10); // increased from 1 — 1ms is too fast and can cause serial buffer issues
+  delay(10);  // increased from 1 — 1ms is too fast and can cause serial buffer issues
 }
 
 // Consolidated print functions into one
 void printPedestalData(String data[]) {
-  Serial.print(data[0]); // RFID
+  Serial.print(data[0]);  // RFID
   Serial.print(" ");
-  Serial.print(data[1]); // mag data
+  Serial.print(data[1]);  // mag data
 }
 
-bool checkMagStrength(float magStrength) {
+bool checkMagStrength(float magStrength, int mux_addr, int port) {
   if (magStrength != 0.0) {
-        //magData = String(strength);
-        return magStrength > 20;
-      } else {
-        magData = "[empty " + String(mux_addr) + " " + String(port) + "]";
-      }
+    //magData = String(strength);
+    return magStrength > 20;
+    //return magStrength;
+  } else {
+    return false;
+    //return "[empty " + String(mux_addr) + " " + String(port) + "]";
+  }
 }
 
-String readBytes(byte *uidByte, byte uidSize) {
+String readBytes(byte* uidByte, byte uidSize) {
   String idString = "";
   for (int i = 0; i < uidSize; i++) {
-    idString += String(uidByte[i]); // fixed: was (String)uidByte[i] — use String() instead
+    idString += String(uidByte[i]);  // fixed: was (String)uidByte[i] — use String() instead
   }
   return idString;
 }
