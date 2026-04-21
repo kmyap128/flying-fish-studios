@@ -106,36 +106,54 @@ const tryStartGame = () => {
 };
 
 io.on("connection", (socket) => {
-  const takenSlots = Object.keys(playerSockets).map(Number);
-  const availableSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
+  socket.on("requestSlot", (requestedSlot) => {
+    const takenSlots = Object.keys(playerSockets).map(Number);
 
-  if (availableSlot === undefined) {
-    socket.emit("lobbyFull");
-    return;
-  }
+    let assignedSlot;
+    if (
+      requestedSlot !== null &&
+      requestedSlot !== undefined &&
+      !takenSlots.includes(requestedSlot)
+    ) {
+      assignedSlot = requestedSlot;
+    } else if (requestedSlot !== null && takenSlots.includes(requestedSlot)) {
+      assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
+    } else {
+      assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
+    }
 
-  playerSockets[availableSlot] = socket.id;
-  socket.pedestalIndex = availableSlot;
+    if (assignedSlot === undefined) {
+      socket.emit("lobbyFull");
+      return;
+    }
 
-  console.log(
-    `🔌 Client connected: ${socket.id} -> pedestal ${availableSlot + 1}`,
-  );
+    if (assignedSlot === undefined) {
+      socket.emit("lobbyFull");
+      return;
+    }
+    playerSockets[assignedSlot] = socket.id;
+    socket.pedestalIndex = assignedSlot;
 
-  socket.emit("identity", { pedestalIndex: availableSlot });
+    console.log(
+      `🔌 Client connected: ${socket.id} -> pedestal ${assignedSlot + 1}`,
+    );
 
-  io.emit("lobby", getLobbyState());
+    socket.emit("identity", { pedestalIndex: assignedSlot });
 
-  if (gameStarted && game.currentScenario) {
-    socket.emit("scenarioChange", {
-      round: game.round,
-      stage: game.stage,
-      wizardsGrasp: game.wizardsGrasp,
-      optionsOrder: game.currentOptionsOrder,
-      // mode: game.mode,
-      // timerTick: game.timerTick,
-      // remaining: game.remaining,
-    });
-  }
+    io.emit("lobby", getLobbyState());
+
+    if (gameStarted && game.currentScenario) {
+      socket.emit("scenarioChange", {
+        round: game.round,
+        stage: game.stage,
+        wizardsGrasp: game.wizardsGrasp,
+        optionsOrder: game.currentOptionsOrder,
+        // mode: game.mode,
+        // timerTick: game.timerTick,
+        // remaining: game.remaining,
+      });
+    }
+  });
 
   socket.on("disconnect", () => {
     delete playerSockets[socket.pedestalIndex];

@@ -281,7 +281,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choice = p.choice ?? "selfish";
-          console.log("choice: ", choice);
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -291,7 +290,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choice = p.choice ?? "option 1";
-          console.log("choice: ", choice);
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -301,7 +299,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choice = p.choice ?? "worst";
-          console.log("choice: ", choice);
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -374,7 +371,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choiceIndex = p.choice ?? "option 1";
-          console.log("choice index: ", choiceIndex);
           winningChoices.push(this.currentOptions[choiceIndex]);
           value = this.currentOptions[choiceIndex];
           if (this.currentScenarioCategory == "item") {
@@ -397,13 +393,9 @@ export class Game {
         this.wizardsGrasp += total / this.players.length;
       }
     }
-    console.log("1!!!!!!!!");
-    console.log(winningChoice);
-    console.log(winningChoices);
-    console.log("2!!!!!!!!!!!");
-
+    console.log("Result Text ");
     console.log(this.resultText);
-    console.log("5!!!!!!!!!!!!");
+    console.log("Wizards Grasp");
     console.log(this.wizardsGrasp);
 
     if (this.onRoundResult) {

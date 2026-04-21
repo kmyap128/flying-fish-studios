@@ -29,10 +29,18 @@ function App() {
   const [roundResult, setRoundResult] = useState(null);
 
   useEffect(() => {
-    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
+    socket.on("connect", () => {
+      console.log("✅ Socket connected:", socket.id);
+      const storedSlot = localStorage.getItem("pedestalIndex");
+      const requestedSlot = storedSlot !== null ? Number(storedSlot) : null;
+
+      socket.emit("requestSlot", requestedSlot);
+    });
 
     socket.on("identity", ({ pedestalIndex }) => {
       setMyPedestalIndex(pedestalIndex);
+
+      localStorage.setItem("pedestalIndex", pedestalIndex);
       console.log(`I am pedestal ${pedestalIndex + 1}`);
     });
 
@@ -56,6 +64,7 @@ function App() {
         setOptionsOrder(optionsOrder);
         setRoundResult(null);
         setPlayerChoices([]);
+        setGameResult(null);
       },
     );
 
