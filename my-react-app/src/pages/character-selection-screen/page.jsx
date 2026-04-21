@@ -41,15 +41,15 @@ export default function CharacterSelectionScreen({
     return () => clearTimeout(readyTimer);
   });
 
-  useEffect(() => {
-    if (!socket) return;
+  // useEffect(() => {
+  //   if (!socket) return;
 
-    socket.on("gameStarting", () => {
-    console.log("🎮 gameStarting received in CharacterSelectionScreen");
-      onComplete(myPlayer);
-    });
-    return () => socket.off("gameStarting");
-  }, [socket, myPlayer]);
+  //   socket.on("gameStarting", () => {
+  //   console.log("🎮 gameStarting received in CharacterSelectionScreen");
+  //     onComplete(myPlayer);
+  //   });
+  //   return () => socket.off("gameStarting");
+  // }, [socket, myPlayer]);
 
   return (
     <div
@@ -85,6 +85,13 @@ export default function CharacterSelectionScreen({
             />
           </div>
         )}
+        {screen !== "character-selection" &&
+          screen !== "lobby" &&
+          screen !== "scenario" && (
+            <div style={{ color: "white", padding: 40 }}>
+              Unknown screen: "{screen}"
+            </div>
+          )}
       </div>
     </div>
   );

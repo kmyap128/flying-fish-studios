@@ -56,9 +56,11 @@ function App() {
       console.warn("Lobby is full");
     });
 
-    // socket.on("gameStarting", () => {
-    //   setTimeout(() => setScreen("scenario"), 3000);
-    // });
+    socket.on("gameStarting", () => {
+      //setTimeout(() => setScreen("scenario"), 3000);
+      setGameResult(null);
+      setScreen("scenario");
+    });
 
     socket.on(
       "scenarioChange",
@@ -95,7 +97,7 @@ function App() {
       socket.off("identity");
       socket.off("lobby");
       socket.off("lobbyFull");
-      //socket.off("gameStarting");
+      socket.off("gameStarting");
       socket.off("scenarioChange");
       socket.off("playerChoice");
       socket.off("roundResult");

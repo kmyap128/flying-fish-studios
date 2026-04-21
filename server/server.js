@@ -160,8 +160,6 @@ io.on("connection", (socket) => {
         gameStarted = true;
         console.log("All players ready - starting game");
         io.emit("gameStarting");
-
-        console.log("📡 gameStarting emitted");
         setTimeout(() => game.loadCurrentScenario(), 3000);
       }
     });
