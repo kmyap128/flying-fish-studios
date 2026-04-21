@@ -260,6 +260,7 @@ export class Game {
       });
       this.chosen[pedestalIndex] = true;
     }
+    console.log(player.species, player.choice);
 
     let choices = 0;
     this.chosen.forEach((choice) => {

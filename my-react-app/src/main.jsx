@@ -91,6 +91,17 @@ function App() {
     });
     socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
     socket.on("gameEnd", (result) => setGameResult(result));
+    socket.on("fullRestart", () => {
+      setGameResult(null);
+      setRoundResult(null);
+      setPlayerChoices([]);
+      setScenarioData(null);
+      setGameState({ stage: 0, wizardsGrasp: 0 });
+      setMode("scenario");
+      setCountdown(5);
+      setOptionsOrder([]);
+      setScreen("character-selection");
+    });
 
     return () => {
       //socket.off("connect");
@@ -104,6 +115,7 @@ function App() {
       socket.off("modeChange");
       socket.off("timerTick");
       socket.off("gameEnd");
+      socket.off("fullRestart");
     };
   }, []);
 

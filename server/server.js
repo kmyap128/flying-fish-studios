@@ -166,6 +166,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    if (socket.pedestalIndex === undefined) return;
     delete playerSockets[socket.pedestalIndex];
     console.log(`Disconnected: pedestal ${socket.pedestalIndex + 1}`);
     io.emit("lobby", getLobbyState());
@@ -174,8 +175,9 @@ io.on("connection", (socket) => {
 
 [0, 1, 2, 3].forEach((pedestalIndex) => {
   subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag, selectedChoice }) => {
-    const species = RFID_MAP[rfid];
+    const species = RFID_MAP[rfidTag];
     if (selectedChoice != 0) {
+      console.log(species, "registered");
       game.assignCharacterToPedestal(pedestalIndex, species);
       io.emit("lobby", getLobbyState());
       tryStartGame();
@@ -243,6 +245,50 @@ if (process.stdin.isTTY) {
         setTimeout(() => game.loadCurrentScenario(), 3000);
         console.log("🎮 Dev: game force started");
       }
+      return;
+    }
+
+    if (str === "t") {
+      console.log("🔄 Full game restart...");
+
+      // Reset game state
+      game.stage = 0;
+      game.currentCategoryIndex = 0;
+      game.wizardsGrasp = 0;
+      game.currentScenario = null;
+      game.currentOptions = null;
+      game.currentOptionsOrder = [];
+      game.currentType = null;
+      game.currentScenarioCategory = null;
+      game.round = null;
+      game.chosen = [false, false, false, false];
+      game.resultText = "";
+      game.players.forEach((p) => {
+        p.resetChoice();
+        p.out = false;
+        p.disabled = null;
+        p.isImpostor = false;
+        p.species = null; // add this — forces new RFID tap
+        p.name = null;
+        p.heroImage = null;
+        p.traitorImage = null;
+        p.portrait = null;
+        p.nameBoard = null;
+        p.infoBlock = null;
+      });
+      clearInterval(game.timerInterval);
+
+      // Reset server state
+      readyPlayers.clear();
+      gameStarted = false;
+
+      game.assignImpostor();
+      io.emit("lobby", getLobbyState());
+
+      // Tell all clients to go back to character selection
+      io.emit("fullRestart");
+      console.log("🔄 Full restart complete");
+
       return;
     }
 

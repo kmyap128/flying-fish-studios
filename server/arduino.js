@@ -27,38 +27,48 @@ PORT1.on("error", (err) => console.error("Port error", err.message));
 
 PARSER1.on("data", (data) => {
   let newData = data.split(" | ");
-  let data1 = newData[0].split(" ");
-  let data2 = newData[1].split(" ");
-  let data3 = newData[2].split(" ");
-  let data4 = newData[3].split(" ");
-  notify("pedestal1", {
-    selectedChoice: data1[1],
-  });
-  notify("pedestal2", {
-    selectedChoice: data2[1],
-  });
-  notify("pedestal3", {
-    selectedChoice: data3[1],
-  });
-  notify("pedestal4", {
-    selectedChoice: data4[1],
-  });
-  notify("rfid1", {
-    rfidTag: data1[0],
-    selectedChoice: data1[1],
-  });
-  notify("rfid2", {
-    rfidTag: data2[0],
-    selectedChoice: data2[1],
-  });
-  notify("rfid3", {
-    rfidTag: data3[0],
-    selectedChoice: data3[1],
-  });
-  notify("rfid4", {
-    rfidTag: data4[0],
-    selectedChoice: data4[1],
-  });
+  if (newData.length > 1) {
+    if (newData[0]) {
+      let data1 = newData[0].split(" ");
+      notify("pedestal1", {
+        selectedChoice: data1[1],
+      });
+      notify("rfid1", {
+        rfidTag: data1[0],
+        selectedChoice: data1[1],
+      });
+    }
+    if (newData[1]) {
+      let data2 = newData[1].split(" ");
+      notify("pedestal2", {
+        selectedChoice: data2[1],
+      });
+      notify("rfid2", {
+        rfidTag: data2[0],
+        selectedChoice: data2[1],
+      });
+    }
+    if (newData[2]) {
+      let data3 = newData[2].split(" ");
+      notify("pedestal3", {
+        selectedChoice: data3[1],
+      });
+      notify("rfid3", {
+        rfidTag: data3[0],
+        selectedChoice: data3[1],
+      });
+    }
+    if (newData[3]) {
+      let data4 = newData[3].split(" ");
+      notify("pedestal4", {
+        selectedChoice: data4[1],
+      });
+      notify("rfid4", {
+        rfidTag: data4[0],
+        selectedChoice: data4[1],
+      });
+    }
+  }
 });
 
 //NOTIFY/SUBSCRIBE FUNCTIONALITY
