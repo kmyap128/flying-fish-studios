@@ -6,7 +6,7 @@
 .wizard-bg {
   display: block;
   height: auto;
-  width: 30vw;
+  width: 25vw;
 }
 
 .wizard-content {
@@ -52,8 +52,8 @@
 
 .wizard-scenario {
   position: absolute;
-  bottom: 10%;
-  right: 10%;
+  bottom: 12%;
+  right:12%;
 }
 
 .wizard-scenario-text {
@@ -66,7 +66,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  -webkit-text-stroke: 5px black;
+  -webkit-text-stroke: 3px black;
   paint-order: stroke fill;
 
 }
