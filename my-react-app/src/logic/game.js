@@ -13,6 +13,8 @@ export class Game {
     this.stage = 0;
     this.currentCategoryIndex = 0;
     this.wizardsGrasp = 0;
+    this.injury = false;
+    // If injury is true, add an extra 1? WG until the injury is cleared
 
     this.allScenarios = null;
     this.scenarioFlow = [];
@@ -72,10 +74,10 @@ export class Game {
   //     this.state = STATES.SCENARIO;
   //     this.currentOptions = options;
   //     this.currentType = type;
-  
+
   //     document.getElementById("scenario-name").textContent = scenario.name;
   //     document.getElementById("scenario").textContent = scenario.text;
-  
+
   //     this.optionButtons.forEach((button, index) => {
   //       if (index < options.length) {
   //         button.style.display = "inline-block";
@@ -86,10 +88,10 @@ export class Game {
   //         button.style.display = "none";
   //       }
   //     });
-  
+
   //     this.selectedOption = null;
   //     this.lockInButton.disabled = true;
-  
+
   //     this.round.startTimer(
   //       this.timerElement,
   //       this.circle,
@@ -158,6 +160,18 @@ export class Game {
       if (typeof value === "number") {
         this.wizardsGrasp += value;
       }
+
+      // Handle injury trigger
+      if (value === 2) {
+        this.injury = true;
+        console.log(`Injury : ${this.injury}`);
+      }
+    }
+
+    // Apply injury
+    if (this.injury) {
+      this.wizardsGrasp += 1;
+      console.log(this.injury);
     }
 
     // Lose Condition

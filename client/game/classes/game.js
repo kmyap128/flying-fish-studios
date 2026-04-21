@@ -32,6 +32,7 @@ export class Game {
     this.selectedOption = null;
     this.selectedOptionIndex = null;
     this.wizardsGrasp = 0;
+    this.injury = false;
 
   }
 
@@ -150,6 +151,17 @@ export class Game {
       }
       console.log("Total Wizard's Grasp:", this.wizardsGrasp);
 
+      // Handle injury trigger
+      if (value === 2) {
+        this.injury = true;
+        console.log(`Injury : ${this.injury}`);
+      }
+    }
+
+    // Apply injury
+    if (this.injury) {
+      this.wizardsGrasp += 1;
+      console.log(this.injury);
     }
 
     // Lose Condition

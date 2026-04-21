@@ -109,17 +109,9 @@
     "The Merchant": {
       "scenario": "Gilbert the frog in a tiny coat sits behind a crooked wooden stall. 'Greetings, travelers... care to improve your survival odds? I have a few items available.'",
       "options": {
-        "item 1": [
-          "Sprint Boots",
-          "Gain extra time on one future decision",
-          ""
-        ],
-        "item 2": ["Anti-Wizard Bell", "Cancel one sabotage attempt", ""],
-        "item 3": [
-          "Toad Alarm Clock",
-          "Reveals which option is safest in a future scenario",
-          ""
-        ]
+        "item 1": ["Toad Alarm Clock", "ADD_TIME", "Gain 5 seconds on the next scenario"],
+        "item 2": ["Keep Your Passive", "KEEP_PASSIVE", "Do not choose any item"],
+        "item 3": ["Baya Band", "COMBINED_WIZGRASP", "If all players choose same answer, erase WG"]
       },
       "sound": "",
       "background": "forest-day-gillbert.png",
@@ -129,9 +121,9 @@
     "Fairy Fountain": {
       "scenario": "Magical forest fairies greet you before a glowing fountain, offering a blessing for finding their hidden sanctuary.",
       "options": {
-        "item 1": ["Fountain Water", "Heals you of all your ailments", ""],
-        "item 2": ["Fairy Wand", "Reveal the worst option on a decision", ""],
-        "item 3": ["Glitter Dust", "Prevent your grasp from increasing", ""]
+        "item 1": ["Fountain Water", "HEAL_INJURY", "Heals your injury"],
+        "item 2": ["Keep Your Passive", "KEEP_PASSIVE", "Do not choose any item"],
+        "item 3": ["Bingus", "MYSTERY", "It has a mysterious aura..."]
       },
       "sound": "",
       "background": "forest-day-fountain.png",
@@ -141,9 +133,9 @@
     "The Gardener": {
       "scenario": "Tobias the forest florist tends to his magical flowers and offers you one hiding a mysterious reward.",
       "options": {
-        "item 1": ["The Lovely Lily", "Heals you of all your ailments", ""],
-        "item 2": ["Dandelion Wish", "Sets back your Wizard's Grasp", ""],
-        "item 3": ["Midnight Orchid", "Reveals the worst choice", ""]
+        "item 1": ["Shield Flower", "PREVENT_INJURY", "Prevent your next injury"],
+        "item 2": ["Keep Your Passive", "KEEP_PASSIVE", "Do not choose any item"],
+        "item 3": ["Guardian Fruit", "REMOVE_WIZGRASP", "Removes an amount of WG"]
       },
       "sound": "",
       "background": "forest-day-gardener.png",

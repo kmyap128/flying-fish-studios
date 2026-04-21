@@ -15,6 +15,7 @@ export default function ScenarioScreen() {
 
   const [mode, setMode] = useState('scenario')
   const [countdown, setCountdown] = useState(5)
+  const [injury, setInjury] = useState(false)
 
   // Initialize game once
   useEffect(() => {
@@ -60,12 +61,14 @@ export default function ScenarioScreen() {
   const handleLockIn = () => {
     console.log("Locking in option", game.selectedOptionIndex)
     game.endRound()
+    setInjury(game.injury) // Sync Injury state
     console.log("Current Grasp:", game.wizardsGrasp)
+    console.log("Injury:", game.injury)
   }
 
   return (
     <div
-      className="app-container"
+      className={`app-container ${injury ? "injured" : ""}`}
       style={{
         backgroundImage: scenarioData
           ? `url(/backgrounds/${scenarioData.scenario.media.background})`
