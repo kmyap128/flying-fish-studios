@@ -8,6 +8,15 @@
   90%        { transform: translateX(3px); }
 }
 
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+}
+
 .character-info {
   align-items: center;
   justify-content: center;

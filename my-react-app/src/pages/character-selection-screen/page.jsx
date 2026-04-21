@@ -21,7 +21,7 @@ export default function CharacterSelectionScreen({ onComplete, myPlayer }) {
     if (stage !== "image") return;
 
     const shakeTimer = setTimeout(() => setShaking(false), 600);
-    const switchTimer = setTimeout(() => setStage("character"), 10000);
+    const switchTimer = setTimeout(() => setStage("character"));
 
     return () => {
       clearTimeout(shakeTimer);
@@ -33,7 +33,7 @@ export default function CharacterSelectionScreen({ onComplete, myPlayer }) {
     <div
       className="app-container"
       style={{
-        backgroundImage: `url(/backgrounds/character-select.png)`,
+        backgroundImage: `url(/backgrounds/forest-day.png)`,
         backgroundSize: "cover",
       }}
     >

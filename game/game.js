@@ -48,35 +48,35 @@ export class Game {
     const allCharacters = {
       "Nine-Tailed Fish": {
         name: "Finley",
-        image: "Finley_UI.png",
+        heroImage: "Fin_Hero.png",
+        traitorImage: "Fin_Trait.png",
         portrait: "Finley_LargePortrait.png",
         nameBoard: "Finley_NameBoard.png",
-        description: "insert description here",
-        item: "item name",
+        infoBlock: "Fin_Block.png",
       },
       Jackalope: {
         name: "Sprig",
-        image: "Sprig_UI.png",
+        heroImage: "Spr_Hero.png",
+        traitorImage: "Spr_Trait.png",
         portrait: "Sprig_LargePortrait.png",
         nameBoard: "Sprig_NameBoard.png",
-        description: "insert desciption here",
-        item: "item name",
+        infoBlock: "Spr_Block.png",
       },
       "Duck Duck Goose": {
         name: "Waddles",
-        image: "Waddles_UI.png",
+        heroImage: "Wad_Hero.png",
+        traitorImage: "Wad_Trait.png",
         portrait: "Waddles_LargePortrait.png",
         nameBoard: "Waddles_NameBoard.png",
-        description: "insert description here",
-        item: "item name",
+        infoBlock: "Wad_Block.png",
       },
       Dinogon: {
         name: "Smoulder",
-        image: "Smoulder_UI.png",
+        heroImage: "Smo_Hero.png",
+        traitorImage: "Smo_Trait.png",
         portrait: "Smoulder_LargePortrait.png",
         nameBoard: "Smoulder_NameBoard.png",
-        description: "insert description here",
-        item: "item name",
+        infoBlock: "Smo_Block.png",
       },
     };
 
@@ -89,9 +89,11 @@ export class Game {
     const player = this.players[pedestalIndex];
     player.name = character.name;
     player.species = species;
-    player.image = character.image;
+    player.heroImage = character.heroImage;
+    player.traitorImage = character.traitorImage;
     player.portrait = character.portrait;
     player.nameBoard = character.nameBoard;
+    player.infoBlock = character.infoBlock;
     player.description = character.description;
     player.item = ITEMS[character.item] || null;
 
@@ -279,7 +281,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choice = p.choice ?? "selfish";
-          console.log("choice: ", choice);
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -289,7 +290,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choice = p.choice ?? "option 1";
-          console.log("choice: ", choice);
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -299,7 +299,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choice = p.choice ?? "worst";
-          console.log("choice: ", choice);
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -372,7 +371,6 @@ export class Game {
       this.players.forEach((p) => {
         if (!p.out) {
           const choiceIndex = p.choice ?? "option 1";
-          console.log("choice index: ", choiceIndex);
           winningChoices.push(this.currentOptions[choiceIndex]);
           value = this.currentOptions[choiceIndex];
           if (this.currentScenarioCategory == "item") {
@@ -395,13 +393,9 @@ export class Game {
         this.wizardsGrasp += total / this.players.length;
       }
     }
-    console.log("1!!!!!!!!");
-    console.log(winningChoice);
-    console.log(winningChoices);
-    console.log("2!!!!!!!!!!!");
-
+    console.log("Result Text ");
     console.log(this.resultText);
-    console.log("5!!!!!!!!!!!!");
+    console.log("Wizards Grasp");
     console.log(this.wizardsGrasp);
 
     if (this.onRoundResult) {
@@ -425,7 +419,7 @@ export class Game {
 
     this.chosen = [false, false, false, false];
 
-    if (this.onModeChange) this.onModeChange = "result";
+    if (this.onModeChange) this.onModeChange("result");
 
     this.startTimer(5, "result", () => {
       this.stage++;

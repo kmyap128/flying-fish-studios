@@ -1,9 +1,12 @@
 import './characterInfo.css';
-import itembg from '/Character_Select/ItemBoard.png'
+import itembg from '/UI_Assets/Character_Select/ItemBoard.png'
 
 export function CharacterInfo({ character, onComplete }) {
-    const playerPortrait = character?.portrait ? `/Character_Select/Large_Portraits/${character.portrait}` : null;
-    const playerNameBoard = character?.nameBoard ? `/Character_Select/Character_Name_Boards/${character.nameBoard}` : null;
+    const playerPortrait = character?.portrait ? `/UI_Assets/Character_Select/Large_Portraits/${character.portrait}` : null;
+    const playerNameBoard = character?.nameBoard ? `/UI_Assets/Character_Select/Character_Name_Boards/${character.nameBoard}` : null;
+    // add logic to check for traitor
+    // isTraitor ? traitorBlock: infoBlock
+    const playerInfoBoard = character?.infoBlock ? `/UI_Assets/Character_Select/Bio_Blocks/${character.infoBlock}` : null;
 
     return (
         <div className="character-info-container" onClick={onComplete} style={{ cursor: "pointer" }}>
@@ -15,14 +18,8 @@ export function CharacterInfo({ character, onComplete }) {
                 <div className="character-name">
                     <img src={playerNameBoard} alt={character.name} />
                 </div>
-                <div className="character-bio">
-                    <p>{character.desciption}</p>
-                </div>
-                <div className='character-item'>
-                    {/* <img src={`/item-icons/${character.item.icon}`} alt={character.item.name} /> */}
-                    <img className='item-bg' src={itembg} alt="" />
-                    <p className='item-name'>{character.item}</p>
-                    {/* <p className='item-description'>{character.itemDescription}</p> */}
+                <div className='character-info'>
+                    <img className='info-bg' src={playerInfoBoard} alt="" />
                 </div>
             </div>
                 

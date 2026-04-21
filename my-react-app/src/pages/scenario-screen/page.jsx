@@ -32,7 +32,9 @@ export default function ScenarioScreen({
     ? `url(/backgrounds/${scenarioData.media.background})`
     : "none";
 
-  const playerImage = myPlayer?.image ? `/UI_Assets/Corner_UI/Character_UI/${myPlayer.image}` : null;
+  //add logic to determine if player is imposter or not, display correct panel accordingly
+  // isTraitor ? traitor image : hero image
+  const playerImage = myPlayer?.heroImage ? `/UI_Assets/Corner_UI/Character_Banners/${myPlayer.heroImage}` : null;
 
   return (
     <div
@@ -56,7 +58,7 @@ export default function ScenarioScreen({
             </div> */}
             <div className="header-wrapper">
               <div id="creature-bar-container">
-                <CreatureBar image={playerImage} creatureName={myPlayer?.name} />
+                <CreatureBar image={playerImage} />
               </div>
               <div id="wizard-bar-container">
                 <WizardBar  
@@ -66,20 +68,17 @@ export default function ScenarioScreen({
               </div>
             </div>
             <div className="content">
-              {/* <ScenarioCard
-                title={scenarioData.name}
-                description={scenarioData.text}
-                variant="block"
-              /> */}
               <ScenarioBlock
                 title={scenarioData.name}
                 description={scenarioData.text}
               />
             </div>
-            <TimerMeter
-              timerCurrent={countdown}
-              timerDuration={timerDuration}
-            />
+            <div className="timer-meter-container">
+              <TimerMeter
+                timerCurrent={countdown}
+                timerDuration={timerDuration}
+              />
+            </div>
           </>
         )}
 
@@ -87,7 +86,7 @@ export default function ScenarioScreen({
           <>
             <div className="header-wrapper">
               <div id="creature-bar-container">
-                <CreatureBar image={playerImage} creatureName={myPlayer.name} />
+                <CreatureBar image={playerImage} />
               </div>
               <div id="timer-container">
                 <Timer timerCurrent={countdown} />
@@ -151,13 +150,9 @@ export default function ScenarioScreen({
             <ResultBlock
               scenarioNum={gameState.stage + 1}
               resultText={roundResult.winningOption?.[2]}
+              timerCurrent={countdown}
+              timerDuration={timerDuration}
             />
-            <div id="timer-meter-container">
-              <TimerMeter
-                timerCurrent={countdown}
-                timerDuration={timerDuration}
-              />
-            </div>
           </>
         )}
       </div>

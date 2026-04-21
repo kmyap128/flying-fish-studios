@@ -7,15 +7,17 @@
 .timer-meter-bg {
   display: block;
   width: 100%;
+  transform: translate(-1.3%, 40%);
 }
 
 .timer-meter-fill-wrapper {
   position: absolute;
-  overflow: hidden;  
-  transform: translateY(70%);
+  width: var(--fill-percent, 100%);  
+  overflow: hidden;                  
+  transform: translateY(150%);
 }
 
 .timer-meter-fill {
   display: block;
-  transform: translateX(1.5%);
+  width: 100vw;                      
 }

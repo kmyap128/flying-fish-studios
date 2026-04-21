@@ -14,8 +14,9 @@ export function Options({ options, onSelect, myChoice }) {
         return (
           <button
             key={key}
-            className={`option ${isMyChoice ? "option--chosen" : ""}`}
-            onClick={() => onSelect(key)}
+            className={`option ${isMyChoice ? "option--chosen" : ""} ${myChoice && !isMyChoice ? "option--disabled" : ""}`}
+            onClick={() => !myChoice && onSelect(key)}
+            disabled={myChoice && !isMyChoice}
           >
             <img className="option-bg" src={optionBg} alt="" />
             <div className="option-button-content">

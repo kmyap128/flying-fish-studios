@@ -10,7 +10,7 @@ import LobbyScreen from "./pages/lobby-screen/page.jsx";
 const socket = io("http://localhost:3000");
 
 function App() {
-  const [screen, setScreen] = useState("character-selection-screen");
+  const [screen, setScreen] = useState("character-selection");
   const [myPedestalIndex, setMyPedestalIndex] = useState(null);
   const [lobbyState, setLobbyState] = useState({
     status: "waiting",
@@ -29,10 +29,18 @@ function App() {
   const [roundResult, setRoundResult] = useState(null);
 
   useEffect(() => {
-    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
+    socket.on("connect", () => {
+      console.log("✅ Socket connected:", socket.id);
+      const storedSlot = localStorage.getItem("pedestalIndex");
+      const requestedSlot = storedSlot !== null ? Number(storedSlot) : null;
+
+      socket.emit("requestSlot", requestedSlot);
+    });
 
     socket.on("identity", ({ pedestalIndex }) => {
       setMyPedestalIndex(pedestalIndex);
+
+      localStorage.setItem("pedestalIndex", pedestalIndex);
       console.log(`I am pedestal ${pedestalIndex + 1}`);
     });
 
@@ -56,6 +64,7 @@ function App() {
         setOptionsOrder(optionsOrder);
         setRoundResult(null);
         setPlayerChoices([]);
+        setGameResult(null);
       },
     );
 
@@ -72,6 +81,7 @@ function App() {
       setMode(newMode);
       if (newMode === "scenario") setTimerDuration(5);
       if (newMode === "options") setTimerDuration(10);
+      if (newMode === "result") setTimerDuration(5);
     });
     socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
     socket.on("gameEnd", (result) => setGameResult(result));

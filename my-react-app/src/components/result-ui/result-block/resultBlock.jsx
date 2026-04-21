@@ -1,22 +1,8 @@
 import './resultBlock.css';
 import { useEffect, useRef } from 'react';
+import { TimerMeter } from '../../hud-ui/timer-meter/timerMeter.jsx';
 
-export function ResultBlock({ scenarioNum, resultText }) {
-    const fillRef = useRef(null);
-    const duration = 10000;
-
-    useEffect(() => {
-        const el = fillRef.current;
-        if (!el) return;
-
-        el.style.transition = 'none';
-        el.style.width = '100%';
-
-        el.getBoundingClientRect();
-
-        el.style.transition = `width ${duration}ms linear`;
-        el.style.width = '0%';
-    }, [duration]);
+export function ResultBlock({ scenarioNum, resultText, countdown, timerDuration }) {   
   return (
     <div className="result-content">
 
@@ -38,9 +24,10 @@ export function ResultBlock({ scenarioNum, resultText }) {
       </div>
 
       <div className="time-meter">
-        <div className="meter">
-          <div className="fill" ref={fillRef} />
-        </div>
+        <TimerMeter
+          timerCurrent={countdown}
+          timerDuration={timerDuration}
+        />
         <span>next question</span>
       </div>
 

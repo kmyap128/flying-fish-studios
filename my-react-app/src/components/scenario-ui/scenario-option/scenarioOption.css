@@ -47,9 +47,9 @@
   font-size: 3em;
   color: #fff;
   margin: 0;
-  padding-top: 20px;
+  padding-top: 25px;
   padding-left: 60px;
   padding-right: 60px;
   text-align: center;
-  -webkit-text-stroke: 3px black;
+  -webkit-text-stroke: 2px black;
 }

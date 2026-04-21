@@ -9,10 +9,10 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 #content-container {
-  padding: 20px;
   gap: 20px;
   display: flex;
   flex-direction: column;
@@ -70,6 +70,7 @@ body {
 #timer-container {
   position: absolute;
   left: 50%;
+  top: 80%;
   transform: translateX(-50%);
 }
 
