@@ -36,6 +36,8 @@ const RFID_MAP = {
 // Single game instance
 const game = new Game();
 
+const readyPlayers = new Set();
+
 game.onScenarioChange = (roundData) => {
   io.emit("scenarioChange", {
     round: roundData,
@@ -97,11 +99,7 @@ const tryStartGame = () => {
   const allConnected = Object.keys(playerSockets).length === 4;
   const allHaveCharacters = game.players.every((p) => p.species);
   if (allConnected && allHaveCharacters) {
-    game.assignImpostor();
-    gameStarted = true;
-    console.log("All players ready - starting game");
-    io.emit("gameStarting");
-    setTimeout(() => game.loadCurrentScenario(), 3000);
+    io.emit("allCharactersAssigned");
   }
 };
 
@@ -153,6 +151,20 @@ io.on("connection", (socket) => {
         // remaining: game.remaining,
       });
     }
+
+    socket.on("playerReady", () => {
+      readyPlayers.add(socket.pedestalIndex);
+
+      if (readyPlayers >= 4 && !gameStarted) {
+        game.assignImpostor();
+        gameStarted = true;
+        console.log("All players ready - starting game");
+        io.emit("gameStarting");
+
+        console.log("📡 gameStarting emitted");
+        setTimeout(() => game.loadCurrentScenario(), 3000);
+      }
+    });
   });
 
   socket.on("disconnect", () => {
@@ -221,6 +233,18 @@ if (process.stdin.isTTY) {
       io.emit("lobby", getLobbyState());
       console.log("🪪 Dev: all RFID taps simulated");
       tryStartGame();
+      return;
+    }
+
+    if (str === "g") {
+      [0, 1, 2, 3].forEach((i) => readyPlayers.add(i));
+      if (!gameStarted) {
+        game.assignImpostor();
+        gameStarted = true;
+        io.emit("gameStarting");
+        setTimeout(() => game.loadCurrentScenario(), 3000);
+        console.log("🎮 Dev: game force started");
+      }
       return;
     }
 

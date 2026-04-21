@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import "./index.css";
 import ScenarioScreen from "./pages/scenario-screen/page.jsx";
@@ -28,12 +28,16 @@ function App() {
   const [playerChoices, setPlayerChoices] = useState([]);
   const [roundResult, setRoundResult] = useState(null);
 
+  const slotRequested = useRef(false);
+
   useEffect(() => {
     socket.on("connect", () => {
       console.log("✅ Socket connected:", socket.id);
+      if (slotRequested.current) return;
+      slotRequested.current = true;
+
       const storedSlot = localStorage.getItem("pedestalIndex");
       const requestedSlot = storedSlot !== null ? Number(storedSlot) : null;
-
       socket.emit("requestSlot", requestedSlot);
     });
 
@@ -52,9 +56,9 @@ function App() {
       console.warn("Lobby is full");
     });
 
-    socket.on("gameStarting", () => {
-      setTimeout(() => setScreen("scenario"), 3000);
-    });
+    // socket.on("gameStarting", () => {
+    //   setTimeout(() => setScreen("scenario"), 3000);
+    // });
 
     socket.on(
       "scenarioChange",
@@ -87,11 +91,11 @@ function App() {
     socket.on("gameEnd", (result) => setGameResult(result));
 
     return () => {
-      socket.off("connect");
+      //socket.off("connect");
       socket.off("identity");
       socket.off("lobby");
       socket.off("lobbyFull");
-      socket.off("gameStarting");
+      //socket.off("gameStarting");
       socket.off("scenarioChange");
       socket.off("playerChoice");
       socket.off("roundResult");
@@ -108,6 +112,7 @@ function App() {
     playerChoices.find((p) => p.pedestalIndex === myPedestalIndex) ?? null;
 
   const handleCharacterSelectComplete = (selectedCharacters) => {
+    console.log("✅ handleCharacterSelectComplete called");
     socket.emit("startGame", { selectedCharacters });
     setScreen("scenario");
   };
@@ -118,12 +123,7 @@ function App() {
         <CharacterSelectionScreen
           onComplete={handleCharacterSelectComplete}
           myPlayer={myPlayer}
-        />
-      )}
-      {screen === "lobby" && (
-        <LobbyScreen
-          lobbyState={lobbyState}
-          myPedestalIndex={myPedestalIndex}
+          socket={socket}
         />
       )}
       {screen === "scenario" && (

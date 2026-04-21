@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import { StartPrompt } from "../../components/start-screen-ui/start-prompt/prompt.jsx";
 import { CharacterInfo } from "../../components/start-screen-ui/character-info/characterInfo.jsx";
 
-export default function CharacterSelectionScreen({ onComplete, myPlayer }) {
+export default function CharacterSelectionScreen({
+  onComplete,
+  myPlayer,
+  socket,
+}) {
   const [stage, setStage] = useState("prompt");
   const [shaking, setShaking] = useState(false);
   const handlePromptClick = () => {
@@ -28,6 +32,24 @@ export default function CharacterSelectionScreen({ onComplete, myPlayer }) {
       clearTimeout(switchTimer);
     };
   }, [stage]);
+
+  useEffect(() => {
+    if (stage !== "character") return;
+    const readyTimer = setTimeout(() => {
+      socket.emit("playerReady");
+    }, 10000);
+    return () => clearTimeout(readyTimer);
+  });
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("gameStarting", () => {
+    console.log("🎮 gameStarting received in CharacterSelectionScreen");
+      onComplete(myPlayer);
+    });
+    return () => socket.off("gameStarting");
+  }, [socket, myPlayer]);
 
   return (
     <div
