@@ -82,7 +82,7 @@ export default function ScenarioScreen({
           </>
         )}
 
-        {mode === "exiting" && (
+        {/* {mode === "exiting" && (
           <>
             <div className="header-wrapper">
               <div id="creature-bar-container">
@@ -103,7 +103,7 @@ export default function ScenarioScreen({
               description={scenarioData.text}
             />
           </>
-        )}
+        )} */}
 
         {!gameResult && mode === "options" && scenarioData && (
           <>
@@ -149,8 +149,8 @@ export default function ScenarioScreen({
           <>
             <ResultBlock
               scenarioNum={gameState.stage + 1}
-              resultText={roundResult.winningOption?.[2]}
-              timerCurrent={countdown}
+              resultText={roundResult.resultText}
+              countdown={countdown}
               timerDuration={timerDuration}
             />
           </>

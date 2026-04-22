@@ -1,6 +1,7 @@
 import './resultBlock.css';
 import { useEffect, useRef } from 'react';
 import { TimerMeter } from '../../hud-ui/timer-meter/timerMeter.jsx';
+import { CharacterBlock } from '../character-block/characterBlock.jsx';
 
 export function ResultBlock({ scenarioNum, resultText, countdown, timerDuration }) {   
   return (
@@ -13,10 +14,10 @@ export function ResultBlock({ scenarioNum, resultText, countdown, timerDuration 
 
       <div className="mid-section">
         <div className="character-panel">
-          <img src="/characters/finley.png" alt="Finley" />
-          <img src="/characters/smoulder.png" alt="Smoulder" />
-          <img src="/characters/sprig.png" alt="Sprig" />
-          <img src="/characters/waddles.png" alt="Waddles" />
+          <CharacterBlock characterName="Finley" itemUsed={false} isInjured={false} />
+          <CharacterBlock characterName="Smoulder" itemUsed={false} isInjured={false} />
+          <CharacterBlock characterName="Sprig" itemUsed={false} isInjured={false} />
+          <CharacterBlock characterName="Waddles" itemUsed={false} isInjured={false} />
         </div>
         <div className="grasp-breakdown">
 

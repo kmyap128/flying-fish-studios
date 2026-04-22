@@ -402,6 +402,7 @@ export class Game {
     if (this.onRoundResult) {
       this.onRoundResult({
         winningChoice,
+        resultText: this.resultText,
         wizardsGrasp: this.wizardsGrasp,
         playerChoices: this.players.map((p) => ({
           species: p.species,

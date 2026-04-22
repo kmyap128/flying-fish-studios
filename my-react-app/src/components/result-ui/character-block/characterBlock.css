@@ -1,0 +1,55 @@
+.character-block-container {
+  background-image: url("/UI_Assets/Item_Cards/ItemCard_BKG.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 130px;
+}
+
+.character-block {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-left: 12%;
+  padding-right: 14%;
+  padding-top: 1%;
+  box-sizing: border-box;
+}
+
+.portrait img,
+.item img,
+.prompt img,
+.score img {
+  height: auto;
+}
+
+.portrait img {
+  width: 90%;
+}
+
+.item img {
+  width: 90%;
+}
+
+.prompt img {
+  width: 80%;
+}
+
+.score img {
+  width: 70%;
+}
+
+.prompt .smoulder-prompt {
+  width: 68%;
+  height: auto;
+}
+
+.prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
