@@ -91,7 +91,6 @@ function App() {
     });
     socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
     socket.on("gameEnd", (result) => setGameResult(result));
-    
 
     return () => {
       //socket.off("connect");
@@ -125,6 +124,7 @@ function App() {
         players: [],
       });
       setScreen("character-selection");
+      window.location.reload();
     });
 
     return () => socket.off("fullRestart");

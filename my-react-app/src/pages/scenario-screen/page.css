@@ -12,6 +12,15 @@ body {
   overflow: hidden;
 }
 
+.app-container.injured::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 0, 0, 0.15); /* subtle red */
+  pointer-events: none;
+  z-index: 1;
+}
+
 #content-container {
   gap: 20px;
   display: flex;

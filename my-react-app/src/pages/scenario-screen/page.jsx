@@ -44,7 +44,7 @@ export default function ScenarioScreen({
 
   return (
     <div
-      className="app-container"
+      className={`app-container ${injury ? "injured" : ""}`}
       style={{
         backgroundImage: scenarioData
           ? `url(/backgrounds/${scenarioData.media.background})`
