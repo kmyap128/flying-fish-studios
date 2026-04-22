@@ -6,7 +6,6 @@ import { CharacterBlock } from '../character-block/characterBlock.jsx';
 export function ResultBlock({ scenarioNum, resultText, countdown, timerDuration }) {   
   return (
     <div className="result-content">
-
       <div className="top-section">
         <p className="scenario-label">Scenario {scenarioNum}</p>
         <p className="result-text">{resultText}</p>
@@ -20,7 +19,12 @@ export function ResultBlock({ scenarioNum, resultText, countdown, timerDuration 
           <CharacterBlock characterName="Waddles" itemUsed={false} isInjured={false} />
         </div>
         <div className="grasp-breakdown">
-
+          <div className='scorecard'>
+            <img src="/UI_Assets/Scorecard/Scorecard_BKG.png" alt="scorecard" />
+          </div>
+          <div className='grasp-meter'>
+            <img src="/UI_Assets/TotalWG_Meters/WG_Meter_0.png" alt="grasp meter" />
+          </div>
         </div>
       </div>
 

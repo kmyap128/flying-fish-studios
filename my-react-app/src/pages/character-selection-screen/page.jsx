@@ -69,9 +69,7 @@ export default function CharacterSelectionScreen({
     >
       <div id="content-container">
         {stage === "prompt" && (
-          <div onClick={handlePromptClick}>
             <StartPrompt />
-          </div>
         )}
 
         {stage === "image" && (
@@ -93,13 +91,6 @@ export default function CharacterSelectionScreen({
             />
           </div>
         )}
-        {/* {screen !== "character-selection" &&
-          screen !== "lobby" &&
-          screen !== "scenario" && (
-            <div style={{ color: "white", padding: 40 }}>
-              Unknown screen: "{screen}"
-            </div>
-          )} */}
       </div>
     </div>
   );
