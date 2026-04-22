@@ -2,6 +2,9 @@
 import { SerialPort } from "serialport";
 import { ReadlineParser } from "@serialport/parser-readline";
 
+const SILENT_TIMEOUT_MS = 5000;
+const RECONNECT_DELAY_MS = 2000;
+
 //track port (2)
 const PORT1 = new SerialPort({ path: "COM3", baudRate: 115200 });
 //create parsers (2)
@@ -18,6 +21,39 @@ const SUBSCRIBERS = {
   rfid4: [],
 };
 
+let silentTimer = null;
+let isConnected = false;
+
+function resetSilentTimer() {
+  if (silentTimer) clearTimeout(silentTimer);
+  silentTimer = setTimeout(() => {
+    console.warn(
+      `⚠️ No data from Arduino for ${SILENT_TIMEOUT_MS}ms — attempting reconnect`,
+    );
+    reconnect();
+  }, SILENT_TIMEOUT_MS);
+}
+
+function reconnect() {
+  isConnected = false;
+  if (PORT1 && PORT1.isOpen) {
+    PORT1.close(() => scheduleReconnect());
+  } else {
+    scheduleReconnect();
+  }
+}
+
+function scheduleReconnect() {
+  console.log(`🔄 Reconnecting in ${RECONNECT_DELAY_MS}ms...`);
+  setTimeout(() => {
+    if (!isConnected) {
+      PORT1 = new SerialPort({ path: PORT_PATH, baudRate: BAUD_RATE });
+      PARSER1 = PORT1.pipe(new ReadlineParser({ delimiter: "\n" }));
+      attachListeners();
+    }
+  }, RECONNECT_DELAY_MS);
+}
+
 //create data arrays through splitting (on "|" ?)
 //assign data to creatures through arrays indexes (PARSER.on)
 // map/trim
@@ -26,6 +62,8 @@ PORT1.on("open", () => console.log("Port1 open"));
 PORT1.on("error", (err) => console.error("Port error", err.message));
 
 PARSER1.on("data", (data) => {
+  resetSilentTimer();
+  
   let newData = data.split(" | ");
   if (newData.length > 1) {
     if (newData[0]) {
