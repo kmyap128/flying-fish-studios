@@ -11,6 +11,8 @@ import { Game } from "../game/game.js";
 // ESM file paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// Usage: node ./server/server.js --pedestals
+const autoAssignPedestals = process.argv.includes("--pedestals");
 
 const APP = EXPRESS();
 const SERVER = HTTP.createServer(APP);
@@ -120,6 +122,17 @@ io.on("connection", (socket) => {
       assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
     }
 
+    if (
+      autoAssignPedestals &&
+      game.players[assignedSlot] &&
+      !game.players[assignedSlot].species
+    ) {
+      game.assignCharacterToPedestal(assignedSlot, DEV_RFID[assignedSlot]);
+      console.log(
+        `🎮 Auto-assigned ${DEV_RFID[assignedSlot]} to pedestal ${assignedSlot + 1}`,
+      );
+    }
+
     if (assignedSlot === undefined) {
       socket.emit("lobbyFull");
       return;
@@ -137,8 +150,6 @@ io.on("connection", (socket) => {
     );
 
     socket.emit("identity", { pedestalIndex: assignedSlot });
-
-    io.emit("lobby", getLobbyState());
 
     if (gameStarted && game.currentScenario) {
       socket.emit("scenarioChange", {
@@ -163,6 +174,8 @@ io.on("connection", (socket) => {
         setTimeout(() => game.loadCurrentScenario(), 3000);
       }
     });
+    io.emit("lobby", getLobbyState());
+    tryStartGame();
   });
 
   socket.on("disconnect", () => {
@@ -282,7 +295,6 @@ if (process.stdin.isTTY) {
       readyPlayers.clear();
       gameStarted = false;
 
-      game.assignImpostor();
       io.emit("lobby", getLobbyState());
 
       // Tell all clients to go back to character selection

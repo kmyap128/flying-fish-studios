@@ -40,7 +40,7 @@ export default function CharacterSelectionScreen({
     }, 10000);
     return () => clearTimeout(readyTimer);
   });
-  
+
   useEffect(() => {
     if (!socket) return;
     socket.on("fullRestart", () => {

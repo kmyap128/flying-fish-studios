@@ -23,7 +23,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "Mushrooms_Blockade.mp3",
       "background": "mushrooms-purple.PNG",
       "images": [],
       "animation": ""
@@ -51,7 +51,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Annual_Snail_Parade.mp3",
       "background": "forest-day-snails.png",
       "images": [],
       "animation": ""
@@ -79,7 +79,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "Floral_Grasp.mp3",
       "background": "flowerfield.png",
       "images": [],
       "animation": ""
@@ -109,7 +109,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Wolf_Guardian.mp3",
       "background": "forest-day-wolf.png",
       "images": [],
       "animation": ""
@@ -137,7 +137,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Angry_Shroombear.mp3",
       "background": "forest-night-shroombear.png",
       "images": [],
       "animation": ""
@@ -165,7 +165,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Mirror-Image_Duel.mp3",
       "background": "pond-notadpoles.png",
       "images": [],
       "animation": ""
@@ -188,7 +188,7 @@
         ]
       },
       "type": "solo",
-      "sound": "",
+      "sound": "The_Merchant.mp3",
       "background": "forest-day-gillbert.png",
       "images": [],
       "animation": ""
@@ -201,7 +201,7 @@
         "option 3": ["Glitter Dust", "Prevent your grasp from increasing", ""]
       },
       "type": "solo",
-      "sound": "",
+      "sound": "Fairy_Fountain.mp3",
       "background": "forest-day-fountain.png",
       "images": [],
       "animation": ""
@@ -214,7 +214,7 @@
         "option 3": ["Midnight Orchid", "Reveals the worst choice", ""]
       },
       "type": "solo",
-      "sound": "",
+      "sound": "The_Gardener.mp3",
       "background": "forest-day-gardener.png",
       "images": [],
       "animation": ""
@@ -244,7 +244,7 @@
         ]
       },
       "type": "solo",
-      "sound": "",
+      "sound": "The_Statue_of_the_Greedy_King.mp3",
       "background": "forest-day-statue.png",
       "images": [],
       "animation": ""
@@ -267,7 +267,7 @@
         "option 3": ["Cross anyways", 2, "", "glowing-bridge/Cross.png"]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Glowing_Bridge.mp3",
       "background": "ravine-bridge.png",
       "images": [],
       "animation": ""
@@ -275,7 +275,12 @@
     "The Illuminated Portal": {
       "scenario": "A mesmerizing portal hums in the woods, pulling at your mind. You cannot look away unless you please it.",
       "options": {
-        "option 1": ["Toss in your items", 1, "", "illuminated-portal/Toss.png"],
+        "option 1": [
+          "Toss in your items",
+          1,
+          "",
+          "illuminated-portal/Toss.png"
+        ],
         "option 2": [
           "Throw in a companion",
           1,
@@ -290,7 +295,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Illuminated_Portal.mp3",
       "background": "forest-day-portal.png",
       "images": [],
       "animation": ""
@@ -320,7 +325,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Goblin_Interns.mp3",
       "background": "forest-day-goblin-interns.png",
       "images": [],
       "animation": ""
@@ -348,7 +353,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Sad_Cheese_Seller.mp3",
       "background": "forest-day-cheese-seller.png",
       "images": [],
       "animation": ""
@@ -376,7 +381,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "The_Whimsical_Tree.mp3",
       "background": "forest-day-whimsical-tree.png",
       "images": [],
       "animation": ""
@@ -407,7 +412,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "Trapped_Ogre.mp3",
       "background": "",
       "images": [],
       "animation": ""
@@ -436,7 +441,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "Abandoned_Cart.mp3",
       "background": "forest-day-goblin-thief.png",
       "images": [],
       "animation": ""
@@ -465,7 +470,7 @@
         ]
       },
       "type": "synergy",
-      "sound": "",
+      "sound": "Witch's_Soup.mp3",
       "background": "pond-notadpoles-witch.png",
       "images": [],
       "animation": ""

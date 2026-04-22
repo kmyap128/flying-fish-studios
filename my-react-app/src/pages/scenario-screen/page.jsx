@@ -32,9 +32,15 @@ export default function ScenarioScreen({
     ? `url(/backgrounds/${scenarioData.media.background})`
     : "none";
 
+  const narration = scenarioData
+    ? `url(/sounds/${scenarioData.media.sound})`
+    : "none";
+
   //add logic to determine if player is imposter or not, display correct panel accordingly
   // isTraitor ? traitor image : hero image
-  const playerImage = myPlayer?.heroImage ? `/UI_Assets/Corner_UI/Character_Banners/${myPlayer.heroImage}` : null;
+  const playerImage = myPlayer?.heroImage
+    ? `/UI_Assets/Corner_UI/Character_Banners/${myPlayer.heroImage}`
+    : null;
 
   return (
     <div
@@ -61,7 +67,7 @@ export default function ScenarioScreen({
                 <CreatureBar image={playerImage} />
               </div>
               <div id="wizard-bar-container">
-                <WizardBar  
+                <WizardBar
                   wizardsGrasp={gameState.wizardsGrasp}
                   scenarioNumber={gameState.stage + 1}
                 />
