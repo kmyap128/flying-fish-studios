@@ -153,15 +153,15 @@ export class Game {
 
       // Handle injury trigger
       if (value === 2) {
-        this.injury = true;
-        console.log(`Injury : ${this.injury}`);
+        CreaturePlayer.injury = true;
+        console.log(`Injury : ${CreaturePlayer.injury}`);
+        console.log(`this.injury: ${this.injury}`);
       }
     }
 
     // Apply injury
-    if (this.injury) {
+    if (CreaturePlayer.injury) {
       this.wizardsGrasp += 1;
-      console.log(this.injury);
     }
 
     // Lose Condition
@@ -173,6 +173,11 @@ export class Game {
     this.stage++;
     this.currentCategoryIndex++;
     this.loadCurrentScenario();
+  }
+
+  //FUNC Injury
+  isInjured() {
+    CreaturePlayer.injury = true;
   }
 
   //FUNC win screen

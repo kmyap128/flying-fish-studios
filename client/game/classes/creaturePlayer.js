@@ -1,5 +1,5 @@
 export class CreaturePlayer {
-  constructor(name, image, description, item) {
+  constructor(name, image, description, item, injury) {
     //creature name
     this.name = name;
     //creature image
@@ -8,6 +8,8 @@ export class CreaturePlayer {
     this.description = description;
     //creature item
     this.item = window.ITEMS[item];
+    this.injury = injury;
+    injury = false;
 
     this.isImpostor = false;
   }
