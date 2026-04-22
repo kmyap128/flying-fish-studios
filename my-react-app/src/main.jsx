@@ -132,8 +132,10 @@ function App() {
     return () => socket.off("fullRestart");
   }, []);
 
+  const allPlayers = lobbyState.players ?? [];
+
   const myPlayer =
-    myPedestalIndex !== null ? lobbyState.players?.[myPedestalIndex] : null;
+    myPedestalIndex !== null ? allPlayers?.[myPedestalIndex] : null;
 
   const myChoice =
     playerChoices.find((p) => p.pedestalIndex === myPedestalIndex) ?? null;

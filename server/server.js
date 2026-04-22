@@ -76,7 +76,7 @@ game.onGameEndPlayer = (result) => {
 game.onGameEndImpostor = (result) => {
   const impostor = game.players.find((p) => p.isImpostor);
   if (impostor) {
-    const socketId = playerSockets[p.pedestalIndex];
+    const socketId = playerSockets[impostor.pedestalIndex];
     if (socketId) io.to(socketId).emit("gameEnd", { result, isImpostor: true });
   }
 };
@@ -179,7 +179,7 @@ io.on("connection", (socket) => {
     socket.on("playerReady", () => {
       readyPlayers.add(socket.pedestalIndex);
 
-      if (readyPlayers >= 4 && !gameStarted) {
+      if (readyPlayers.size >= 4 && !gameStarted) {
         game.assignImpostor();
         gameStarted = true;
         console.log("All players ready - starting game");

@@ -38,7 +38,7 @@ export class Game {
     // Callbacks (Server sends these to react)
     this.onScenarioChange = null;
     this.onGameEndPlayer = null;
-    this.onGameEndImportor = null;
+    this.onGameEndImpostor = null;
     this.onModeChange = null;
     this.onTimerTick = null;
     this.onPlayerChoice = null;

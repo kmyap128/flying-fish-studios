@@ -184,7 +184,7 @@ void loop() {
 
     enableMuxPort(port, mux_addr);
 
-    unsigned log sensorStart = millis();
+    unsigned long sensorStart = millis();
 
     float magX = sensors[x].getXData();
 
@@ -196,7 +196,6 @@ void loop() {
       Serial.flush();
 
       // Try bus recovery
-      disableAllMuxPorts();
       if (!i2cBusRecovery()) {
         softwareReset();
       }
