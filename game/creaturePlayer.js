@@ -16,6 +16,7 @@ export class CreaturePlayer {
 
     this.isImpostor = false;
     this.out = false;
+    this.injury = false;
 
     this.choice = null;
     this.disabled = null;
