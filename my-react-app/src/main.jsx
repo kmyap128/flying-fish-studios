@@ -90,7 +90,9 @@ function App() {
       if (newMode === "result") setTimerDuration(5);
     });
     socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
-    socket.on("gameEnd", (result) => setGameResult(result));
+    socket.on("gameEnd", ({ result, isImpostor }) => {
+      setGameResult({ result, isImpostor });
+    });
 
     return () => {
       //socket.off("connect");

@@ -64,8 +64,21 @@ game.onRoundResult = (resultData) => {
   io.emit("roundResult", resultData);
   io.emit("modeChange", { newMode: "result" });
 };
-game.onGameEnd = (result) => {
-  io.emit("gameEnd", result);
+game.onGameEndPlayer = (result) => {
+  game.players.forEach((p) => {
+    if (!p.isImpostor) {
+      const socketId = playerSockets[p.pedestalIndex];
+      if (socketId)
+        io.to(socketId).emit("gameEnd", { result, isImpostor: false });
+    }
+  });
+};
+game.onGameEndImpostor = (result) => {
+  const impostor = game.players.find((p) => p.isImpostor);
+  if (impostor) {
+    const socketId = playerSockets[p.pedestalIndex];
+    if (socketId) io.to(socketId).emit("gameEnd", { result, isImpostor: true });
+  }
 };
 
 //Load scenarios and start

@@ -8,7 +8,6 @@ import { ScenarioBlock } from "../../components/scenario-ui/scenario-block/scena
 import ScenarioCard from "../../components/scenario-ui/scenario-card/scenarioCard.jsx";
 import { Options } from "../../components/scenario-ui/options/options.jsx";
 import { ResultBlock } from "../../components/result-ui/result-block/resultBlock.jsx";
-import waddles from "/UI_Assets/Corner_UI/Character_UI/Waddles_UI.png";
 import "./page.css";
 
 export default function ScenarioScreen({
@@ -53,7 +52,21 @@ export default function ScenarioScreen({
     >
       <div id="content-container">
         {gameResult && (
-          <h1>{gameResult === "win" ? "YOU WIN!" : "YOU LOSE!"}</h1>
+          <div className="end-screen">
+            {gameResult.isImpostor ? (
+              <h1>
+                {gameResult.result === "win"
+                  ? "YOU WIN! The heroes failed!"
+                  : "YOU LOSE! The heroes escaped!"}
+              </h1>
+            ) : (
+              <h1>
+                {gameResult.result === "win"
+                  ? "YOU WIN! You escaped the wizard!"
+                  : "YOU LOSE! The wizard caught you!"}
+              </h1>
+            )}
+          </div>
         )}
 
         {!gameResult && mode === "scenario" && scenarioData && (
