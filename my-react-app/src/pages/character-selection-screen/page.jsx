@@ -40,7 +40,7 @@ export default function CharacterSelectionScreen({
     }, 10000);
     return () => clearTimeout(readyTimer);
   });
-  
+
   useEffect(() => {
     if (!socket) return;
     socket.on("fullRestart", () => {
@@ -93,13 +93,13 @@ export default function CharacterSelectionScreen({
             />
           </div>
         )}
-        {screen !== "character-selection" &&
+        {/* {screen !== "character-selection" &&
           screen !== "lobby" &&
           screen !== "scenario" && (
             <div style={{ color: "white", padding: 40 }}>
               Unknown screen: "{screen}"
             </div>
-          )}
+          )} */}
       </div>
     </div>
   );
