@@ -1,25 +1,64 @@
 #options-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
 }
 
 .option {
-    padding: 60px 20px;
-    width: 30%;
-    font-size: 3em;
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.8);
+  position: relative;
+  display: inline-flex;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
 
-    box-shadow:
-        inset 0 0 0 2px black,             
-        0 0 20px rgba(76, 46, 110, 0.9),
-        0 0 30px rgba(76, 46, 110, 0.7),
-        0 0 40px rgba(76, 46, 110, 0.5);
+.option--chosen {
+  filter: drop-shadow(0 0 12px gold);
+}
 
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: box-shadow 0.3s ease;
+.option--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.option-bg {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.option-button-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-rows: 1fr 1fr;  
+  align-items: center;
+  justify-items: center;
+  padding: 10% 10%;
+}
+
+.option-icon {
+  width:auto;
+  height: 15vh;
+  align-self: end;   
+}
+
+.option-label {
+  font-family: 'LondrinaSolid', sans-serif;
+  font-weight: 900;
+  font-size: 2em;
+  color: #fff;
+  -webkit-text-stroke: 2px black;
+  paint-order: stroke fill;
+  text-align: center;
+  max-width: 90%;
+  align-self: start;  
+  line-height: 1.2;
 }

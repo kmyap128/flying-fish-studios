@@ -1,0 +1,23 @@
+.timer-meter-bar-container {
+  position: relative;
+  display: inline-flex;
+  width: 100vw;
+}
+
+.timer-meter-bg {
+  display: block;
+  width: 100%;
+  transform: translate(-1.3%, 40%);
+}
+
+.timer-meter-fill-wrapper {
+  position: absolute;
+  width: var(--fill-percent, 100%);  
+  overflow: hidden;                  
+  transform: translateY(150%);
+}
+
+.timer-meter-fill {
+  display: block;
+  width: 100vw;                      
+}

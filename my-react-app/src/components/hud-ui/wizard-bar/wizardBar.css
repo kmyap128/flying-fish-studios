@@ -1,36 +1,72 @@
-.wizard-bar {
-    font-family: 'Chinese Rocks', system-ui, Avenir, Helvetica, Arial, sans-serif;
-    width: 50vw;        
-    height: 80px;
-    padding: 20px;
-    background-color: #585858;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow:
-    0 0 0 2px black,
-    0 0 10px black;
-    transform: skewX(20deg); 
+.wizard-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
-.wizard-fill {
-    height: 100%;
-    width: 0%;    
-    border-radius: 10px; 
-    box-shadow:
-    0 0 0 2px black,
-    0 0 10px black;        
-    background: linear-gradient(to right, #9D64DD, #8152B6, #4C2E6E);
-    transition: width 0.3s ease;
+.wizard-bg {
+  display: block;
+  height: auto;
+  width: 25vw;
 }
 
-.wizard-text {
-    position: absolute;
-    width: 100%;
-    text-align: left;
-    font-size: 3em;
-    color: white;
-    -webkit-text-stroke-width: 8px;
-    -webkit-text-stroke-color: #000;
-    paint-order: stroke fill;
-    transform: translate(2%, -105%) skewX(-20deg); 
+.wizard-content {
+  position: absolute;
+  inset: 0;
+}
+
+.wizard-bar-area {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+.wizard-fill-img {
+  position: absolute;
+  transform: translate(14%, -140%) rotate(180deg);
+  height: auto;
+  width: 52%;
+}
+
+.wizard-diamond {
+  position: absolute;
+  top: 50%;
+  right: 15%;
+  transform: translateY(-50%);
+}
+
+.wizard-percent {
+  margin: 0;
+  transform: translateX(20%);
+  font-family: 'LondrinaSolid', sans-serif;
+  font-size: 5em;
+
+  background: linear-gradient(to bottom, #FFF1BD 50%, #FFCD9D 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  -webkit-text-stroke: 5px black;
+  paint-order: stroke fill;
+}
+
+.wizard-scenario {
+  position: absolute;
+  bottom: 12%;
+  right:12%;
+}
+
+.wizard-scenario-text {
+  margin: 0;
+  transform: translate(-160%, 15%);
+  font-family: 'LondrinaSolid', sans-serif;
+  font-size: 4em;
+
+  background: white;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  -webkit-text-stroke: 3px black;
+  paint-order: stroke fill;
+
 }

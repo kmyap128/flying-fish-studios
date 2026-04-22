@@ -1,14 +1,12 @@
 @font-face {
-  font-family: 'Kanit';
-  src: url('./media/fonts/Kanit/Kanit-Medium.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+  font-family: "LondrinaSolid";
+  src: url("/fonts/LondrinaSolid/LondrinaSolid-Black.ttf") format("truetype");
 }
 
 :root {
-  font-family: 'Kanit', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'LondrinaSolid', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 900;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);

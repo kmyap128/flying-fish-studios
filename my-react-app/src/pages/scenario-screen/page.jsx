@@ -1,130 +1,167 @@
-import { Header } from '../../components/hud-ui/header/header.jsx'
-import { ScenarioOption } from '../../components/scenario-ui/scenario-option/scenarioOption.jsx'
-import { ScenarioBlock } from '../../components/scenario-ui/scenario-block/scenarioBlock.jsx'
-import { Options } from '../../components/scenario-ui/options/options.jsx'
-import { Game } from '../../logic/game.js'
-import jackalope from '../../media/assets/characters/jackalope.png'
-import './page.css'
-import { useState, useEffect } from 'react'
+import { Header } from "../../components/hud-ui/header/header.jsx";
+import { CreatureBar } from "../../components/hud-ui/creature-bar/creatureBar.jsx";
+import { WizardBar } from "../../components/hud-ui/wizard-bar/wizardBar.jsx";
+import { Timer } from "../../components/hud-ui/timer/timer.jsx";
+import { TimerMeter } from "../../components/hud-ui/timer-meter/timerMeter.jsx";
+import { ScenarioOption } from "../../components/scenario-ui/scenario-option/scenarioOption.jsx";
+import { ScenarioBlock } from "../../components/scenario-ui/scenario-block/scenarioBlock.jsx";
+import ScenarioCard from "../../components/scenario-ui/scenario-card/scenarioCard.jsx";
+import { Options } from "../../components/scenario-ui/options/options.jsx";
+import { ResultBlock } from "../../components/result-ui/result-block/resultBlock.jsx";
+import waddles from "/UI_Assets/Corner_UI/Character_UI/Waddles_UI.png";
+import "./page.css";
 
-export default function ScenarioScreen() {
+export default function ScenarioScreen({
+  socket,
+  scenarioData,
+  gameResult,
+  gameState,
+  mode,
+  countdown,
+  timerDuration,
+  optionsOrder,
+  myChoice,
+  myPlayer,
+  roundResult,
+}) {
+  const handleSelectOption = (key) => {
+    socket.emit("selectOption", { optionKey: key });
+  };
 
-  const [game] = useState(() => new Game())
-  const [scenarioData, setScenarioData] = useState(null)
-  const [gameResult, setGameResult] = useState(null)
+  const background = scenarioData
+    ? `url(/backgrounds/${scenarioData.media.background})`
+    : "none";
 
-  const [mode, setMode] = useState('scenario')
-  const [countdown, setCountdown] = useState(5)
-  const [injury, setInjury] = useState(false)
+  const narration = scenarioData
+    ? `url(/sounds/${scenarioData.media.sound})`
+    : "none";
 
-  // Initialize game once
-  useEffect(() => {
-    game.onScenarioChange = (data) => {
-      setScenarioData(data)
-    }
-
-    game.onGameEnd = (result) => {
-      setGameResult(result)
-    }
-
-    game.loadScenarios().then(() => {
-      game.loadCurrentScenario()
-    })
-  }, [game])
-
-  // Restart countdown every time scenario changes
-  useEffect(() => {
-    if (!scenarioData) return
-
-    setMode('scenario')
-    setCountdown(5)
-
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval)
-          setMode('options')
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [scenarioData])
-
-  const handleSelectOption = (index) => {
-    console.log("Selected index:", index)
-    game.selectOption(index)
-  }
-
-  const handleLockIn = () => {
-    console.log("Locking in option", game.selectedOptionIndex)
-    game.endRound()
-    setInjury(game.injury) // Sync Injury state
-    console.log("Current Grasp:", game.wizardsGrasp)
-    console.log("Injury:", game.injury)
-  }
+  //add logic to determine if player is imposter or not, display correct panel accordingly
+  // isTraitor ? traitor image : hero image
+  const playerImage = myPlayer?.heroImage
+    ? `/UI_Assets/Corner_UI/Character_Banners/${myPlayer.heroImage}`
+    : null;
 
   return (
     <div
       className={`app-container ${injury ? "injured" : ""}`}
       style={{
         backgroundImage: scenarioData
-          ? `url(/backgrounds/${scenarioData.scenario.media.background})`
-          : 'none'
+          ? `url(/backgrounds/${scenarioData.media.background})`
+          : "none",
       }}
     >
       <div id="content-container">
-
         {gameResult && (
           <h1>{gameResult === "win" ? "YOU WIN!" : "YOU LOSE!"}</h1>
         )}
 
-        {!gameResult && mode === 'scenario' && scenarioData && (
+        {!gameResult && mode === "scenario" && scenarioData && (
           <>
-            <Header
-              image={jackalope}
-              creatureName={'Jackalope'}
-              timerStart={5}
-              scenarioNumber={game.stage + 1}
-              wizardsGrasp={game.wizardsGrasp}
-            />
+            {/* <div className='header'>
+              
 
+            </div> */}
+            <div className="header-wrapper">
+              <div id="creature-bar-container">
+                <CreatureBar image={playerImage} />
+              </div>
+              <div id="wizard-bar-container">
+                <WizardBar
+                  wizardsGrasp={gameState.wizardsGrasp}
+                  scenarioNumber={gameState.stage + 1}
+                />
+              </div>
+            </div>
+            <div className="content">
+              <ScenarioBlock
+                title={scenarioData.name}
+                description={scenarioData.text}
+              />
+            </div>
+            <div className="timer-meter-container">
+              <TimerMeter
+                timerCurrent={countdown}
+                timerDuration={timerDuration}
+              />
+            </div>
+          </>
+        )}
+
+        {/* {mode === "exiting" && (
+          <>
+            <div className="header-wrapper">
+              <div id="creature-bar-container">
+                <CreatureBar image={playerImage} />
+              </div>
+              <div id="timer-container">
+                <Timer timerCurrent={countdown} />
+              </div>
+              <div id="wizard-bar-container">
+                <WizardBar
+                  wizardsGrasp={gameState.wizardsGrasp}
+                  scenarioNumber={gameState.stage + 1}
+                />
+              </div>
+            </div>
             <ScenarioBlock
-              title={scenarioData.scenario.name}
-              description={scenarioData.scenario.text}
+              title={scenarioData.scenarioName}
+              description={scenarioData.text}
             />
           </>
-        )}
+        )} */}
 
-        {!gameResult && mode === 'options' && scenarioData && (
+        {!gameResult && mode === "options" && scenarioData && (
           <>
-            <Header
-              image={jackalope}
-              creatureName={'Jackalope'}
-              timerStart={10}
-              scenarioNumber={game.stage + 1}
-              wizardsGrasp={game.wizardsGrasp}
-            />
+            <div className="header-wrapper">
+              <div id="creature-bar-container">
+                <CreatureBar
+                  image={playerImage}
+                  creatureName={myPlayer?.name}
+                />
+              </div>
+              <div id="timer-container">
+                <Timer timerCurrent={countdown} />
+              </div>
+              <div id="wizard-bar-container">
+                <WizardBar
+                  wizardsGrasp={gameState.wizardsGrasp}
+                  scenarioNumber={gameState.stage + 1}
+                />
+              </div>
+            </div>
 
-            <ScenarioOption
-              title={scenarioData.scenario.name}
-              description={scenarioData.scenario.text}
-            />
+            <div className="option-content">
+              <ScenarioOption
+                title={scenarioData.scenarioName}
+                description={scenarioData.text}
+              />
+            </div>
 
-            <Options
-              options={scenarioData.options.map(o => o[0])}
-              onSelect={handleSelectOption}
-            />
-
-            <button onClick={handleLockIn}>
-              Lock In
-            </button>
+            <div className="options-container">
+              <Options
+                options={optionsOrder.map((key) => [
+                  key,
+                  scenarioData.options[key],
+                ])}
+                myChoice={myChoice?.choice ?? null}
+                onSelect={(key) => handleSelectOption(key)}
+              />
+            </div>
           </>
         )}
 
+        {mode === "result" && roundResult && (
+          <>
+            <ResultBlock
+              scenarioNum={gameState.stage + 1}
+              resultText={roundResult.resultText}
+              countdown={countdown}
+              timerDuration={timerDuration}
+            />
+          </>
+        )}
       </div>
     </div>
-  )
+  );
 }

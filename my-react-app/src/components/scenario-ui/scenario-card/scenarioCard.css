@@ -1,0 +1,73 @@
+@keyframes slideUpFadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUpFadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-40px); }
+}
+
+.scenario-card {
+  position: relative;
+  display: inline-flex;
+  animation: slideUpFadeIn 0.6s ease-out forwards;
+}
+
+.scenario-card--exit {
+  animation: slideUpFadeOut 0.4s ease-in forwards;
+  pointer-events: none;
+}
+
+.scenario-card-bg {
+  display: block;
+  height: auto;
+}
+
+.scenario-card--block .scenario-card-bg {
+  width: 35vw;
+}
+
+.scenario-card--option .scenario-card-bg {
+  width: 25vw;
+}
+
+.scenario-card-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.scenario-card--block .scenario {
+  font-size: 3em;
+  max-width: 80%;
+}
+
+.scenario-card--option .scenario {
+  font-size: 2.5em;
+  max-width: 80%;
+}
+
+.scenario-name {
+  font-size: 1.25em;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-align: center;
+  margin: 0 0 8px;
+}
+
+.scenario {
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-align: center;
+  margin: 0;
+}
+
+.line-dot-line { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.left-line, .right-line { width: 300px; height: 4px; background: rgba(255,255,255,0.9); }
+.left-line  { clip-path: polygon(0% 50%, 15% 0%, 100% 0%, 100% 100%, 15% 100%); }
+.right-line { clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: white; box-shadow: 0 0 6px rgba(0,0,0,0.5); }

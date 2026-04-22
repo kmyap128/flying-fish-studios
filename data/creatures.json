@@ -1,22 +1,38 @@
 {
-  "Nine-Tailed Fish": {
-    "image": "",
-    "description": "",
-    "passive": "Finley's Fizzy Soda"
+  "Finley": {
+    "species": "The Nine-Tailed Fish",
+    "image": "Finley_UI.png",
+    "animation": "finley.gif",
+    "bio": "bio about finley",
+    "itemImage": "",
+    "item": "item name",
+    "itemDescription": "description of the item"
   },
-  "Jackalope": {
-    "image": "",
-    "description": "",
-    "passive": "Sprig's Special Soup"
+  "Sprig": {
+    "species": "The Jubilant Jackalope",  
+    "image": "Sprig_UI.png",
+    "animation": "sprig.gif",
+    "bio": "bio about sprig",
+    "itemImage": "",
+    "item": "item name",
+    "itemDescription": "description of the item"
   },
-  "Duck Duck Goose": {
-    "image": "",
-    "description": "",
-    "passive": "Waddles' Warm Wisdom"
+  "Waddles": {
+    "species": "The Duck Duck Goose",
+    "image": "Waddles_UI.png",
+    "animation": "waddles.gif",
+    "bio": "bio about waddles",
+    "itemImage": "",
+    "item": "item name",
+    "itemDescription": "description of the item"
   },
-  "Dinogon": {
-    "image": "",
-    "description": "",
-    "passive": "Smoulder's Spicy Knapsack"
+  "Smoulder": {
+    "species": "",
+    "image": "Smoulder_UI.png",
+    "animation": "smoulder.gif",
+    "bio": "",
+    "itemImage": "",
+    "item": "item name",
+    "itemDescription": ""
   }
 }

@@ -5,9 +5,11 @@ body {
 
 .app-container {
   min-height: 100vh;
+  width: 100%;          
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 .app-container.injured::after {
@@ -20,12 +22,70 @@ body {
 }
 
 #content-container {
-  padding: 20px;
-  gap: 20px; 
+  gap: 20px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.option-content {
+  flex: 1;
+  display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
+}
+
+.options-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 2;
+}
+
+.header-wrapper {
+  position: relative;  
+  width: 100%;
+  transform: translateY(-50%);
+  height: 20vh;
+  z-index: 3;
+}
+
+#creature-bar-container,
+#wizard-bar-container {
+  position: absolute;
+}
+
+#creature-bar-container {
+  left: 20px;
+}
+
+#wizard-bar-container {
+  right: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#timer-container {
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  transform: translateX(-50%);
+}
+
+#timer-meter-container {
+  margin: 0;
+  padding: 0;
 }
 
 
