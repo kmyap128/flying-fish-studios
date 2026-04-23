@@ -5,10 +5,8 @@ import { Timer } from "../../components/hud-ui/timer/timer.jsx";
 import { TimerMeter } from "../../components/hud-ui/timer-meter/timerMeter.jsx";
 import { ScenarioOption } from "../../components/scenario-ui/scenario-option/scenarioOption.jsx";
 import { ScenarioBlock } from "../../components/scenario-ui/scenario-block/scenarioBlock.jsx";
-import ScenarioCard from "../../components/scenario-ui/scenario-card/scenarioCard.jsx";
 import { Options } from "../../components/scenario-ui/options/options.jsx";
 import { ResultBlock } from "../../components/result-ui/result-block/resultBlock.jsx";
-import waddles from "/UI_Assets/Corner_UI/Character_UI/Waddles_UI.png";
 import "./page.css";
 
 export default function ScenarioScreen({
@@ -42,9 +40,12 @@ export default function ScenarioScreen({
     ? `/UI_Assets/Corner_UI/Character_Banners/${myPlayer.heroImage}`
     : null;
 
+  const playerName = myPlayer?.name || "Unknown Creature";
+  const isImposter = myPlayer?.isImposter ? true : false;
+
   return (
     <div
-      className={`app-container ${injury ? "injured" : ""}`}
+      className={`app-container`}
       style={{
         backgroundImage: scenarioData
           ? `url(/backgrounds/${scenarioData.media.background})`
@@ -58,13 +59,13 @@ export default function ScenarioScreen({
 
         {!gameResult && mode === "scenario" && scenarioData && (
           <>
-            {/* <div className='header'>
-              
-
-            </div> */}
             <div className="header-wrapper">
               <div id="creature-bar-container">
-                <CreatureBar image={playerImage} />
+                <CreatureBar
+                  creatureName={playerName}
+                  isImposter={isImposter}
+                  isInjured={false}
+                />
               </div>
               <div id="wizard-bar-container">
                 <WizardBar
@@ -88,36 +89,14 @@ export default function ScenarioScreen({
           </>
         )}
 
-        {/* {mode === "exiting" && (
-          <>
-            <div className="header-wrapper">
-              <div id="creature-bar-container">
-                <CreatureBar image={playerImage} />
-              </div>
-              <div id="timer-container">
-                <Timer timerCurrent={countdown} />
-              </div>
-              <div id="wizard-bar-container">
-                <WizardBar
-                  wizardsGrasp={gameState.wizardsGrasp}
-                  scenarioNumber={gameState.stage + 1}
-                />
-              </div>
-            </div>
-            <ScenarioBlock
-              title={scenarioData.scenarioName}
-              description={scenarioData.text}
-            />
-          </>
-        )} */}
-
         {!gameResult && mode === "options" && scenarioData && (
           <>
             <div className="header-wrapper">
               <div id="creature-bar-container">
                 <CreatureBar
-                  image={playerImage}
-                  creatureName={myPlayer?.name}
+                  creatureName={playerName}
+                  isImposter={isImposter}
+                  isInjured={false}
                 />
               </div>
               <div id="timer-container">

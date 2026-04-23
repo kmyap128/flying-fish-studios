@@ -5,7 +5,6 @@ import { io } from "socket.io-client";
 import "./index.css";
 import ScenarioScreen from "./pages/scenario-screen/page.jsx";
 import CharacterSelectionScreen from "./pages/character-selection-screen/page.jsx";
-import LobbyScreen from "./pages/lobby-screen/page.jsx";
 
 const socket = io("http://localhost:3000");
 
