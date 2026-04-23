@@ -38,7 +38,9 @@ const RFID_MAP = {
 // Single game instance
 const game = new Game();
 
+const reservedSlots = {};
 const readyPlayers = new Set();
+let characterDisplayTimer;
 
 game.onScenarioChange = (roundData) => {
   io.emit("scenarioChange", {
@@ -113,8 +115,23 @@ const tryStartGame = () => {
   if (gameStarted) return;
   const allConnected = Object.keys(playerSockets).length === 4;
   const allHaveCharacters = game.players.every((p) => p.species);
+  console.log(
+    `🔍 tryStartGame: connected=${allConnected} (${Object.keys(playerSockets).length}/4), characters=${allHaveCharacters}`,
+  );
   if (allConnected && allHaveCharacters) {
+    console.log("📡 Emitting allCharactersAssigned");
     io.emit("allCharactersAssigned");
+    console.log("All characters assigned — starting character display");
+
+    characterDisplayTimer = setTimeout(() => {
+      if (!gameStarted) {
+        game.assignImpostor();
+        gameStarted = true;
+        console.log("Character display complete — starting game");
+        io.emit("gameStarting");
+        setTimeout(() => game.loadCurrentScenario(), 3000);
+      }
+    }, 10000);
   }
 };
 
@@ -128,22 +145,17 @@ io.on("connection", (socket) => {
       requestedSlot !== undefined &&
       !takenSlots.includes(requestedSlot)
     ) {
+      if (reservedSlots[requestedSlot]) {
+        clearTimeout(reservedSlots[requestedSlot]);
+        delete reservedSlots[requestedSlot];
+      }
       assignedSlot = requestedSlot;
-    } else if (requestedSlot !== null && takenSlots.includes(requestedSlot)) {
-      assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
     } else {
       assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
-    }
 
-    if (
-      autoAssignPedestals &&
-      game.players[assignedSlot] &&
-      !game.players[assignedSlot].species
-    ) {
-      game.assignCharacterToPedestal(assignedSlot, DEV_RFID[assignedSlot]);
-      console.log(
-        `🎮 Auto-assigned ${DEV_RFID[assignedSlot]} to pedestal ${assignedSlot + 1}`,
-      );
+      if (assignedSlot === undefined) {
+        assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
+      }
     }
 
     if (assignedSlot === undefined) {
@@ -151,10 +163,6 @@ io.on("connection", (socket) => {
       return;
     }
 
-    if (assignedSlot === undefined) {
-      socket.emit("lobbyFull");
-      return;
-    }
     playerSockets[assignedSlot] = socket.id;
     socket.pedestalIndex = assignedSlot;
 
@@ -162,7 +170,18 @@ io.on("connection", (socket) => {
       `🔌 Client connected: ${socket.id} -> pedestal ${assignedSlot + 1}`,
     );
 
+    if (autoAssignPedestals && !game.players[assignedSlot].species) {
+      game.assignCharacterToPedestal(assignedSlot, DEV_RFID[assignedSlot]);
+      console.log(
+        `🎮 Auto-assigned ${DEV_RFID[assignedSlot]} to pedestal ${assignedSlot + 1}`,
+      );
+    }
+
     socket.emit("identity", { pedestalIndex: assignedSlot });
+    socket.emit("lobby", getLobbyState());
+    io.emit("lobby", getLobbyState());
+
+    tryStartGame();
 
     if (gameStarted && game.currentScenario) {
       socket.emit("scenarioChange", {
@@ -170,31 +189,34 @@ io.on("connection", (socket) => {
         stage: game.stage,
         wizardsGrasp: game.wizardsGrasp,
         optionsOrder: game.currentOptionsOrder,
-        // mode: game.mode,
-        // timerTick: game.timerTick,
-        // remaining: game.remaining,
       });
     }
+  });
 
-    socket.on("playerReady", () => {
-      readyPlayers.add(socket.pedestalIndex);
+  socket.on("playerReady", () => {
+    readyPlayers.add(socket.pedestalIndex);
+    console.log(`✅ Ready count: ${readyPlayers.size}/4`);
 
-      if (readyPlayers.size >= 4 && !gameStarted) {
-        game.assignImpostor();
-        gameStarted = true;
-        console.log("All players ready - starting game");
-        io.emit("gameStarting");
-        setTimeout(() => game.loadCurrentScenario(), 3000);
-      }
-    });
-    io.emit("lobby", getLobbyState());
-    tryStartGame();
+    if (readyPlayers.size >= 4 && !gameStarted) {
+      game.assignImpostor();
+      gameStarted = true;
+      console.log("All players ready - starting game");
+      io.emit("gameStarting");
+      setTimeout(() => game.loadCurrentScenario(), 3000);
+    }
   });
 
   socket.on("disconnect", () => {
     if (socket.pedestalIndex === undefined) return;
-    delete playerSockets[socket.pedestalIndex];
-    console.log(`Disconnected: pedestal ${socket.pedestalIndex + 1}`);
+    const slot = socket.pedestalIndex;
+
+    reservedSlots[slot] = setTimeout(() => {
+      delete reservedSlots[slot];
+      console.log(`Slot ${slot + 1} reservation expired`);
+    }, 10000);
+
+    delete playerSockets[slot];
+    console.log(`Disconnected: pedestal ${slot + 1}`);
     io.emit("lobby", getLobbyState());
   });
 });
@@ -304,9 +326,18 @@ if (process.stdin.isTTY) {
       });
       clearInterval(game.timerInterval);
 
+      if (characterDisplayTimer) {
+        clearTimeout(characterDisplayTimer);
+        characterDisplayTimer = null;
+      }
+
       // Reset server state
       readyPlayers.clear();
       gameStarted = false;
+
+      // In t key handler, add after readyPlayers.clear():
+      Object.values(reservedSlots).forEach(clearTimeout);
+      Object.keys(reservedSlots).forEach((k) => delete reservedSlots[k]);
 
       io.emit("lobby", getLobbyState());
 

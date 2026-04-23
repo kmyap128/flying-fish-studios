@@ -8,6 +8,7 @@ import CharacterSelectionScreen from "./pages/character-selection-screen/page.js
 import LobbyScreen from "./pages/lobby-screen/page.jsx";
 
 const socket = io("http://localhost:3000");
+let slotAlreadyRequested = false;
 
 function App() {
   const [screen, setScreen] = useState("character-selection");
@@ -28,17 +29,22 @@ function App() {
   const [playerChoices, setPlayerChoices] = useState([]);
   const [roundResult, setRoundResult] = useState(null);
 
-  const slotRequested = useRef(false);
+  //const slotRequested = useRef(false);
 
   useEffect(() => {
-    socket.on("connect", () => {
+    socket.once("connect", () => {
       console.log("✅ Socket connected:", socket.id);
-      if (slotRequested.current) return;
-      slotRequested.current = true;
+      console.log("slotAlreadyRequested:", slotAlreadyRequested); // add this
 
       const storedSlot = localStorage.getItem("pedestalIndex");
       const requestedSlot = storedSlot !== null ? Number(storedSlot) : null;
       socket.emit("requestSlot", requestedSlot);
+    });
+
+    socket.on("disconnect", () => {
+          console.log("❌ Socket disconnected — resetting slot request flag");
+
+      slotAlreadyRequested = false;
     });
 
     socket.on("identity", ({ pedestalIndex }) => {
@@ -95,7 +101,7 @@ function App() {
     });
 
     return () => {
-      //socket.off("connect");
+      socket.off("connect");
       socket.off("identity");
       socket.off("lobby");
       socket.off("lobbyFull");
@@ -106,6 +112,7 @@ function App() {
       socket.off("modeChange");
       socket.off("timerTick");
       socket.off("gameEnd");
+      socket.off("disconnect");
     };
   }, []);
 
@@ -126,6 +133,7 @@ function App() {
         players: [],
       });
       setScreen("character-selection");
+      console.log("🔄 fullRestart received in main.jsx — reloading");
       window.location.reload();
     });
 
