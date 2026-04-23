@@ -8,8 +8,10 @@ export default function CharacterSelectionScreen({
   myPlayer,
   socket,
 }) {
+  const [pendingCharacterStage, setPendingCharacterStage] = useState(false);
   const [stage, setStage] = useState("prompt");
   const [shaking, setShaking] = useState(false);
+
   const handlePromptClick = () => {
     setStage("image");
     setShaking(true);
@@ -25,7 +27,7 @@ export default function CharacterSelectionScreen({
     if (stage !== "image") return;
 
     const shakeTimer = setTimeout(() => setShaking(false), 600);
-    const switchTimer = setTimeout(() => setStage("character"));
+    const switchTimer = setTimeout(() => setStage("character"), 2000);
 
     return () => {
       clearTimeout(shakeTimer);
@@ -34,26 +36,43 @@ export default function CharacterSelectionScreen({
   }, [stage]);
 
   useEffect(() => {
-    if (stage !== "character") return;
-    const readyTimer = setTimeout(() => {
-      socket.emit("playerReady");
-    }, 10000);
-    return () => clearTimeout(readyTimer);
-  });
+    if (!socket) return;
+    socket.on("allCharactersAssigned", () => {
+      console.log("📦 allCharactersAssigned received, current stage:", stage);
+      setPendingCharacterStage(true);
+    });
+    return () => socket.off("allCharactersAssigned");
+  }, [socket, stage]);
 
   useEffect(() => {
-    if (!socket) return;
-    socket.on("fullRestart", () => {
-      setStage("prompt");
-    });
-    return () => socket.off("fullRestart");
-  }, [socket]);
+    if (pendingCharacterStage && myPlayer?.species) {
+      setStage("character");
+      setPendingCharacterStage(false);
+    }
+  }, [pendingCharacterStage, myPlayer]);
+
+  // useEffect(() => {
+  //   if (stage !== "character") return;
+  //   const readyTimer = setTimeout(() => {
+  //     socket.emit("playerReady");
+  //   }, 10000);
+  //   return () => clearTimeout(readyTimer);
+  // });
+
+  // useEffect(() => {
+  //   if (!socket) return;
+  //   socket.on("fullRestart", () => {
+  //     console.log("🔄 fullRestart received in CharacterSelectionScreen");
+  //     setStage("prompt");
+  //   });
+  //   return () => socket.off("fullRestart");
+  // }, [socket]);
 
   useEffect(() => {
     if (!socket) return;
 
     socket.on("gameStarting", () => {
-    console.log("🎮 gameStarting received in CharacterSelectionScreen");
+      console.log("🎮 gameStarting received in CharacterSelectionScreen");
       onComplete(myPlayer);
     });
     return () => socket.off("gameStarting");
@@ -68,9 +87,7 @@ export default function CharacterSelectionScreen({
       }}
     >
       <div id="content-container">
-        {stage === "prompt" && (
-            <StartPrompt />
-        )}
+        {stage === "prompt" && <StartPrompt />}
 
         {stage === "image" && (
           <div className="egg-anim">

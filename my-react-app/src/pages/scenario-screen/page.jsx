@@ -7,6 +7,7 @@ import { ScenarioOption } from "../../components/scenario-ui/scenario-option/sce
 import { ScenarioBlock } from "../../components/scenario-ui/scenario-block/scenarioBlock.jsx";
 import { Options } from "../../components/scenario-ui/options/options.jsx";
 import { ResultBlock } from "../../components/result-ui/result-block/resultBlock.jsx";
+import { useRef } from "react";
 import "./page.css";
 
 export default function ScenarioScreen({
@@ -33,6 +34,13 @@ export default function ScenarioScreen({
   const narration = scenarioData
     ? `url(/sounds/${scenarioData.media.sound})`
     : "none";
+  const audioRef = useRef(null);
+
+  let narDuration = null;
+  const handleLoadedMetadata = () => {
+    narDuration =
+      narration && audioRef.current ? audioRef.current.duration : null;
+  };
 
   //add logic to determine if player is imposter or not, display correct panel accordingly
   // isTraitor ? traitor image : hero image
@@ -45,7 +53,7 @@ export default function ScenarioScreen({
 
   return (
     <div
-      className={`app-container`}
+      className={`app-container ${myPlayer?.injury ? "injured" : ""}`}
       style={{
         backgroundImage: scenarioData
           ? `url(/backgrounds/${scenarioData.media.background})`
@@ -54,11 +62,35 @@ export default function ScenarioScreen({
     >
       <div id="content-container">
         {gameResult && (
-          <h1>{gameResult === "win" ? "YOU WIN!" : "YOU LOSE!"}</h1>
+          <div className="end-screen">
+            {gameResult.isImpostor ? (
+              <h1>
+                {gameResult.result === "win"
+                  ? "YOU WIN! The heroes failed!"
+                  : "YOU LOSE! The heroes escaped!"}
+              </h1>
+            ) : (
+              <h1>
+                {gameResult.result === "win"
+                  ? "YOU WIN! You escaped the wizard!"
+                  : "YOU LOSE! The wizard caught you!"}
+              </h1>
+            )}
+          </div>
         )}
 
         {!gameResult && mode === "scenario" && scenarioData && (
           <>
+            {/* <div className='header'>
+              
+
+            </div> */}
+            <audio
+              ref={audioRef}
+              onLoadedMetadata={handleLoadedMetadata}
+              src={narration}
+            ></audio>
+
             <div className="header-wrapper">
               <div id="creature-bar-container">
                 <CreatureBar
@@ -83,7 +115,7 @@ export default function ScenarioScreen({
             <div className="timer-meter-container">
               <TimerMeter
                 timerCurrent={countdown}
-                timerDuration={timerDuration}
+                timerDuration={narDuration}
               />
             </div>
           </>
