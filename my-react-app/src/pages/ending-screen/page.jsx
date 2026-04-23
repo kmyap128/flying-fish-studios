@@ -4,10 +4,20 @@ import { useState, useEffect } from "react";
 
 export default function EndingScreen({
   gameResult,
+  players
 }) {
+
+  const impostor = players.find(p => p.isImpostor);
+  const heroes = players.filter(p => !p.isImpostor);
 
 
   return (
+    console.log(gameResult, gameResult?.result, gameResult?.isImpostor),
+    console.log(players),
+    
+    console.log("impostor:", impostor),
+    console.log("heroes:", heroes),
+
     <div
       className="app-container"
       style={{
@@ -15,16 +25,37 @@ export default function EndingScreen({
         backgroundSize: "cover",
       }}
     >
-      <div id="content-container">
-        {gameResult === "win" && (
+      <div id="content-container"
+        style={{
+          backgroundImage: `url(/UI_Assets/Darken_Screen.png)`,
+          backgroundSize: "cover",
+        }}
+      >
+        {gameResult.result === "win" && gameResult.isImpostor === true && (
           <div className="win-screen">
-            <h1>YOU WIN!</h1>
+            <div className="header">
+              <img src="/UI_Assets/Final_Results/Defeat_Banner.png" alt="" />
+            </div>
+            <div className="prompt">
+              <img src="/UI_Assets/Final_Results/Final_Prompt.png" alt="" />
+            </div>
+            <div className="icons">
+
+            </div>
           </div>
         )}
 
-        {gameResult === "lose" && (
+        {gameResult.result === "lose" && (
           <div className="lose-screen">
-            <h1>YOU LOSE!</h1>
+            <div className="header">
+              <img src="/UI_Assets/Final_Results/Defeat_Banner.png" alt="" />
+            </div>
+            <div className="prompt">
+              <img src="/UI_Assets/Final_Results/Final_Prompt.png" alt="" />
+            </div>
+            <div className="icons">
+
+            </div>
           </div>
         )}
       </div>

@@ -55,7 +55,7 @@ export class Game {
         nameBoard: "Finley_NameBoard.png",
         infoBlock: "Fin_Block.png",
       },
-      Jackalope: {
+      "Jackalope": {
         name: "Sprig",
         heroImage: "Spr_Hero.png",
         traitorImage: "Spr_Trait.png",
@@ -71,7 +71,7 @@ export class Game {
         nameBoard: "Waddles_NameBoard.png",
         infoBlock: "Wad_Block.png",
       },
-      Dinogon: {
+      "Dinogon": {
         name: "Smoulder",
         heroImage: "Smo_Hero.png",
         traitorImage: "Smo_Trait.png",

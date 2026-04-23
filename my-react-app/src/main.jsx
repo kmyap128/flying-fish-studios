@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import "./index.css";
 import ScenarioScreen from "./pages/scenario-screen/page.jsx";
 import CharacterSelectionScreen from "./pages/character-selection-screen/page.jsx";
+import EndingScreen from "./pages/ending-screen/page.jsx";
 
 const socket = io("http://localhost:3000");
 let slotAlreadyRequested = false;
@@ -96,6 +97,7 @@ function App() {
     });
     socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
     socket.on("gameEnd", ({ result, isImpostor }) => {
+      setScreen("end");
       setGameResult({ result, isImpostor });
     });
 
@@ -177,7 +179,9 @@ function App() {
           roundResult={roundResult}
         />
       )}
-      {/* )} */}
+      {screen === "end" && gameResult && (
+        <EndingScreen gameResult={gameResult} players={lobbyState.players} />
+      )}
     </>
   );
 }

@@ -50,6 +50,7 @@ export default function ScenarioScreen({
 
   const playerName = myPlayer?.name || "Unknown Creature";
   const isImposter = myPlayer?.isImposter ? true : false;
+  console.log(isImposter);
 
   return (
     <div
@@ -61,24 +62,6 @@ export default function ScenarioScreen({
       }}
     >
       <div id="content-container">
-        {gameResult && (
-          <div className="end-screen">
-            {gameResult.isImpostor ? (
-              <h1>
-                {gameResult.result === "win"
-                  ? "YOU WIN! The heroes failed!"
-                  : "YOU LOSE! The heroes escaped!"}
-              </h1>
-            ) : (
-              <h1>
-                {gameResult.result === "win"
-                  ? "YOU WIN! You escaped the wizard!"
-                  : "YOU LOSE! The wizard caught you!"}
-              </h1>
-            )}
-          </div>
-        )}
-
         {!gameResult && mode === "scenario" && scenarioData && (
           <>
             {/* <div className='header'>
