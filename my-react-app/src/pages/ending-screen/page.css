@@ -1,0 +1,16 @@
+.lose-screen, .win-screen {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header, .prompt {
+    display: flex;
+    align-items: center;
+}
+
+.icons {
+    
+}

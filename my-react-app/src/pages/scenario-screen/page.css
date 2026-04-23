@@ -12,15 +12,6 @@ body {
   overflow: hidden;
 }
 
-.app-container.injured::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 0, 0, 0.15); /* subtle red */
-  pointer-events: none;
-  z-index: 1;
-}
-
 #content-container {
   gap: 20px;
   display: flex;
@@ -56,6 +47,7 @@ body {
 .header-wrapper {
   position: relative;  
   width: 100%;
+  display: flex;
   transform: translateY(-50%);
   height: 20vh;
   z-index: 3;
@@ -68,10 +60,12 @@ body {
 
 #creature-bar-container {
   left: 20px;
+  top: 125%;
 }
 
 #wizard-bar-container {
-  right: 20px;
+  right: -48%;
+  top: 125%;
   display: flex;
   justify-content: flex-end;
 }
@@ -79,7 +73,7 @@ body {
 #timer-container {
   position: absolute;
   left: 50%;
-  top: 80%;
+  top: 60%;
   transform: translateX(-50%);
 }
 

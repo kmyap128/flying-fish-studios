@@ -37,7 +37,8 @@ export class Game {
 
     // Callbacks (Server sends these to react)
     this.onScenarioChange = null;
-    this.onGameEnd = null;
+    this.onGameEndPlayer = null;
+    this.onGameEndImpostor = null;
     this.onModeChange = null;
     this.onTimerTick = null;
     this.onPlayerChoice = null;
@@ -54,7 +55,7 @@ export class Game {
         nameBoard: "Finley_NameBoard.png",
         infoBlock: "Fin_Block.png",
       },
-      Jackalope: {
+      "Jackalope": {
         name: "Sprig",
         heroImage: "Spr_Hero.png",
         traitorImage: "Spr_Trait.png",
@@ -70,7 +71,7 @@ export class Game {
         nameBoard: "Waddles_NameBoard.png",
         infoBlock: "Wad_Block.png",
       },
-      Dinogon: {
+      "Dinogon": {
         name: "Smoulder",
         heroImage: "Smo_Hero.png",
         traitorImage: "Smo_Trait.png",
@@ -187,9 +188,11 @@ export class Game {
 
   shuffleOptionKeys(options) {
     const keys = Object.keys(options);
-    for (let i = keys.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [keys[i], keys[j]] = [keys[j], keys[i]];
+    if (this.currentScenario.name !== "The Statue of the Greedy King") {
+      for (let i = keys.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [keys[i], keys[j]] = [keys[j], keys[i]];
+      }
     }
     return keys;
   }
@@ -197,7 +200,7 @@ export class Game {
   //FUNC load current scenario
   loadCurrentScenario() {
     if (this.currentCategoryIndex >= this.scenarioFlow.length) {
-      this.endGame("win");
+      this.endGame(true);
       return;
     }
 
@@ -415,7 +418,7 @@ export class Game {
 
     // Lose Condition
     if (this.wizardsGrasp >= 8) {
-      this.endGame("lose");
+      this.endGame(false);
       return;
     }
 
@@ -434,9 +437,11 @@ export class Game {
     clearInterval(this.timerInterval);
     this.state = STATES.END;
 
-    if (this.onGameEnd) {
-      this.onGameEnd(result); // "win" or "lose"
-    }
+    const playerResult = result === "win" ? "win" : "lose";
+    const impostorResult = result === "win" ? "lose" : "win";
+
+    if (this.onGameEndPlayer) this.onGameEndPlayer(playerResult);
+    if (this.onGameEndImpostor) this.onGameEndImpostor(impostorResult);
   }
 
   //FUNC assign imposter

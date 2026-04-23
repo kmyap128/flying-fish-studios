@@ -12,25 +12,25 @@
 }
 
 .top-section {
+  background-image: url("/UI_Assets/ScenarioResult/ScenarioResult_BKG.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(76, 46, 110, 0.4);
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px;
 }
 
 .scenario-label {
   font-size: 1em;
-  color: rgba(255, 255, 255, 0.6);
+  color: #A87685;
   margin: 0 0 8px;
 }
 
 .result-text {
-  font-size: 1.5em;
-  color: #fff;
+  font-size: 2em;
+  color: #673245;
   text-align: center;
   margin: 0;
 }
@@ -38,7 +38,6 @@
 .mid-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
 }
 
 .character-panel {
@@ -46,7 +45,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
+  padding-top: 20px;
+  padding-left: 50px;
 }
 
 .character-panel img {
@@ -61,10 +62,16 @@
 .grasp-breakdown {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: rgba(76, 46, 110, 0.4);
-  border-radius: 10px;
-  padding: 12px;
+  gap: 50px;
+  padding-top: 20px;
+  padding-right: 150px;
+  justify-content: flex-start;
+}
+
+.scorecard img, .grasp-meter img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .time-meter {
