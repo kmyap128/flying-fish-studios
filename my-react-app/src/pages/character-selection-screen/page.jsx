@@ -11,6 +11,7 @@ export default function CharacterSelectionScreen({
   const [pendingCharacterStage, setPendingCharacterStage] = useState(false);
   const [stage, setStage] = useState("prompt");
   const [shaking, setShaking] = useState(false);
+  const [allTapped, setAllTapped] = useState(false);
 
   const handlePromptClick = () => {
     setStage("image");
@@ -24,16 +25,28 @@ export default function CharacterSelectionScreen({
   }, [myPlayer]);
 
   useEffect(() => {
+    if (!socket) return;
+    socket.on("allCharactersAssigned", () => {
+      setAllTapped(true);
+      setPendingCharacterStage(true);
+    });
+    return () => socket.off("allCharactersAssigned");
+  }, [socket]);
+
+  useEffect(() => {
     if (stage !== "image") return;
 
     const shakeTimer = setTimeout(() => setShaking(false), 600);
-    const switchTimer = setTimeout(() => setStage("character"), 2000);
+
+    const switchTimer = allTapped
+      ? setTimeout(() => setStage("character"), 2000)
+      : null;
 
     return () => {
       clearTimeout(shakeTimer);
-      clearTimeout(switchTimer);
+      if (switchTimer) clearTimeout(switchTimer);
     };
-  }, [stage]);
+  }, [stage, allTapped]);
 
   useEffect(() => {
     if (!socket) return;
@@ -43,6 +56,17 @@ export default function CharacterSelectionScreen({
     });
     return () => socket.off("allCharactersAssigned");
   }, [socket, stage]);
+
+  useEffect(() => {
+    if (!allTapped) return;
+    if (stage === "image") {
+      return;
+    }
+    if (pendingCharacterStage && myPlayer?.species) {
+      setStage("character");
+      setPendingCharacterStage(false);
+    }
+  }, [allTapped, pendingCharacterStage, myPlayer]);
 
   useEffect(() => {
     if (pendingCharacterStage && myPlayer?.species) {

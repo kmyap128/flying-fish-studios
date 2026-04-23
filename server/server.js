@@ -38,7 +38,6 @@ const RFID_MAP = {
 // Single game instance
 const game = new Game();
 
-const reservedSlots = {};
 const readyPlayers = new Set();
 let characterDisplayTimer;
 
@@ -137,6 +136,23 @@ const tryStartGame = () => {
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {
+    if (requestedSlot === null || requestedSlot === undefined) {
+      socket.emit("lobbyFull");
+      return;
+    }
+
+    const takenByLiveSocket = Object.entries(playerSockets).some(
+      ([slot, id]) => Number(slot) === requestedSlot && id !== socket.id,
+    );
+
+    if (takenByLifeSocket) {
+      socket.emit("lobbyFull");
+      return;
+    }
+
+    playerSockets[requestedSlot] = socket.id;
+    socket.pedestalIndex = requestedSlot;
+
     const takenSlots = Object.keys(playerSockets).map(Number);
 
     let assignedSlot;
@@ -145,10 +161,6 @@ io.on("connection", (socket) => {
       requestedSlot !== undefined &&
       !takenSlots.includes(requestedSlot)
     ) {
-      if (reservedSlots[requestedSlot]) {
-        clearTimeout(reservedSlots[requestedSlot]);
-        delete reservedSlots[requestedSlot];
-      }
       assignedSlot = requestedSlot;
     } else {
       assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
@@ -209,11 +221,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     if (socket.pedestalIndex === undefined) return;
     const slot = socket.pedestalIndex;
-
-    reservedSlots[slot] = setTimeout(() => {
-      delete reservedSlots[slot];
-      console.log(`Slot ${slot + 1} reservation expired`);
-    }, 10000);
 
     delete playerSockets[slot];
     console.log(`Disconnected: pedestal ${slot + 1}`);
@@ -334,10 +341,6 @@ if (process.stdin.isTTY) {
       // Reset server state
       readyPlayers.clear();
       gameStarted = false;
-
-      // In t key handler, add after readyPlayers.clear():
-      Object.values(reservedSlots).forEach(clearTimeout);
-      Object.keys(reservedSlots).forEach((k) => delete reservedSlots[k]);
 
       io.emit("lobby", getLobbyState());
 
