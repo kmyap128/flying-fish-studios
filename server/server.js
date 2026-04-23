@@ -92,17 +92,7 @@ let gameStarted = false;
 
 const getLobbyState = () => ({
   connectedSlots: Object.keys(playerSockets).map(Number),
-  players: game.players.map((p) => ({
-    species: p.species,
-    name: p.name,
-    heroImage: p.heroImage,
-    traitorImage: p.traitorImage,
-    portrait: p.portrait,
-    nameBoard: p.nameBoard,
-    infoBlock: p.infoBlock,
-    pedestalIndex: p.pedestalIndex,
-    hasCharacter: !!p.species,
-  })),
+  players: game.players.map((p) => ({ ...p })),
   status:
     Object.keys(playerSockets).length === 4 &&
     game.players.every((p) => p.species)
@@ -319,18 +309,7 @@ if (process.stdin.isTTY) {
       game.chosen = [false, false, false, false];
       game.resultText = "";
       game.players.forEach((p) => {
-        p.resetChoice();
-        p.out = false;
-        p.disabled = null;
-        p.isImpostor = false;
-        p.species = null; // add this — forces new RFID tap
-        p.name = null;
-        p.heroImage = null;
-        p.traitorImage = null;
-        p.portrait = null;
-        p.nameBoard = null;
-        p.infoBlock = null;
-      });
+        p.reset();
       clearInterval(game.timerInterval);
 
       if (characterDisplayTimer) {

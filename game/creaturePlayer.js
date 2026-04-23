@@ -1,23 +1,41 @@
 import { ITEMS } from "./enums/enums.js";
 
 export class CreaturePlayer {
-  constructor(name, species, image, description, item, pedestalIndex) {
-    //creature name
-    this.name = name;
-
-    this.species = species;
-    //creature image
-    this.image = image;
-    //creature description
-    this.description = description;
-    //creature item
-    this.item = ITEMS[item];
+  constructor(pedestalIndex) {
     this.pedestalIndex = pedestalIndex;
 
+    // Set by assignCharacterToPedestal
+    this.species = null;
+    this.name = null;
+    this.heroImage = null;
+    this.traitorImage = null;
+    this.portrait = null;
+    this.nameBoard = null;
+    this.infoBlock = null;
+    this.description = null;
+    this.item = null;
+
+    // Game state
     this.isImpostor = false;
     this.out = false;
     this.injury = false;
+    this.choice = null;
+    this.disabled = null;
+  }
 
+  reset() {
+    this.species = null;
+    this.name = null;
+    this.heroImage = null;
+    this.traitorImage = null;
+    this.portrait = null;
+    this.nameBoard = null;
+    this.infoBlock = null;
+    this.description = null;
+    this.item = null;
+    this.isImpostor = false;
+    this.out = false;
+    this.injury = false;
     this.choice = null;
     this.disabled = null;
   }
@@ -29,14 +47,6 @@ export class CreaturePlayer {
 
   makeImpostor() {
     this.isImpostor = true;
-  }
-
-  removeImpostor() {
-    this.isImpostor = false;
-  }
-
-  resetChoice() {
-    this.choice = null;
   }
 
   setChoice(choice) {

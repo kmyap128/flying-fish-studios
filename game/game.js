@@ -29,10 +29,10 @@ export class Game {
     this.resultText = "";
 
     this.players = [
-      new CreaturePlayer(null, null, null, null, null, 0),
-      new CreaturePlayer(null, null, null, null, null, 1),
-      new CreaturePlayer(null, null, null, null, null, 2),
-      new CreaturePlayer(null, null, null, null, null, 3),
+      new CreaturePlayer(0),
+      new CreaturePlayer(1),
+      new CreaturePlayer(2),
+      new CreaturePlayer(3),
     ];
 
     // Callbacks (Server sends these to react)
