@@ -118,13 +118,13 @@ const tryStartGame = () => {
     `🔍 tryStartGame: connected=${allConnected} (${Object.keys(playerSockets).length}/4), characters=${allHaveCharacters}`,
   );
   if (allConnected && allHaveCharacters) {
+    game.assignImpostor();
     console.log("📡 Emitting allCharactersAssigned");
     io.emit("allCharactersAssigned");
     console.log("All characters assigned — starting character display");
 
     characterDisplayTimer = setTimeout(() => {
       if (!gameStarted) {
-        game.assignImpostor();
         gameStarted = true;
         console.log("Character display complete — starting game");
         io.emit("gameStarting");
