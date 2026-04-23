@@ -346,6 +346,113 @@ export class Game {
     this.selectedOptionIndex = index;
   }
 
+  // Define the 4 passives up here
+
+  SmoulderPassive() {
+    const smoulder = this.players.find(p => p.species === "Smoulder" && !p.out);
+    if (!smoulder) return "No_Smoulder";
+
+    let didReduce = false;
+    let didInjure = false;
+
+    //1st effect
+    if (smoulder.injury) {
+      this.wizardsGrasp -= 1;
+      didReduce = true;
+      console.log(`Smoulder took some grasp away!`)
+    }
+
+    //2nd effect
+    if (Math.random() < 0.5) {
+      const teammates = this.players.filter(p => p != smoulder && !p.out);
+
+      if (teammates.length > 0) {
+        const randomIndex = Math.floor(Math.random() * teammates.length);
+        const injuredTeammate = teammates[randomIndex];
+        injuredTeammate.injury = true;
+        didInjure = true;
+        console.log(`Smoulder injured ${injuredTeammate}`)
+      }
+    }
+
+    // Decide return value
+    if (didInjure && didReduce) return "Smoulder_Both"; //Both passives used
+    if (didInjure) return "Smoulder_Injured" // Injured a teammate
+    if (didReduce) return "Smoulder_WG_Reduced" //reduced the wizards grasp
+    return "Smoulder_None"
+  }
+
+  FinleyPassive() {
+    const finley = this.players.find(p => p.species === "Finley" && !p.out);
+    if (!finley) return "No_Finley";
+
+    // Get all injured players (that are stil in)
+    const injuredPlayers = this.players.filter(p => p.injury && !p.out);
+
+    //Trigger if 2+ teammates are injured
+    if (injuredPlayers.length >= 2) {
+      const randomIndex = Math.floor(Math.random() * injuredPlayers.length);
+      const healedPlayer = injuredPlayers[randomIndex];
+
+      healedPlayer.injury = false;
+      console.log(`Finley healed ${healedPlayer}`);
+
+      return "Finley_Healed";
+    }
+
+    return "Finley_None";
+  }
+
+  WaddlesPassive() {
+    const waddles = this.players.find(p => p.species === "Waddles" && !p.out);
+    if (!waddles) return "No_Waddles";
+
+    // Count choices
+    const tally = {};
+
+    this.players.forEach((p) => {
+      if (!p.out && p.choice) {
+        tally[p.choice] = (tally[p.choice] || 0) + 1;
+      }
+    });
+
+    // Check for 3 choices
+    const hasExactlyThree = Object.values(tally).some(count => count === 3);
+
+    if (hasExactlyThree) {
+      this.wizardsGrasp -= 2
+      return "Waddles_Reduced"
+    }
+
+    return "Waddles_None";
+  }
+
+  SprigPassive(roundWG) {
+    const sprig = this.players.find(p => p.species === "Sprig" && !p.out);
+    if (!sprig) return "No_Sprig";
+
+    // Count all choices
+    const tally = {};
+
+    this.players.forEach(p => {
+      if (!p.out && p.choice) {
+        tally[p.choice] = (tally[p.choice] || 0) + 1;
+      }
+    });
+
+    // Check if Sprig is the ONLY one who chose his option
+    const count = tally[sprig.choice];
+
+    if (count === 1) {
+      roundWG *= 0.5;
+      console.log("Sprig reduced WG by 50%");
+      return "Sprig_Halved";
+    }
+
+    return "Sprig_None";
+  }
+
+
   //FUNC end round?
   endRound() {
     clearInterval(this.timerInterval);
@@ -353,10 +460,19 @@ export class Game {
     let winningChoices = [];
     let winningKey;
     let value;
+    let roundWG = 0;
     if (this.currentType == "synergy") {
       winningChoice = this.getMajorityChoice()[0];
       winningKey = this.getMajorityChoice()[1];
       value = [winningChoice[1], winningChoice[2]];
+      if (this.currentScenarioCategory == "combat") {
+        this.players.forEach((p) => {
+          if (p.choice == "worst") {
+            p.injury = true;
+            console.log(p.injury);
+          }
+        });
+      }
       if (this.currentScenarioCategory == "sacrifice") {
         value = this.handleSacrificeScenario(winningChoice);
         this.resultText = value[1];
@@ -394,29 +510,45 @@ export class Game {
         }
       });
       if (typeof total === "number") {
-        this.wizardsGrasp += total / this.players.length;
+        roundWG = total / this.players.length;
       }
     }
     console.log("Result Text ");
     console.log(this.resultText);
     console.log("Wizards Grasp");
     console.log(this.wizardsGrasp);
+    const smoulderResult = this.SmoulderPassive();
+    const finleyResult = this.FinleyPassive();
+    const sprigResult = this.SprigPassive(roundWG);
+    roundWG = sprigResult.roundWG;
+    const waddlesResult = this.WaddlesPassive();
+
+    this.wizardsGrasp += roundWG;
 
     if (this.onRoundResult) {
       this.onRoundResult({
         winningChoice,
         resultText: this.resultText,
         wizardsGrasp: this.wizardsGrasp,
+
+        passives: {
+          Smoulder: smoulderResult,
+          Finley: finleyResult,
+          Sprig: sprigResult,
+          Waddles: waddlesResult
+        },
+
         playerChoices: this.players.map((p) => ({
           species: p.species,
           pedestalIndex: p.pedestalIndex,
           choice: p.choice,
+          injury: p.injury,
           option: p.choice ? this.currentOptions[p.choice] : null,
         })),
       });
     }
-
     if (this.onModeChange) this.onModeChange("result");
+
 
     this.chosen = [false, false, false, false];
 
