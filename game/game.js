@@ -174,6 +174,7 @@ export class Game {
 
   handleDilemmaScenario(newChoice, newKey) {
     let choice = newChoice;
+    console.log(choice);
     let result;
     console.log("DILEMMA CHOICE");
     console.log(choice);
@@ -189,7 +190,7 @@ export class Game {
         result = [choice[2][0], choice[2][1]];
       }
     } else {
-      result = [choice[0], choice[1]];
+      result = [choice[1], choice[2]];
     }
     return result;
   }
@@ -376,20 +377,22 @@ export class Game {
 
   // Define the 4 passives up here
 
-  SmoulderPassive() {
+  SmoulderPassive(roundWG) {
     const smoulder = this.players.find(
-      (p) => p.species === "Smoulder" && !p.out && !p.isImpostor
+      (p) => p.species === "Dinogon" && !p.out && !p.isImpostor,
     );
-    if (!smoulder) return "No_Smoulder";
+    if (!smoulder) return ["No_Smoulder", roundWG];
 
     let didReduce = false;
     let didInjure = false;
 
     //1st effect
     if (smoulder.injury) {
-      this.wizardsGrasp -= 1;
+      console.log("pre-smoulder", roundWG);
+      roundWG -= 1;
       didReduce = true;
       console.log(`Smoulder took some grasp away!`);
+      console.log("post-smoulder", roundWG);
     }
 
     //2nd effect
@@ -401,19 +404,19 @@ export class Game {
         const injuredTeammate = teammates[randomIndex];
         injuredTeammate.injury = true;
         didInjure = true;
-        console.log(`Smoulder injured ${injuredTeammate}`);
+        console.log(`Smoulder injured ${injuredTeammate.name}`);
       }
     }
 
     // Decide return value
-    if (didInjure && didReduce) return "Smoulder_Both"; //Both passives used
-    if (didInjure) return "Smoulder_Injured"; // Injured a teammate
-    if (didReduce) return "Smoulder_WG_Reduced"; //reduced the wizards grasp
-    return "Smoulder_None";
+    if (didInjure && didReduce) return ["Smoulder_Both", roundWG]; //Both passives used
+    if (didInjure) return ["Smoulder_Injured", roundWG]; // Injured a teammate
+    if (didReduce) return ["Smoulder_WG_Reduced", roundWG]; //reduced the wizards grasp
+    return ["Smoulder_None", roundWG];
   }
 
   FinleyPassive() {
-    const finley = this.players.find((p) => p.species === "Finley" && !p.out && !p.isImpostor);
+    const finley = this.players.find((p) => p.species === "Nine-Tailed Fish" && !p.out && !p.isImpostor);
     if (!finley) return "No_Finley";
 
     // Get all injured players (that are stil in)
@@ -425,7 +428,7 @@ export class Game {
       const healedPlayer = injuredPlayers[randomIndex];
 
       healedPlayer.injury = false;
-      console.log(`Finley healed ${healedPlayer}`);
+      console.log(`Finley healed ${healedPlayer.name}`);
 
       return "Finley_Healed";
     }
@@ -433,9 +436,9 @@ export class Game {
     return "Finley_None";
   }
 
-  WaddlesPassive() {
-    const waddles = this.players.find((p) => p.species === "Waddles" && !p.out && !p.isImpostor);
-    if (!waddles) return "No_Waddles";
+  WaddlesPassive(roundWG) {
+    const waddles = this.players.find((p) => p.species === "Duck Duck Goose" && !p.out && !p.isImpostor);
+    if (!waddles) return ["No_Waddles", roundWG];
 
     // Count choices
     const tally = {};
@@ -450,16 +453,19 @@ export class Game {
     const hasExactlyThree = Object.values(tally).some((count) => count === 3);
 
     if (hasExactlyThree) {
-      this.wizardsGrasp -= 2;
-      return "Waddles_Reduced";
+      console.log("pre-waddles", roundWG);
+      roundWG -= 1; //changed from 2 to 1 for balance
+      console.log("Waddles reduced the Wizard's Grasp!");
+      console.log("post-waddles", roundWG);
+      return ["Waddles_Reduced", roundWG];
     }
 
-    return "Waddles_None";
+    return ["Waddles_None", roundWG];
   }
 
   SprigPassive(roundWG) {
-    const sprig = this.players.find((p) => p.species === "Sprig" && !p.out && !p.isImpostor);
-    if (!sprig) return "No_Sprig";
+    const sprig = this.players.find((p) => p.species === "Jackalope" && !p.out && !p.isImpostor);
+    if (!sprig) return ["No_Sprig", roundWG];
 
     // Count all choices
     const tally = {};
@@ -474,11 +480,12 @@ export class Game {
     const count = tally[sprig.choice];
 
     if (count === 1) {
+      console.log("pre-sprig", roundWG);
       roundWG *= 0.5;
       console.log("Sprig reduced WG by 50%");
+      console.log("post-sprig", roundWG);
       return ["Sprig_Halved", roundWG];
     }
-
     return ["Sprig_None", roundWG];
   }
 
@@ -506,17 +513,16 @@ export class Game {
         value = this.handleSacrificeScenario(winningChoice);
         this.resultText = value[1];
         console.log("sacrifice value", value[0]);
-        this.wizardsGrasp += value[0];
+        roundWG = value[0];
       } else if (this.currentScenarioCategory == "dilemma") {
         value = this.handleDilemmaScenario(winningChoice, winningKey);
         this.resultText = value[1];
         console.log("dilemma value", value[0]);
-        this.wizardsGrasp += value[0];
+        roundWG = value[0];
       } else {
         this.resultText = value[1];
         console.log("other values", value[0]);
         roundWG = value[0];
-        //this.wizardsGrasp += value[0];
       }
     } else {
       let total = 0;
@@ -548,16 +554,20 @@ export class Game {
     }
     console.log("Result Text ");
     console.log(this.resultText);
+    const smoulderAction = this.SmoulderPassive(roundWG);
+    const smoulderResult = smoulderAction[0];
+    roundWG = smoulderAction[1]
+    const finleyResult = this.FinleyPassive();
+    const sprigAction = this.SprigPassive(roundWG)
+    const sprigResult = sprigAction[0];
+    roundWG = sprigAction[1];
+    const waddlesAction = this.WaddlesPassive(roundWG);
+    const waddlesResult = waddlesAction[0];
+    roundWG = waddlesAction[1];
+
+    this.wizardsGrasp += roundWG;
     console.log("Wizards Grasp");
     console.log(this.wizardsGrasp);
-    const smoulderResult = this.SmoulderPassive();
-    const finleyResult = this.FinleyPassive();
-    const sprigResult = this.SprigPassive(roundWG)[0];
-    roundWG = this.SprigPassive(roundWG)[1];
-    const waddlesResult = this.WaddlesPassive();
-
-    console.log("sprig effect", roundWG);
-    this.wizardsGrasp += roundWG;
 
     if (this.onRoundResult) {
       this.onRoundResult({
@@ -586,7 +596,7 @@ export class Game {
     this.chosen = [false, false, false, false];
 
     this.startTimer(15, "result", () => {
-      if (this.wizardsGrasp >= 8) {
+      if (this.wizardsGrasp >= 11) {
         this.endGame(false);
         return;
       }
