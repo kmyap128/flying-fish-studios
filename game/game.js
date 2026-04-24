@@ -251,12 +251,12 @@ export class Game {
     mp3Duration(narrationPath, (err, duration) => {
       if (err) return console.log(err.message);
       narrationDuration = duration;
-    });
 
-    this.startTimer(narrationDuration, "scenario", () => {
-      if (this.onModeChange) this.onModeChange("options");
-      this.startTimer(20, "options", () => {
-        this.endRound();
+      this.startTimer(narrationDuration, "scenario", () => {
+        if (this.onModeChange) this.onModeChange("options");
+        this.startTimer(20, "options", () => {
+          this.endRound();
+        });
       });
     });
   }
