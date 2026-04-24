@@ -137,7 +137,7 @@ export class Game {
     } else {
       if (choice == "option 1") {
         this.players.forEach((player) => {
-          player.item == null;
+          player.item == false;
         });
         return [response[1], response[0]];
       } else if (choice == "option 2") {
@@ -276,7 +276,9 @@ export class Game {
     if (this.state !== STATES.SCENARIO) return;
     const player = this.players[pedestalIndex];
     if (!player) return;
+    if (player.out) return;
 
+    if (optionKey === player.disabled) return;
     player.setChoice(optionKey);
 
     if (this.onPlayerChoice) {
@@ -290,7 +292,9 @@ export class Game {
           choice: p.choice,
         })),
       });
-      this.chosen[pedestalIndex] = true;
+      if (player.choice !== player.disabled) {
+        this.chosen[pedestalIndex] = true;
+      }
     }
     console.log(player.species, player.choice);
 
@@ -301,7 +305,9 @@ export class Game {
       }
     });
 
-    if (choices >= 4) {
+    const playersIn = this.players.filter((p) => !p.out).length;
+
+    if (choices >= playersIn) {
       this.endRound();
     }
   }
@@ -313,7 +319,14 @@ export class Game {
       tally = { helpful: 0, selfish: 0 };
       this.players.forEach((p) => {
         if (!p.out) {
-          const choice = p.choice ?? "selfish";
+          const choice =
+            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
+              ? p.choice
+              : p.disabled
+                ? this.currentOptionsOrder[p.disabled] == "selfish"
+                  ? "helpful"
+                  : "selfish"
+                : "selfish";
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -322,7 +335,14 @@ export class Game {
       tally = { "option 1": 0, "option 2": 0, "option 3": 0 };
       this.players.forEach((p) => {
         if (!p.out) {
-          const choice = p.choice ?? "option 1";
+          const choice =
+            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
+              ? p.choice
+              : p.disabled
+                ? this.currentOptionsOrder[p.disabled] == "option 1"
+                  ? "option 2"
+                  : "option 1"
+                : "option 1";
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -331,7 +351,14 @@ export class Game {
       tally = { best: 0, neutral: 0, worst: 0 };
       this.players.forEach((p) => {
         if (!p.out) {
-          const choice = p.choice ?? "worst";
+          const choice =
+            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
+              ? p.choice
+              : p.disabled
+                ? this.currentOptionsOrder[p.disabled] == "worst"
+                  ? "neutral"
+                  : "worst"
+                : "worst";
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -379,7 +406,7 @@ export class Game {
 
   SmoulderPassive(roundWG) {
     const smoulder = this.players.find(
-      (p) => p.species === "Dinogon" && !p.out && !p.isImpostor,
+      (p) => p.species === "Dinogon" && !p.out && !p.isImpostor && !p.item,
     );
     if (!smoulder) return ["No_Smoulder", roundWG];
 
@@ -416,7 +443,10 @@ export class Game {
   }
 
   FinleyPassive() {
-    const finley = this.players.find((p) => p.species === "Nine-Tailed Fish" && !p.out && !p.isImpostor);
+    const finley = this.players.find(
+      (p) =>
+        p.species === "Nine-Tailed Fish" && !p.out && !p.isImpostor && !p.item,
+    );
     if (!finley) return "No_Finley";
 
     // Get all injured players (that are stil in)
@@ -437,7 +467,10 @@ export class Game {
   }
 
   WaddlesPassive(roundWG) {
-    const waddles = this.players.find((p) => p.species === "Duck Duck Goose" && !p.out && !p.isImpostor);
+    const waddles = this.players.find(
+      (p) =>
+        p.species === "Duck Duck Goose" && !p.out && !p.isImpostor && !p.item,
+    );
     if (!waddles) return ["No_Waddles", roundWG];
 
     // Count choices
@@ -464,7 +497,9 @@ export class Game {
   }
 
   SprigPassive(roundWG) {
-    const sprig = this.players.find((p) => p.species === "Jackalope" && !p.out && !p.isImpostor);
+    const sprig = this.players.find(
+      (p) => p.species === "Jackalope" && !p.out && !p.isImpostor && !p.item,
+    );
     if (!sprig) return ["No_Sprig", roundWG];
 
     // Count all choices
@@ -529,14 +564,22 @@ export class Game {
       let value = [];
       this.players.forEach((p) => {
         if (!p.out) {
-          const choiceIndex = p.choice ?? "option 1";
+          const choiceIndex =
+            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
+              ? p.choice
+              : p.disabled
+                ? this.currentOptionsOrder[p.disabled] == "option 1"
+                  ? "option 2"
+                  : "option 1"
+                : "option 1";
           winningChoices.push(this.currentOptions[choiceIndex]);
           value = this.currentOptions[choiceIndex];
-          if (this.currentScenarioCategory == "item") {
-            p.item == this.currentScenario.item;
-            this.resultText = value[2];
-            total += 1;
-          } else if (this.currentScenarioCategory == "sacrifice") {
+          // if (this.currentScenarioCategory == "item") {
+          //   p.item == this.currentScenario.item;
+          //   this.resultText = value[2];
+          //   total += 1;
+          // } else
+          if (this.currentScenarioCategory == "sacrifice") {
             value = this.handleSacrificeScenario(
               this.currentOptions[choiceIndex],
             );
@@ -548,17 +591,18 @@ export class Game {
           }
         }
       });
-      if (typeof total === "number") {
-        roundWG = total / this.players.length;
+      const playersIn = this.players.filter((p) => !p.out).length;
+      if (typeof total === "number" && playersIn > 0) {
+        roundWG = total / playersIn;
       }
     }
     console.log("Result Text ");
     console.log(this.resultText);
     const smoulderAction = this.SmoulderPassive(roundWG);
     const smoulderResult = smoulderAction[0];
-    roundWG = smoulderAction[1]
+    roundWG = smoulderAction[1];
     const finleyResult = this.FinleyPassive();
-    const sprigAction = this.SprigPassive(roundWG)
+    const sprigAction = this.SprigPassive(roundWG);
     const sprigResult = sprigAction[0];
     roundWG = sprigAction[1];
     const waddlesAction = this.WaddlesPassive(roundWG);
