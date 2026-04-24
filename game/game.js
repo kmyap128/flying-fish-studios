@@ -131,13 +131,13 @@ export class Game {
         else if (choice == "option 2") player.disabled = 2;
         else player.disabled = 3;
       });
-      return [response[1], response[2]];
+      return [response[1], response[0]];
     } else {
       if (choice == "option 1") {
         this.players.forEach((player) => {
           player.item == null;
         });
-        return [response[1], response[2]];
+        return [response[1], response[0]];
       } else if (choice == "option 2") {
         let chance = Math.random();
         let normalPlayers = [];
@@ -165,7 +165,7 @@ export class Game {
         }
         return [response[1], `${out.name} has been left behind`];
       } else {
-        return [response[1], response[2]];
+        return [response[1], response[0]];
       }
     }
   }

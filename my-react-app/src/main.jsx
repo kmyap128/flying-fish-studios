@@ -165,6 +165,7 @@ function App() {
   }, []);
 
   const allPlayers = lobbyState.players ?? [];
+  console.log(allPlayers);
 
   const myPlayer =
     myPedestalIndex !== null ? allPlayers?.[myPedestalIndex] : null;
