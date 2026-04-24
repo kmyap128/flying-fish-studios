@@ -34,7 +34,9 @@ export default function ScenarioScreen({
     ? `url(/backgrounds/${scenarioData.media.background})`
     : null;
 
-  const narration = scenarioData ? `/sounds/narrations/${scenarioData.media.sound}` : null;
+  const narration = scenarioData
+    ? `/sounds/narrations/${scenarioData.media.sound}`
+    : null;
 
   let narDuration = null;
 
@@ -135,6 +137,7 @@ export default function ScenarioScreen({
           <>
             <ResultBlock
               scenarioNum={gameState.stage + 1}
+              chosenOption={roundResult.winningChoice[0]}
               resultText={roundResult.resultText}
               countdown={countdown}
               timerDuration={timerDuration}
