@@ -121,7 +121,7 @@
           "Punch it in the stomach",
           1,
           "A giant fish flew out of its mouth, it was choking and only wanted your help. It shows you a shortcut.",
-          "angry-shroombear/Punch.png"
+          "shroombear/Punch.png"
         ],
         "worst": [
           "Throw mushrooms at it",
@@ -130,7 +130,7 @@
           "shroombear/Throw.png"
         ],
         "neutral": [
-          "Stand tall and indimidate it",
+          "Stand tall and intimidate it",
           2,
           "It’s confused. You’re confused. The bear walks away in confusion.",
           "shroombear/Strong.png"
@@ -154,7 +154,7 @@
         "best": [
           "Sacrifice your Reflection.",
           1,
-          "It dramatically fades, “I was cooler” You win anyway.",
+          "It dramatically fades. “I was cooler...” You win anyway.",
           "mirror-image/Goodbye.png"
         ],
         "neutral": [
@@ -279,19 +279,19 @@
           "Toss in your items",
           2,
           "",
-          "illuminated-portal/Toss.png"
+          "portal/Toss.png"
         ],
         "option 2": [
           "Throw in a companion",
           2,
           "",
-          "illuminated-portal/Companion.png"
+          "portal/Companion.png"
         ],
         "option 3": [
           "Sacrifice Wizard's Grasp",
           4,
           "",
-          "illuminated-portal/WG.png"
+          "portal/WG.png"
         ]
       },
       "type": "synergy",
@@ -395,7 +395,7 @@
           "Help him climb out",
           2,
           "He says thanks, then remembers he’s an ogre and smacks you over the head. He then leaves out of respect.",
-          "trapped-ogre/Helphim.png"
+          "ogre-pit/Helphim.png"
         ],
         "selfish": [
           "Steal the potion",
@@ -413,7 +413,7 @@
       },
       "type": "synergy",
       "sound": "Trapped_Ogre.mp3",
-      "background": "",
+      "background": "ravine-nobridge.png",
       "images": [],
       "animation": ""
     },
