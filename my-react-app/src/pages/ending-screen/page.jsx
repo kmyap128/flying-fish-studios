@@ -4,19 +4,13 @@ import { useState, useEffect } from "react";
 
 export default function EndingScreen({
   gameResult,
-  players
 }) {
-
-  const impostor = players.find(p => p.isImpostor);
-  const heroes = players.filter(p => !p.isImpostor);
-
+  const { result, isImpostor, allPlayers } = gameResult;
+  console.log("Game Result:", result);
+  console.log("Is Impostor:", isImpostor);
+  console.log("All Players with Roles:", allPlayers);
 
   return (
-    console.log(gameResult, gameResult?.result, gameResult?.isImpostor),
-    console.log(players),
-    
-    console.log("impostor:", impostor),
-    console.log("heroes:", heroes),
 
     <div
       className="app-container"
@@ -31,16 +25,30 @@ export default function EndingScreen({
           backgroundSize: "cover",
         }}
       >
-        {gameResult.result === "win" && gameResult.isImpostor === true && (
+        {gameResult.result === "win" && (
           <div className="win-screen">
             <div className="header">
-              <img src="/UI_Assets/Final_Results/Defeat_Banner.png" alt="" />
+              <img src="/UI_Assets/Final_Results/Victory_Banner.png" alt="" />
             </div>
             <div className="prompt">
               <img src="/UI_Assets/Final_Results/Final_Prompt.png" alt="" />
             </div>
             <div className="icons">
-
+              {isImpostor ? (
+                <>
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
+                </>
+              ) : (
+                <>
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
+                </>
+              )}
             </div>
           </div>
         )}
@@ -54,7 +62,21 @@ export default function EndingScreen({
               <img src="/UI_Assets/Final_Results/Final_Prompt.png" alt="" />
             </div>
             <div className="icons">
-
+              {isImpostor ? (
+                <>
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
+                </>
+              ) : (
+                <>
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
+                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
+                </>
+              )}
             </div>
           </div>
         )}
