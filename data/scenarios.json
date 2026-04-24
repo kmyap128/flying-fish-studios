@@ -264,7 +264,12 @@
           "",
           "glowing-bridge/Vote.png"
         ],
-        "option 3": ["Cross anyways", 3, "", "glowing-bridge/Cross.png"]
+        "option 3": [
+          "Cross anyways",
+          4,
+          "The bridge breaks underneath you, and you all fall into the ravine. It takes you a while to get out.",
+          "glowing-bridge/Cross.png"
+        ]
       },
       "type": "synergy",
       "sound": "The_Glowing_Bridge.mp3",
@@ -275,24 +280,9 @@
     "The Illuminated Portal": {
       "scenario": "A mesmerizing portal hums in the woods, pulling at your mind. You cannot look away unless you please it.",
       "options": {
-        "option 1": [
-          "Toss in your items",
-          2,
-          "",
-          "portal/Toss.png"
-        ],
-        "option 2": [
-          "Throw in a companion",
-          2,
-          "",
-          "portal/Companion.png"
-        ],
-        "option 3": [
-          "Sacrifice Wizard's Grasp",
-          4,
-          "",
-          "portal/WG.png"
-        ]
+        "option 1": ["Toss in your items", 2, "", "portal/Toss.png"],
+        "option 2": ["Throw in a companion", 2, "", "portal/Companion.png"],
+        "option 3": ["Sacrifice Wizard's Grasp", 4, "", "portal/WG.png"]
       },
       "type": "synergy",
       "sound": "The_Illuminated_Portal.mp3",

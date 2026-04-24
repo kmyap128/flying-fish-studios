@@ -127,6 +127,7 @@ export class Game {
   handleSacrificeScenario(newChoice) {
     let choice = newChoice;
     let response = choice;
+    console.log(choice);
     if (this.currentScenario.name == "The Statue of the Greedy King") {
       this.players.forEach((player) => {
         if (choice == "option 1") player.disabled = 1;
@@ -148,7 +149,7 @@ export class Game {
         this.players.forEach((player) => {
           if (player.isImpostor) {
             impostor = player;
-          } else {
+          } else if (!player.out) {
             normalPlayers.push(player);
           }
         });
@@ -162,11 +163,14 @@ export class Game {
           normalPlayers[2].out = true;
           out = normalPlayers[2];
         } else {
-          impostor.out;
+          impostor.out = true;
           out = impostor;
         }
         return [response[1], `${out.name} has been left behind`];
       } else {
+        if (this.currentScenario.name === "The Glowing Bridge") {
+          return [response[1], response[2]];
+        }
         return [response[1], response[0]];
       }
     }
@@ -546,6 +550,7 @@ export class Game {
       }
       if (this.currentScenarioCategory == "sacrifice") {
         value = this.handleSacrificeScenario(winningChoice);
+        console.log(value);
         this.resultText = value[1];
         console.log("sacrifice value", value[0]);
         roundWG = value[0];

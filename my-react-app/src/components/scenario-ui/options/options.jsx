@@ -5,7 +5,7 @@ export function Options({ options, onSelect, myChoice }) {
   // If only 2 options, inject a blank disabled one in the middle
   const displayOptions =
     options.length === 2
-      ? [options[0], options[1], ["__blank__", [" ", null, null, null]]]
+      ? [options[0], ["__blank__", [" ", null, null, null]], options[1]]
       : options;
 
   return (
@@ -20,7 +20,7 @@ export function Options({ options, onSelect, myChoice }) {
             key={key}
             className={`option ${isMyChoice ? "option--chosen" : ""} ${(myChoice && !isMyChoice) || isBlank ? "option--disabled" : ""}`}
             onClick={() => !myChoice && !isBlank && onSelect(key)}
-            disabled={myChoice && !isMyChoice || isBlank}
+            disabled={(myChoice && !isMyChoice) || isBlank}
           >
             <img className="option-bg" src={optionBg} alt="" />
             <div className="option-button-content">
