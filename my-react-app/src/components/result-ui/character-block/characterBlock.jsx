@@ -1,6 +1,6 @@
 import './characterBlock.css';
 
-export function CharacterBlock({ characterName, passiveResult, isInjured }) {  
+export function CharacterBlock({ characterName, itemUsed, isInjured }) {  
     const characterAbbreviation = characterName.slice(0, 1).toUpperCase() + characterName.slice(1, 3).toLowerCase();
     const characterStatus = itemUsed ? "Default" : isInjured ? "Injured" : "Transparent";
     const itemStatus = itemUsed ? "Default" : "Transparent";
