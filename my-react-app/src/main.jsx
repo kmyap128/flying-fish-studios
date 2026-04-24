@@ -107,9 +107,9 @@ function App() {
       if (newMode === "result") setTimerDuration(15);
     });
     socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
-    socket.on("gameEnd", ({ result, isImpostor }) => {
+    socket.on("gameEnd", ({ result, isImpostor, allPlayers }) => {
       setScreen("end");
-      setGameResult({ result, isImpostor });
+      setGameResult({ result, isImpostor, allPlayers });
     });
 
     return () => {
@@ -214,7 +214,7 @@ function App() {
         />
       )}
       {screen === "end" && gameResult && (
-        <EndingScreen gameResult={gameResult} players={lobbyState.players} />
+        <EndingScreen gameResult={gameResult} />
       )}
     </>
   );

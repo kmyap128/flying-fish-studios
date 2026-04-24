@@ -68,19 +68,42 @@ game.onRoundResult = (resultData) => {
   io.emit("modeChange", { newMode: "result" });
 };
 game.onGameEndPlayer = (result) => {
+  console.log("onGameEndPlayer fired, game.players:", game.players.map(p => ({ name: p.name, species: p.species, isImpostor: p.isImpostor })));
+
+  const allPlayersWithRoles = game.players.map((p) => ({
+    pedestalIndex: p.pedestalIndex,
+    name: p.name,
+    species: p.species,
+    heroImage: p.heroImage,
+    traitorImage: p.traitorImage,
+    portrait: p.portrait,
+    isImpostor: p.isImpostor,
+  }));
+
   game.players.forEach((p) => {
     if (!p.isImpostor) {
       const socketId = playerSockets[p.pedestalIndex];
       if (socketId)
-        io.to(socketId).emit("gameEnd", { result, isImpostor: false });
+        io.to(socketId).emit("gameEnd", { result, isImpostor: false, allPlayers: allPlayersWithRoles });
     }
   });
 };
 game.onGameEndImpostor = (result) => {
   const impostor = game.players.find((p) => p.isImpostor);
+
+  const allPlayersWithRoles = game.players.map((p) => ({
+    pedestalIndex: p.pedestalIndex,
+    name: p.name,
+    species: p.species,
+    heroImage: p.heroImage,
+    traitorImage: p.traitorImage,
+    portrait: p.portrait,
+    isImpostor: p.isImpostor,
+  }));
+
   if (impostor) {
     const socketId = playerSockets[impostor.pedestalIndex];
-    if (socketId) io.to(socketId).emit("gameEnd", { result, isImpostor: true });
+    if (socketId) io.to(socketId).emit("gameEnd", { result, isImpostor: true, allPlayers: allPlayersWithRoles });
   }
 };
 
