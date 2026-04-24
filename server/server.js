@@ -102,6 +102,32 @@ const getLobbyState = () => ({
       : "waiting",
 });
 
+const tryShowCharacters = () => {
+  const allConnected = Object.keys(playerSockets).length === 4;
+  const allTapped = readyPlayers.size === 4;
+  const allHaveCharacters = game.players.every((p) => p.species);
+
+  if (allConnected && allTapped && allHaveCharacters && !gameStarted) {
+    console.log("All connected and tapped - showing characters");
+    game.assignImpostor();
+
+    Object.entries(playerSockets).forEach(([slot, socketId]) => {
+      const player = game.players[Number(slot)];
+      io.to(socketId).emit("roleAssigned", { isImpostor: player.isImpostor });
+    });
+
+    io.emit("allPlayersReady");
+
+    characterDisplayTimer = setTimeout(() => {
+      if (!gameStarted) {
+        gameStarted = true;
+        io.emit("gameStarting");
+        setTimeout(() => game.loadCurrentScenario(), 3000);
+      }
+    }, 10000);
+  }
+}
+
 const tryStartGame = () => {
   if (gameStarted) return;
   const allConnected = Object.keys(playerSockets).length === 4;
@@ -194,11 +220,13 @@ io.on("connection", (socket) => {
       );
     }
 
+    console.log(
+      `🔍 tryStartGame: connected=${Object.keys(playerSockets).length === 4} (${Object.keys(playerSockets).length}/4)`,
+    );
+
     socket.emit("identity", { pedestalIndex: requestedSlot });
     socket.emit("lobby", getLobbyState());
     io.emit("lobby", getLobbyState());
-
-    tryStartGame();
 
     if (
       !gameStarted &&
@@ -258,6 +286,8 @@ io.on("connection", (socket) => {
     if (!gameStarted) {
       const socketId = playerSockets[pedestalIndex];
       if (socketId) io.to(socketId).emit("playerTapped");
+      readyPlayers.add(pedestalIndex);
+      tryShowCharacters();
       return;
     }
     if (game.state !== STATES.SCENARIO) return;
@@ -373,6 +403,8 @@ if (process.stdin.isTTY) {
       if (!gameStarted) {
         const socketId = playerSockets[pedestal];
         if (socketId) io.to(socketId).emit("playerTapped");
+        readyPlayers.add(pedestal);
+        tryShowCharacters();
         return;
       }
       // Only register choices on options mode

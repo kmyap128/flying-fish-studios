@@ -17,9 +17,15 @@ export default function CharacterSelectionScreen({
   useEffect(() => {
     if (!socket) return;
     socket.on("playerTapped", () => {
-      if (stage === "prompt") setStage("image");
+      if (stage === "prompt") setStage("waiting");
     });
-    return () => socket.off("playerTapped");
+    socket.on("allPlayersReady", () => {
+      setStage("image");
+    })
+    return () => {
+      socket.off("playerTapped");
+      socket.off("allPlayersReady");
+    }
   }, [socket, stage]);
 
   useEffect(() => {
@@ -88,7 +94,9 @@ export default function CharacterSelectionScreen({
       }}
     >
       <div id="content-container">
-        {stage === "prompt" && <StartPrompt />}
+        {stage === "prompt" && <StartPrompt waiting={false} />}
+
+        {stage === "waiting" && <StartPrompt waiting={true} />}
 
         {stage === "image" && (
           <div className="egg-anim">

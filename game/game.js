@@ -214,7 +214,7 @@ export class Game {
 
     if (this.onModeChange) {
       this.currentMode = "scenario";
-      thisonModeChange("scenario");
+      this.onModeChange("scenario");
     }
 
     const currentCategory = this.scenarioFlow[this.currentCategoryIndex];
@@ -476,10 +476,10 @@ export class Game {
     if (count === 1) {
       roundWG *= 0.5;
       console.log("Sprig reduced WG by 50%");
-      return "Sprig_Halved";
+      return ["Sprig_Halved", roundWG];
     }
 
-    return "Sprig_None";
+    return ["Sprig_None", roundWG];
   }
 
   //FUNC end round?
@@ -505,14 +505,18 @@ export class Game {
       if (this.currentScenarioCategory == "sacrifice") {
         value = this.handleSacrificeScenario(winningChoice);
         this.resultText = value[1];
+        console.log("sacrifice value", value[0]);
         this.wizardsGrasp += value[0];
       } else if (this.currentScenarioCategory == "dilemma") {
         value = this.handleDilemmaScenario(winningChoice, winningKey);
         this.resultText = value[1];
+        console.log("dilemma value", value[0]);
         this.wizardsGrasp += value[0];
       } else {
         this.resultText = value[1];
-        this.wizardsGrasp += value[0];
+        console.log("other values", value[0]);
+        roundWG = value[0];
+        //this.wizardsGrasp += value[0];
       }
     } else {
       let total = 0;
@@ -548,10 +552,11 @@ export class Game {
     console.log(this.wizardsGrasp);
     const smoulderResult = this.SmoulderPassive();
     const finleyResult = this.FinleyPassive();
-    const sprigResult = this.SprigPassive(roundWG);
-    roundWG = sprigResult.roundWG;
+    const sprigResult = this.SprigPassive(roundWG)[0];
+    roundWG = this.SprigPassive(roundWG)[1];
     const waddlesResult = this.WaddlesPassive();
 
+    console.log("sprig effect", roundWG);
     this.wizardsGrasp += roundWG;
 
     if (this.onRoundResult) {
