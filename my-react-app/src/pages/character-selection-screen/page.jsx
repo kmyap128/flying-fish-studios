@@ -49,15 +49,6 @@ export default function CharacterSelectionScreen({
   }, [stage, allTapped]);
 
   useEffect(() => {
-    if (!socket) return;
-    socket.on("allCharactersAssigned", () => {
-      console.log("📦 allCharactersAssigned received, current stage:", stage);
-      setPendingCharacterStage(true);
-    });
-    return () => socket.off("allCharactersAssigned");
-  }, [socket, stage]);
-
-  useEffect(() => {
     if (!allTapped) return;
     if (stage === "image") {
       return;

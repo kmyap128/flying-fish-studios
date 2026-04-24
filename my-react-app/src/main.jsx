@@ -39,7 +39,7 @@ function App() {
 
       const params = new URLSearchParams(window.location.search);
       const requestedSlot = params.has("pedestal")
-        ? Number(params.get("pedestal"))
+        ? Number(params.get("pedestal")) - 1
         : null;
       socket.emit("requestSlot", requestedSlot);
     });
@@ -51,7 +51,6 @@ function App() {
     });
 
     socket.on("allCharactersAssigned", () => setAllTapped(true));
-    socket.off("allCharactersAssigned");
 
     socket.on("identity", ({ pedestalIndex }) => {
       setMyPedestalIndex(pedestalIndex);
@@ -119,6 +118,7 @@ function App() {
       socket.off("timerTick");
       socket.off("gameEnd");
       socket.off("disconnect");
+      socket.off("allCharactersAssigned");
     };
   }, []);
 
@@ -144,6 +144,24 @@ function App() {
     });
 
     return () => socket.off("fullRestart");
+  }, []);
+
+  useEffect(() => {
+    const requestSlot = () => {
+      const params = new URLSearchParams(window.location.search);
+      const requestedSlot = params.has("pedestal")
+        ? Number(params.get("pedestal")) - 1
+        : null;
+      socket.emit("requestedSlot", requestedSlot);
+    };
+
+    if (socket.connected) {
+      requestSlot();
+    } else {
+      socket.once("connect", requestSlot);
+    }
+
+    return () => socket.off("connect", requestSlot);
   }, []);
 
   const allPlayers = lobbyState.players ?? [];

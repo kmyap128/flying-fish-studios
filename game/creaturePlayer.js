@@ -49,6 +49,10 @@ export class CreaturePlayer {
     this.isImpostor = true;
   }
 
+  resetChoice() {
+    this.choice = null;
+  }
+
   setChoice(choice) {
     this.choice = choice;
   }

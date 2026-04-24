@@ -108,9 +108,9 @@ const tryStartGame = () => {
     `🔍 tryStartGame: connected=${allConnected} (${Object.keys(playerSockets).length}/4), characters=${allHaveCharacters}`,
   );
   if (allConnected && allHaveCharacters) {
-    game.assignImpostor();
     console.log("📡 Emitting allCharactersAssigned");
     io.emit("allCharactersAssigned");
+    game.assignImpostor();
     console.log("All characters assigned — starting character display");
 
     characterDisplayTimer = setTimeout(() => {
@@ -126,6 +126,11 @@ const tryStartGame = () => {
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {
+    console.log(
+      `requestSlot received: slot=${requestedSlot} from ${socket.id}`,
+    );
+    console.log(`current playerSockets:`, playerSockets);
+    // ...
     if (requestedSlot === null || requestedSlot === undefined) {
       socket.emit("lobbyFull");
       return;
@@ -135,7 +140,7 @@ io.on("connection", (socket) => {
       ([slot, id]) => Number(slot) === requestedSlot && id !== socket.id,
     );
 
-    if (takenByLifeSocket) {
+    if (takenByLiveSocket) {
       socket.emit("lobbyFull");
       return;
     }
@@ -184,6 +189,14 @@ io.on("connection", (socket) => {
     io.emit("lobby", getLobbyState());
 
     tryStartGame();
+
+    if (
+      !gameStarted &&
+      game.players.every((p) => p.species) &&
+      Object.keys(playerSockets).length === 4
+    ) {
+      socket.emit("allCharactersAssigned");
+    }
 
     if (gameStarted && game.currentScenario) {
       socket.emit("scenarioChange", {
@@ -310,7 +323,8 @@ if (process.stdin.isTTY) {
       game.resultText = "";
       game.players.forEach((p) => {
         p.reset();
-      clearInterval(game.timerInterval);
+        clearInterval(game.timerInterval);
+      });
 
       if (characterDisplayTimer) {
         clearTimeout(characterDisplayTimer);

@@ -9,6 +9,7 @@ import { Options } from "../../components/scenario-ui/options/options.jsx";
 import { ResultBlock } from "../../components/result-ui/result-block/resultBlock.jsx";
 import { useRef } from "react";
 import "./page.css";
+import { NarrationPlayer } from "../../components/scenario-ui/narration/narration.jsx";
 
 export default function ScenarioScreen({
   socket,
@@ -34,13 +35,8 @@ export default function ScenarioScreen({
   const narration = scenarioData
     ? `url(/sounds/${scenarioData.media.sound})`
     : "none";
-  const audioRef = useRef(null);
 
   let narDuration = null;
-  const handleLoadedMetadata = () => {
-    narDuration =
-      narration && audioRef.current ? audioRef.current.duration : null;
-  };
 
   //add logic to determine if player is imposter or not, display correct panel accordingly
   // isTraitor ? traitor image : hero image
@@ -68,11 +64,6 @@ export default function ScenarioScreen({
               
 
             </div> */}
-            <audio
-              ref={audioRef}
-              onLoadedMetadata={handleLoadedMetadata}
-              src={narration}
-            ></audio>
 
             <div className="header-wrapper">
               <div id="creature-bar-container">
@@ -94,6 +85,7 @@ export default function ScenarioScreen({
                 title={scenarioData.name}
                 description={scenarioData.text}
               />
+              <NarrationPlayer url={narration} />
             </div>
             <div className="timer-meter-container">
               <TimerMeter

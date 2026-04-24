@@ -2,6 +2,7 @@ import { Round } from "./round.js";
 import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
 import { CreaturePlayer } from "./creaturePlayer.js";
+import mp3Duration from "mp3-duration";
 
 export class Game {
   constructor() {
@@ -236,7 +237,15 @@ export class Game {
       this.onScenarioChange(this.round);
     }
 
-    this.startTimer(5, "scenario", () => {
+    const narrationPath = scenarioData.sound;
+    let narrationDuration;
+
+    mp3Duration("your-file.mp3", (err, duration) => {
+      if (err) return console.log(err.message);
+      narrationDuration = duration;
+    });
+
+    this.startTimer(duration, "scenario", () => {
       if (this.onModeChange) this.onModeChange("options");
       this.startTimer(10, "options", () => {
         this.endRound();
@@ -349,7 +358,9 @@ export class Game {
   // Define the 4 passives up here
 
   SmoulderPassive() {
-    const smoulder = this.players.find(p => p.species === "Smoulder" && !p.out);
+    const smoulder = this.players.find(
+      (p) => p.species === "Smoulder" && !p.out,
+    );
     if (!smoulder) return "No_Smoulder";
 
     let didReduce = false;
@@ -359,35 +370,35 @@ export class Game {
     if (smoulder.injury) {
       this.wizardsGrasp -= 1;
       didReduce = true;
-      console.log(`Smoulder took some grasp away!`)
+      console.log(`Smoulder took some grasp away!`);
     }
 
     //2nd effect
     if (Math.random() < 0.5) {
-      const teammates = this.players.filter(p => p != smoulder && !p.out);
+      const teammates = this.players.filter((p) => p != smoulder && !p.out);
 
       if (teammates.length > 0) {
         const randomIndex = Math.floor(Math.random() * teammates.length);
         const injuredTeammate = teammates[randomIndex];
         injuredTeammate.injury = true;
         didInjure = true;
-        console.log(`Smoulder injured ${injuredTeammate}`)
+        console.log(`Smoulder injured ${injuredTeammate}`);
       }
     }
 
     // Decide return value
     if (didInjure && didReduce) return "Smoulder_Both"; //Both passives used
-    if (didInjure) return "Smoulder_Injured" // Injured a teammate
-    if (didReduce) return "Smoulder_WG_Reduced" //reduced the wizards grasp
-    return "Smoulder_None"
+    if (didInjure) return "Smoulder_Injured"; // Injured a teammate
+    if (didReduce) return "Smoulder_WG_Reduced"; //reduced the wizards grasp
+    return "Smoulder_None";
   }
 
   FinleyPassive() {
-    const finley = this.players.find(p => p.species === "Finley" && !p.out);
+    const finley = this.players.find((p) => p.species === "Finley" && !p.out);
     if (!finley) return "No_Finley";
 
     // Get all injured players (that are stil in)
-    const injuredPlayers = this.players.filter(p => p.injury && !p.out);
+    const injuredPlayers = this.players.filter((p) => p.injury && !p.out);
 
     //Trigger if 2+ teammates are injured
     if (injuredPlayers.length >= 2) {
@@ -404,7 +415,7 @@ export class Game {
   }
 
   WaddlesPassive() {
-    const waddles = this.players.find(p => p.species === "Waddles" && !p.out);
+    const waddles = this.players.find((p) => p.species === "Waddles" && !p.out);
     if (!waddles) return "No_Waddles";
 
     // Count choices
@@ -417,24 +428,24 @@ export class Game {
     });
 
     // Check for 3 choices
-    const hasExactlyThree = Object.values(tally).some(count => count === 3);
+    const hasExactlyThree = Object.values(tally).some((count) => count === 3);
 
     if (hasExactlyThree) {
-      this.wizardsGrasp -= 2
-      return "Waddles_Reduced"
+      this.wizardsGrasp -= 2;
+      return "Waddles_Reduced";
     }
 
     return "Waddles_None";
   }
 
   SprigPassive(roundWG) {
-    const sprig = this.players.find(p => p.species === "Sprig" && !p.out);
+    const sprig = this.players.find((p) => p.species === "Sprig" && !p.out);
     if (!sprig) return "No_Sprig";
 
     // Count all choices
     const tally = {};
 
-    this.players.forEach(p => {
+    this.players.forEach((p) => {
       if (!p.out && p.choice) {
         tally[p.choice] = (tally[p.choice] || 0) + 1;
       }
@@ -451,7 +462,6 @@ export class Game {
 
     return "Sprig_None";
   }
-
 
   //FUNC end round?
   endRound() {
@@ -535,7 +545,7 @@ export class Game {
           Smoulder: smoulderResult,
           Finley: finleyResult,
           Sprig: sprigResult,
-          Waddles: waddlesResult
+          Waddles: waddlesResult,
         },
 
         playerChoices: this.players.map((p) => ({
@@ -548,7 +558,6 @@ export class Game {
       });
     }
     if (this.onModeChange) this.onModeChange("result");
-
 
     this.chosen = [false, false, false, false];
 
