@@ -24,6 +24,7 @@ export default function ScenarioScreen({
   myRole,
   myPlayer,
   roundResult,
+  narrationDuration,
 }) {
   const handleSelectOption = (key) => {
     socket.emit("selectOption", { optionKey: key });
@@ -31,11 +32,9 @@ export default function ScenarioScreen({
 
   const background = scenarioData
     ? `url(/backgrounds/${scenarioData.media.background})`
-    : "none";
+    : null;
 
-  const narration = scenarioData
-    ? `url(/sounds/${scenarioData.media.sound})`
-    : "none";
+  const narration = scenarioData ? `/sounds/${scenarioData.media.sound}` : null;
 
   let narDuration = null;
 
@@ -85,7 +84,7 @@ export default function ScenarioScreen({
             <div className="timer-meter-container">
               <TimerMeter
                 timerCurrent={countdown}
-                timerDuration={narDuration}
+                timerDuration={narrationDuration}
               />
             </div>
           </>

@@ -47,6 +47,7 @@ game.onScenarioChange = (roundData) => {
     stage: game.stage,
     wizardsGrasp: game.wizardsGrasp,
     optionsOrder: game.currentOptionsOrder,
+    narrationDuration: game.narrationDuration,
   });
   console.log("Category: ", game.currentScenarioCategory);
   console.log("Options: ", game.currentOptions);

@@ -112,10 +112,11 @@ export class Game {
   loadScenarios(data) {
     this.allScenarios = data;
     this.categories = Object.keys(this.allScenarios);
+    this.categories.splice(2, 1);
     this.scenarioFlow = [
       Object.entries(data.obstacle || {}),
       Object.entries(data.combat || {}),
-      Object.entries(data.item || {}),
+      // Object.entries(data.item || {}),
       Object.entries(data.sacrifice || {}),
       Object.entries(data.bonus || {}),
       Object.entries(data.dilemma || {}),
@@ -131,13 +132,13 @@ export class Game {
         else if (choice == "option 2") player.disabled = 2;
         else player.disabled = 3;
       });
-      return [response[1], response[2]];
+      return [response[1], response[0]];
     } else {
       if (choice == "option 1") {
         this.players.forEach((player) => {
           player.item == null;
         });
-        return [response[1], response[2]];
+        return [response[1], response[0]];
       } else if (choice == "option 2") {
         let chance = Math.random();
         let normalPlayers = [];
@@ -165,7 +166,7 @@ export class Game {
         }
         return [response[1], `${out.name} has been left behind`];
       } else {
-        return [response[1], response[2]];
+        return [response[1], response[0]];
       }
     }
   }
@@ -251,12 +252,12 @@ export class Game {
     mp3Duration(narrationPath, (err, duration) => {
       if (err) return console.log(err.message);
       narrationDuration = duration;
-    });
 
-    this.startTimer(narrationDuration, "scenario", () => {
-      if (this.onModeChange) this.onModeChange("options");
-      this.startTimer(20, "options", () => {
-        this.endRound();
+      this.startTimer(narrationDuration, "scenario", () => {
+        if (this.onModeChange) this.onModeChange("options");
+        this.startTimer(20, "options", () => {
+          this.endRound();
+        });
       });
     });
   }

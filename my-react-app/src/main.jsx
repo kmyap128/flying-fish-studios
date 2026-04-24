@@ -30,6 +30,7 @@ function App() {
   const [roundResult, setRoundResult] = useState(null);
   const [allTapped, setAllTapped] = useState(false);
   const [myRole, setMyRole] = useState(null);
+  const [narrationDuration, setNarrationDuration] = useState(null);
 
   //const slotRequested = useRef(false);
 
@@ -83,6 +84,7 @@ function App() {
         setScenarioData(round.scenarioData);
         setGameState({ stage, wizardsGrasp });
         setOptionsOrder(optionsOrder);
+        setNarrationDuration(narrationDuration);
         setRoundResult(null);
         setPlayerChoices([]);
         setGameResult(null);
