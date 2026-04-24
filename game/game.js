@@ -3,11 +3,14 @@ import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
 import { CreaturePlayer } from "./creaturePlayer.js";
 import mp3Duration from "mp3-duration";
+<<<<<<< HEAD
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+=======
+>>>>>>> parent of 79dabba (reverted to working game for testing)
 
 export class Game {
   constructor() {
@@ -206,7 +209,7 @@ export class Game {
   //FUNC load current scenario
   loadCurrentScenario() {
     if (this.currentCategoryIndex >= this.scenarioFlow.length) {
-      this.endGame(true);
+      setTimeout(() => this.endGame(true), 5000);
       return;
     }
 
@@ -243,6 +246,7 @@ export class Game {
       this.onScenarioChange(this.round);
     }
 
+<<<<<<< HEAD
     if (this.currentScenario.sound) {
       const narrationPath = path.join(__dirname, this.currentScenario.sound);
       mp3Duration(narrationPath, (err, duration) => {
@@ -259,6 +263,20 @@ export class Game {
             this.endRound();
           });
         });
+=======
+    const narrationPath = scenarioData.sound;
+    let narrationDuration;
+
+    mp3Duration("your-file.mp3", (err, duration) => {
+      if (err) return console.log(err.message);
+      narrationDuration = duration;
+    });
+
+    this.startTimer(duration, "scenario", () => {
+      if (this.onModeChange) this.onModeChange("options");
+      this.startTimer(10, "options", () => {
+        this.endRound();
+>>>>>>> parent of 79dabba (reverted to working game for testing)
       });
     }
   }
@@ -435,17 +453,21 @@ export class Game {
       });
     }
 
-    // Lose Condition
-    if (this.wizardsGrasp >= 8) {
-      this.endGame(false);
-      return;
-    }
+    if (this.onModeChange) this.onModeChange("result");
 
     this.chosen = [false, false, false, false];
 
+<<<<<<< HEAD
     if (this.onModeChange) this.onModeChange("result");
 
     this.startTimer(5, "result", () => {
+=======
+    this.startTimer(5, "result", () => {
+      if (this.wizardsGrasp >= 8) {
+        this.endGame(false);
+        return;
+      }
+>>>>>>> parent of 79dabba (reverted to working game for testing)
       this.stage++;
       this.currentCategoryIndex++;
       this.loadCurrentScenario();
