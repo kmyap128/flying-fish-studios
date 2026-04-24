@@ -2,21 +2,25 @@ import "./options.css";
 import optionBg from "/UI_Assets/Containers/Answer_Container.png";
 
 export function Options({ options, onSelect, myChoice }) {
+  // If only 2 options, inject a blank disabled one in the middle
+  const displayOptions =
+    options.length === 2
+      ? [options[0], options[1], ["__blank__", [" ", null, null, null]]]
+      : options;
+
   return (
     <div id="options-container">
-      {options.map(([key, option]) => {
+      {displayOptions.map(([key, option]) => {
         const [label, , , icon] = option;
+        const isBlank = key === "__blank__";
         const isMyChoice = myChoice === key;
-        // const playersWhoChoseThis = playerChoices.filter(
-        //   (p) => p.choice === key,
-        // );
-        // const isChosen = playersWhoChoseThis.length > 0;
+
         return (
           <button
             key={key}
-            className={`option ${isMyChoice ? "option--chosen" : ""} ${myChoice && !isMyChoice ? "option--disabled" : ""}`}
-            onClick={() => !myChoice && onSelect(key)}
-            disabled={myChoice && !isMyChoice}
+            className={`option ${isMyChoice ? "option--chosen" : ""} ${(myChoice && !isMyChoice) || isBlank ? "option--disabled" : ""}`}
+            onClick={() => !myChoice && !isBlank && onSelect(key)}
+            disabled={myChoice && !isMyChoice || isBlank}
           >
             <img className="option-bg" src={optionBg} alt="" />
             <div className="option-button-content">
@@ -27,7 +31,7 @@ export function Options({ options, onSelect, myChoice }) {
                   alt=""
                 />
               )}
-              <span className="option-label">{label}</span>
+              {!isBlank && <span className="option-label">{label}</span>}
             </div>
           </button>
         );
