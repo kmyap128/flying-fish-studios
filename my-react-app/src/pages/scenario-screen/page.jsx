@@ -30,11 +30,11 @@ export default function ScenarioScreen({
 
   const background = scenarioData
     ? `url(/backgrounds/${scenarioData.media.background})`
-    : "none";
+    : null;
 
   const narration = scenarioData
     ? `url(/sounds/${scenarioData.media.sound})`
-    : "none";
+    : null;
 
   let narDuration = null;
 
