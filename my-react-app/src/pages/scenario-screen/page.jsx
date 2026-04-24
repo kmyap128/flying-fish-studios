@@ -9,6 +9,7 @@ import { Options } from "../../components/scenario-ui/options/options.jsx";
 import { ResultBlock } from "../../components/result-ui/result-block/resultBlock.jsx";
 import { useRef } from "react";
 import "./page.css";
+import { NarrationPlayer } from "../../components/scenario-ui/narration/narration.jsx";
 
 export default function ScenarioScreen({
   socket,
@@ -68,11 +69,7 @@ export default function ScenarioScreen({
               
 
             </div> */}
-            <audio
-              ref={audioRef}
-              onLoadedMetadata={handleLoadedMetadata}
-              src={narration}
-            ></audio>
+            <NarrationPlayer url={narration} />
 
             <div className="header-wrapper">
               <div id="creature-bar-container">

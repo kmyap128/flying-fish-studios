@@ -2,6 +2,7 @@ import { Round } from "./round.js";
 import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
 import { CreaturePlayer } from "./creaturePlayer.js";
+import mp3Duration from "mp3-duration";
 
 export class Game {
   constructor() {
@@ -236,7 +237,15 @@ export class Game {
       this.onScenarioChange(this.round);
     }
 
-    this.startTimer(5, "scenario", () => {
+    const narrationPath = scenarioData.sound;
+    let narrationDuration;
+
+    mp3Duration("your-file.mp3", (err, duration) => {
+      if (err) return console.log(err.message);
+      narrationDuration = duration;
+    });
+
+    this.startTimer(duration, "scenario", () => {
       if (this.onModeChange) this.onModeChange("options");
       this.startTimer(10, "options", () => {
         this.endRound();
