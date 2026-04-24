@@ -32,7 +32,7 @@ export class CreaturePlayer {
     this.nameBoard = null;
     this.infoBlock = null;
     this.description = null;
-    this.item = null;
+    this.item = true;
     this.isImpostor = false;
     this.out = false;
     this.injury = false;
@@ -40,13 +40,9 @@ export class CreaturePlayer {
     this.disabled = null;
   }
 
-  //FUNC add/change/remove item
-  changeItem(item) {
-    this.item = ITEMS[item];
-  }
-
   makeImpostor() {
     this.isImpostor = true;
+    this.item = false;
   }
 
   resetChoice() {

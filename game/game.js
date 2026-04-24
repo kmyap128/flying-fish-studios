@@ -137,7 +137,7 @@ export class Game {
     } else {
       if (choice == "option 1") {
         this.players.forEach((player) => {
-          player.item == null;
+          player.item == false;
         });
         return [response[1], response[0]];
       } else if (choice == "option 2") {
@@ -379,7 +379,7 @@ export class Game {
 
   SmoulderPassive(roundWG) {
     const smoulder = this.players.find(
-      (p) => p.species === "Dinogon" && !p.out && !p.isImpostor,
+      (p) => p.species === "Dinogon" && !p.out && !p.isImpostor && !p.item,
     );
     if (!smoulder) return ["No_Smoulder", roundWG];
 
@@ -416,7 +416,7 @@ export class Game {
   }
 
   FinleyPassive() {
-    const finley = this.players.find((p) => p.species === "Nine-Tailed Fish" && !p.out && !p.isImpostor);
+    const finley = this.players.find((p) => p.species === "Nine-Tailed Fish" && !p.out && !p.isImpostor&& !p.item);
     if (!finley) return "No_Finley";
 
     // Get all injured players (that are stil in)
@@ -437,7 +437,7 @@ export class Game {
   }
 
   WaddlesPassive(roundWG) {
-    const waddles = this.players.find((p) => p.species === "Duck Duck Goose" && !p.out && !p.isImpostor);
+    const waddles = this.players.find((p) => p.species === "Duck Duck Goose" && !p.out && !p.isImpostor&& !p.item);
     if (!waddles) return ["No_Waddles", roundWG];
 
     // Count choices
@@ -464,7 +464,7 @@ export class Game {
   }
 
   SprigPassive(roundWG) {
-    const sprig = this.players.find((p) => p.species === "Jackalope" && !p.out && !p.isImpostor);
+    const sprig = this.players.find((p) => p.species === "Jackalope" && !p.out && !p.isImpostor&& !p.item);
     if (!sprig) return ["No_Sprig", roundWG];
 
     // Count all choices
@@ -532,11 +532,12 @@ export class Game {
           const choiceIndex = p.choice ?? "option 1";
           winningChoices.push(this.currentOptions[choiceIndex]);
           value = this.currentOptions[choiceIndex];
-          if (this.currentScenarioCategory == "item") {
-            p.item == this.currentScenario.item;
-            this.resultText = value[2];
-            total += 1;
-          } else if (this.currentScenarioCategory == "sacrifice") {
+          // if (this.currentScenarioCategory == "item") {
+          //   p.item == this.currentScenario.item;
+          //   this.resultText = value[2];
+          //   total += 1;
+          // } else 
+          if (this.currentScenarioCategory == "sacrifice") {
             value = this.handleSacrificeScenario(
               this.currentOptions[choiceIndex],
             );
