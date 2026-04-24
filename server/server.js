@@ -7,6 +7,7 @@ import fs from "fs";
 import readline from "readline";
 import { fileURLToPath } from "url";
 import { Game } from "../game/game.js";
+import { STATES } from "../game/enums/enums.js";
 
 // ESM file paths
 const __filename = fileURLToPath(import.meta.url);
@@ -240,25 +241,39 @@ io.on("connection", (socket) => {
   });
 });
 
-[0, 1, 2, 3].forEach((pedestalIndex) => {
-  subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag, selectedChoice }) => {
-    const species = RFID_MAP[rfidTag];
-    if (selectedChoice != 0) {
-      console.log(species, "registered");
-      game.assignCharacterToPedestal(pedestalIndex, species);
-      io.emit("lobby", getLobbyState());
-      tryStartGame();
-    }
-  });
-});
+// [0, 1, 2, 3].forEach((pedestalIndex) => {
+//   subscribe(`rfid${pedestalIndex + 1}`, ({ rfidTag, selectedChoice }) => {
+//     const species = RFID_MAP[rfidTag];
+//     if (selectedChoice != 0) {
+//       console.log(species, "registered");
+//       game.assignCharacterToPedestal(pedestalIndex, species);
+//       io.emit("lobby", getLobbyState());
+//       tryStartGame();
+//     }
+//   });
+// });
 
 [0, 1, 2, 3].forEach((pedestalIndex) => {
   subscribe(`pedestal${pedestalIndex + 1}`, ({ selectedChoice }) => {
+    if (!gameStarted) {
+      const socketId = playerSockets[pedestalIndex];
+      if (socketId) io.to(socketId).emit("playerTapped");
+      return;
+    }
+    if (game.state !== STATES.SCENARIO) return;
     const optionKey = game.currentOptionsOrder[selectedChoice - 1];
     if (!optionKey) return;
     game.registerChoice(pedestalIndex, optionKey);
   });
 });
+
+// [0, 1, 2, 3].forEach((pedestalIndex) => {
+//   subscribe(`pedestal${pedestalIndex + 1}`, ({ selectedChoice }) => {
+//     const optionKey = game.currentOptionsOrder[selectedChoice - 1];
+//     if (!optionKey) return;
+//     game.registerChoice(pedestalIndex, optionKey);
+//   });
+// });
 
 const keyMap = {
   1: { pedestal: 0, position: 0 },
@@ -355,6 +370,13 @@ if (process.stdin.isTTY) {
 
     if (keyMap[str]) {
       const { pedestal, position } = keyMap[str];
+      if (!gameStarted) {
+        const socketId = playerSockets[pedestal];
+        if (socketId) io.to(socketId).emit("playerTapped");
+        return;
+      }
+      // Only register choices on options mode
+      if (game.currentOptionsOrder.length === 0) return;
       const option = positionToOption(position);
       game.registerChoice(pedestal, option);
     }

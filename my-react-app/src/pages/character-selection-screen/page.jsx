@@ -15,11 +15,12 @@ export default function CharacterSelectionScreen({
   const [timerWidth, setTimerWidth] = useState(100);
 
   useEffect(() => {
-    if (myPlayer?.species && stage === "prompt") {
-      setStage("image");
-      setShaking(true);
-    }
-  }, [myPlayer?.species]);
+    if (!socket) return;
+    socket.on("playerTapped", () => {
+      if (stage === "prompt") setStage("image");
+    });
+    return () => socket.off("playerTapped");
+  }, [socket, stage]);
 
   useEffect(() => {
     if (stage !== "image") return;
@@ -76,7 +77,7 @@ export default function CharacterSelectionScreen({
     ? "Traitor_Block.png"
     : myPlayer?.infoBlock;
 
-    console.log("myRole in character selection screen", myRole);
+  console.log("myRole in character selection screen", myRole);
 
   return (
     <div
@@ -101,21 +102,28 @@ export default function CharacterSelectionScreen({
         )}
 
         {stage === "impostor" && (
-          <div className="impostor-reveal" 
-          >
+          <div className="impostor-reveal">
             <CharacterInfo
               character={{ ...myPlayer, infoBlock: initImage }}
               onComplete={() => onComplete(myPlayer)}
             />
-            <div className="impostor-gif-overlay" 
-            style={{
-              backgroundImage: `url(/UI_Assets/Darken_Screen.png)`,
-              backgroundSize: "cover",
-            }}>
+            <div
+              className="impostor-gif-overlay"
+              style={{
+                backgroundImage: `url(/UI_Assets/Darken_Screen.png)`,
+                backgroundSize: "cover",
+              }}
+            >
               {myRole?.isImpostor ? (
-                <img src="/UI_Assets/Character_Select/Spinner_Traitor.gif" alt="impostor reveal" />
+                <img
+                  src="/UI_Assets/Character_Select/Spinner_Traitor.gif"
+                  alt="impostor reveal"
+                />
               ) : (
-                <img src="/UI_Assets/Character_Select/Spinner_Hero.gif" alt="hero reveal" />
+                <img
+                  src="/UI_Assets/Character_Select/Spinner_Hero.gif"
+                  alt="hero reveal"
+                />
               )}
             </div>
           </div>

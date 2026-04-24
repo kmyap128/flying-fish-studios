@@ -27,6 +27,7 @@ export class Game {
     this.currentOptions = null;
     this.currentOptionsOrder = [];
     this.currentType = null;
+    this.currentMode = null;
 
     this.round = null;
     this.timerInterval = null;
@@ -211,6 +212,11 @@ export class Game {
       return;
     }
 
+    if (this.onModeChange) {
+      this.currentMode = "scenario";
+      thisonModeChange("scenario");
+    }
+
     const currentCategory = this.scenarioFlow[this.currentCategoryIndex];
 
     if (!currentCategory || currentCategory.length === 0) {
@@ -254,8 +260,10 @@ export class Game {
       narrationDuration = duration;
 
       this.startTimer(narrationDuration, "scenario", () => {
+        this.currentMode = "options";
         if (this.onModeChange) this.onModeChange("options");
         this.startTimer(20, "options", () => {
+          this.currentMode = null;
           this.endRound();
         });
       });
@@ -263,6 +271,8 @@ export class Game {
   }
 
   registerChoice(pedestalIndex, optionKey) {
+    if (this.currentMode !== "options") return;
+    if (this.state !== STATES.SCENARIO) return;
     const player = this.players[pedestalIndex];
     if (!player) return;
 
