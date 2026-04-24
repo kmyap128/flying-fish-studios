@@ -112,10 +112,11 @@ export class Game {
   loadScenarios(data) {
     this.allScenarios = data;
     this.categories = Object.keys(this.allScenarios);
+    this.categories.splice(2, 1);
     this.scenarioFlow = [
       Object.entries(data.obstacle || {}),
       Object.entries(data.combat || {}),
-      Object.entries(data.item || {}),
+      // Object.entries(data.item || {}),
       Object.entries(data.sacrifice || {}),
       Object.entries(data.bonus || {}),
       Object.entries(data.dilemma || {}),
