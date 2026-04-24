@@ -10,6 +10,47 @@ export default function EndingScreen({
   console.log("Is Impostor:", isImpostor);
   console.log("All Players with Roles:", allPlayers);
 
+  const banner = result === "win"
+    ? "/UI_Assets/Final_Results/Victory_Banner.png"
+    : "/UI_Assets/Final_Results/Defeat_Banner.png";
+
+  const getImagePath = (player, isImpostor) => {
+    const fullName = player.name; 
+    const shortName = player.name.slice(0, 3); 
+
+    let traitor;
+    let state;
+    if (player.isImpostor) {
+      traitor = "Traitor";
+    } else {
+      traitor = "Hero";
+    }
+
+    if (isImpostor) {
+      if (player.isImpostor) {
+        if (result === "win") {
+          state = "Victory";
+        } else {
+          state = "Defeat";
+        }
+      } else {
+        state = "Default";
+      }
+    } else {
+      if (!player.isImpostor) {
+        if (result === "win") {
+          state = "Victory";
+        } else {
+          state = "Defeat";
+        }
+      } else {
+        state = "Default";
+      }
+    }
+
+    return `/UI_Assets/Final_Results/Character_Banners/${fullName}/${shortName}_${traitor}_${state}.png`;
+  };
+
   return (
 
     <div
@@ -25,10 +66,9 @@ export default function EndingScreen({
           backgroundSize: "cover",
         }}
       >
-        {gameResult.result === "win" && (
           <div className="win-screen">
             <div className="header">
-              <img src="/UI_Assets/Final_Results/Victory_Banner.png" alt="" />
+              <img src={banner} alt="" />
             </div>
             <div className="prompt">
               <img src="/UI_Assets/Final_Results/Final_Prompt.png" alt="" />
@@ -36,50 +76,21 @@ export default function EndingScreen({
             <div className="icons">
               {isImpostor ? (
                 <>
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
+                  <img src={`${getImagePath(allPlayers[0], isImpostor)}`} alt="" />
+                  <img src={`${getImagePath(allPlayers[1], isImpostor)}`} alt="" />
+                  <img src={`${getImagePath(allPlayers[2], isImpostor)}`} alt="" />
+                  <img src={`${getImagePath(allPlayers[3], isImpostor)}`} alt="" />
                 </>
               ) : (
                 <>
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
+                  <img src={`${getImagePath(allPlayers[0], isImpostor)}`} alt="" />
+                  <img src={`${getImagePath(allPlayers[1], isImpostor)}`} alt="" />
+                  <img src={`${getImagePath(allPlayers[2], isImpostor)}`} alt="" />
+                  <img src={`${getImagePath(allPlayers[3], isImpostor)}`} alt="" />
                 </>
               )}
             </div>
           </div>
-        )}
-
-        {gameResult.result === "lose" && (
-          <div className="lose-screen">
-            <div className="header">
-              <img src="/UI_Assets/Final_Results/Defeat_Banner.png" alt="" />
-            </div>
-            <div className="prompt">
-              <img src="/UI_Assets/Final_Results/Final_Prompt.png" alt="" />
-            </div>
-            <div className="icons">
-              {isImpostor ? (
-                <>
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
-                </>
-              ) : (
-                <>
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Finley/Fin_${isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Smoulder/Smo_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Sprig/Spr_${!isImpostor}.png`} alt="" />
-                  <img src={`/UI_Assets/Final_Results/Character_Banners/Waddles/Wad_${!isImpostor}.png`} alt="" />
-                </>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
