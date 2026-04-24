@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+//import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
@@ -33,16 +33,16 @@ function App() {
   //const slotRequested = useRef(false);
 
   useEffect(() => {
-    socket.once("connect", () => {
-      console.log("✅ Socket connected:", socket.id);
-      console.log("slotAlreadyRequested:", slotAlreadyRequested); // add this
+    // socket.once("connect", () => {
+    //   console.log("✅ Socket connected:", socket.id);
+    //   console.log("slotAlreadyRequested:", slotAlreadyRequested); // add this
 
-      const params = new URLSearchParams(window.location.search);
-      const requestedSlot = params.has("pedestal")
-        ? Number(params.get("pedestal")) - 1
-        : null;
-      socket.emit("requestSlot", requestedSlot);
-    });
+    //   const params = new URLSearchParams(window.location.search);
+    //   const requestedSlot = params.has("pedestal")
+    //     ? Number(params.get("pedestal")) - 1
+    //     : null;
+    //   socket.emit("requestSlot", requestedSlot);
+    // });
 
     socket.on("disconnect", () => {
       console.log("❌ Socket disconnected — resetting slot request flag");
@@ -152,7 +152,7 @@ function App() {
       const requestedSlot = params.has("pedestal")
         ? Number(params.get("pedestal")) - 1
         : null;
-      socket.emit("requestedSlot", requestedSlot);
+      socket.emit("requestSlot", requestedSlot);
     };
 
     if (socket.connected) {
@@ -211,7 +211,7 @@ function App() {
 }
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  // <StrictMode>
+  <App />,
+  // </StrictMode>,
 );

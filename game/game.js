@@ -3,6 +3,11 @@ import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
 import { CreaturePlayer } from "./creaturePlayer.js";
 import mp3Duration from "mp3-duration";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export class Game {
   constructor() {
@@ -237,17 +242,20 @@ export class Game {
       this.onScenarioChange(this.round);
     }
 
-    const narrationPath = scenarioData.sound;
+    const narrationPath = path.join(
+      __dirname,
+      `../data/sounds/${this.currentScenario.media.sound}`,
+    );
     let narrationDuration;
 
-    mp3Duration("your-file.mp3", (err, duration) => {
+    mp3Duration(narrationPath, (err, duration) => {
       if (err) return console.log(err.message);
       narrationDuration = duration;
     });
 
-    this.startTimer(duration, "scenario", () => {
+    this.startTimer(narrationDuration, "scenario", () => {
       if (this.onModeChange) this.onModeChange("options");
-      this.startTimer(10, "options", () => {
+      this.startTimer(20, "options", () => {
         this.endRound();
       });
     });
@@ -561,7 +569,7 @@ export class Game {
 
     this.chosen = [false, false, false, false];
 
-    this.startTimer(5, "result", () => {
+    this.startTimer(15, "result", () => {
       if (this.wizardsGrasp >= 8) {
         this.endGame(false);
         return;

@@ -148,43 +148,43 @@ io.on("connection", (socket) => {
     playerSockets[requestedSlot] = socket.id;
     socket.pedestalIndex = requestedSlot;
 
-    const takenSlots = Object.keys(playerSockets).map(Number);
+    // const takenSlots = Object.keys(playerSockets).map(Number);
 
-    let assignedSlot;
-    if (
-      requestedSlot !== null &&
-      requestedSlot !== undefined &&
-      !takenSlots.includes(requestedSlot)
-    ) {
-      assignedSlot = requestedSlot;
-    } else {
-      assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
+    // let assignedSlot;
+    // if (
+    //   requestedSlot !== null &&
+    //   requestedSlot !== undefined &&
+    //   !takenSlots.includes(requestedSlot)
+    // ) {
+    //   assignedSlot = requestedSlot;
+    // } else {
+    //   assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
 
-      if (assignedSlot === undefined) {
-        assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
-      }
-    }
+    //   if (assignedSlot === undefined) {
+    //     assignedSlot = [0, 1, 2, 3].find((i) => !takenSlots.includes(i));
+    //   }
+    // }
 
-    if (assignedSlot === undefined) {
-      socket.emit("lobbyFull");
-      return;
-    }
+    // if (assignedSlot === undefined) {
+    //   socket.emit("lobbyFull");
+    //   return;
+    // }
 
-    playerSockets[assignedSlot] = socket.id;
-    socket.pedestalIndex = assignedSlot;
+    // playerSockets[assignedSlot] = socket.id;
+    // socket.pedestalIndex = assignedSlot;
 
     console.log(
-      `🔌 Client connected: ${socket.id} -> pedestal ${assignedSlot + 1}`,
+      `🔌 Client connected: ${socket.id} -> pedestal ${requestedSlot + 1}`,
     );
 
-    if (autoAssignPedestals && !game.players[assignedSlot].species) {
-      game.assignCharacterToPedestal(assignedSlot, DEV_RFID[assignedSlot]);
+    if (autoAssignPedestals && !game.players[requestedSlot].species) {
+      game.assignCharacterToPedestal(requestedSlot, DEV_RFID[requestedSlot]);
       console.log(
-        `🎮 Auto-assigned ${DEV_RFID[assignedSlot]} to pedestal ${assignedSlot + 1}`,
+        `🎮 Auto-assigned ${DEV_RFID[requestedSlot]} to pedestal ${requestedSlot + 1}`,
       );
     }
 
-    socket.emit("identity", { pedestalIndex: assignedSlot });
+    socket.emit("identity", { pedestalIndex: requestedSlot });
     socket.emit("lobby", getLobbyState());
     io.emit("lobby", getLobbyState());
 
