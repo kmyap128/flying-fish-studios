@@ -3,7 +3,7 @@ import { CreatureBar } from "../creature-bar/creatureBar";
 import { Timer } from "../timer/timer";
 import './header.css'
 
-export function Header({ image, creatureName, wizardsGrasp, timerCurrent, timerDuration, scenarioNumber }) {
+export function Header({ image, creatureName, wizardsGrasp, timerCurrent, timerDuration, chosenOption }) {
   return (
     <div className="header-wrapper">
       <div id="creature-bar-container">
@@ -13,7 +13,7 @@ export function Header({ image, creatureName, wizardsGrasp, timerCurrent, timerD
         <WizardBar wizardsGrasp={wizardsGrasp} />
       </div>
       <div id="timer-container">
-        <Timer timerCurrent={timerCurrent} timerDuration={timerDuration} scenarioNumber={scenarioNumber} />
+        <Timer timerCurrent={timerCurrent} timerDuration={timerDuration} chosenOption={chosenOption} />
       </div>
     </div>
   );
