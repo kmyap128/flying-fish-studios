@@ -104,7 +104,7 @@ function App() {
       setMode(newMode);
       if (newMode === "scenario") setTimerDuration(5);
       if (newMode === "options") setTimerDuration(10);
-      if (newMode === "result") setTimerDuration(5);
+      if (newMode === "result") setTimerDuration(15);
     });
     socket.on("timerTick", ({ remaining }) => setCountdown(remaining));
     socket.on("gameEnd", ({ result, isImpostor }) => {
