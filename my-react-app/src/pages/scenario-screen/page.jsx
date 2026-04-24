@@ -21,6 +21,7 @@ export default function ScenarioScreen({
   timerDuration,
   optionsOrder,
   myChoice,
+  myRole,
   myPlayer,
   roundResult,
 }) {
@@ -38,15 +39,9 @@ export default function ScenarioScreen({
 
   let narDuration = null;
 
-  //add logic to determine if player is imposter or not, display correct panel accordingly
-  // isTraitor ? traitor image : hero image
-  const playerImage = myPlayer?.heroImage
-    ? `/UI_Assets/Corner_UI/Character_Banners/${myPlayer.heroImage}`
-    : null;
-
   const playerName = myPlayer?.name || "Unknown Creature";
-  const isImposter = myPlayer?.isImposter ? true : false;
-  console.log(isImposter);
+  const isImpostor = myRole?.isImpostor ? true : false;
+  console.log("impostor", isImpostor);
 
   return (
     <div
@@ -69,7 +64,7 @@ export default function ScenarioScreen({
               <div id="creature-bar-container">
                 <CreatureBar
                   creatureName={playerName}
-                  isImposter={isImposter}
+                  isImpostor={isImpostor}
                   isInjured={false}
                 />
               </div>
@@ -102,7 +97,7 @@ export default function ScenarioScreen({
               <div id="creature-bar-container">
                 <CreatureBar
                   creatureName={playerName}
-                  isImposter={isImposter}
+                  isImpostor={isImpostor}
                   isInjured={false}
                 />
               </div>

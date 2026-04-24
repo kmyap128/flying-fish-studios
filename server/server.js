@@ -111,6 +111,14 @@ const tryStartGame = () => {
     console.log("📡 Emitting allCharactersAssigned");
     io.emit("allCharactersAssigned");
     game.assignImpostor();
+
+    Object.entries(playerSockets).forEach(([slot, socketId]) => {
+      const player = game.players[Number(slot)];
+      io.to(socketId).emit("roleAssigned", {
+        isImpostor: player.isImpostor,
+      });
+    });
+
     console.log("All characters assigned — starting character display");
 
     characterDisplayTimer = setTimeout(() => {

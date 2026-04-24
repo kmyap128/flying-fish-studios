@@ -29,6 +29,7 @@ function App() {
   const [playerChoices, setPlayerChoices] = useState([]);
   const [roundResult, setRoundResult] = useState(null);
   const [allTapped, setAllTapped] = useState(false);
+  const [myRole, setMyRole] = useState(null);
 
   //const slotRequested = useRef(false);
 
@@ -51,6 +52,10 @@ function App() {
     });
 
     socket.on("allCharactersAssigned", () => setAllTapped(true));
+
+    socket.on("roleAssigned", ({ isImpostor }) => {
+      setMyRole({ isImpostor });
+    });
 
     socket.on("identity", ({ pedestalIndex }) => {
       setMyPedestalIndex(pedestalIndex);
@@ -119,6 +124,7 @@ function App() {
       socket.off("gameEnd");
       socket.off("disconnect");
       socket.off("allCharactersAssigned");
+      socket.off("roleAssigned");
     };
   }, []);
 
@@ -184,6 +190,7 @@ function App() {
         <CharacterSelectionScreen
           onComplete={handleCharacterSelectComplete}
           myPlayer={myPlayer}
+          myRole={myRole}
           socket={socket}
           allTapped={allTapped}
         />
@@ -199,6 +206,7 @@ function App() {
           timerDuration={timerDuration}
           optionsOrder={optionsOrder}
           myChoice={myChoice}
+          myRole={myRole}
           myPlayer={myPlayer}
           roundResult={roundResult}
         />

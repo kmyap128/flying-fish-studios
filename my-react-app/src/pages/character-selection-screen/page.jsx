@@ -2,75 +2,81 @@ import "./page.css";
 import { useState, useEffect } from "react";
 import { StartPrompt } from "../../components/start-screen-ui/start-prompt/prompt.jsx";
 import { CharacterInfo } from "../../components/start-screen-ui/character-info/characterInfo.jsx";
+import { TimerMeter } from "../../components/hud-ui/timer-meter/timerMeter.jsx";
 
 export default function CharacterSelectionScreen({
   onComplete,
   myPlayer,
+  myRole,
   socket,
-  allTapped,
 }) {
   const [stage, setStage] = useState("prompt");
   const [shaking, setShaking] = useState(false);
-
-  const handlePromptClick = () => {
-    setStage("image");
-    setShaking(true);
-  };
+  const [timerWidth, setTimerWidth] = useState(100);
 
   useEffect(() => {
     if (myPlayer?.species && stage === "prompt") {
-      handlePromptClick();
+      setStage("image");
+      setShaking(true);
     }
-  }, [myPlayer]);
+  }, [myPlayer?.species]);
 
   useEffect(() => {
     if (stage !== "image") return;
-
-    const shakeTimer = setTimeout(() => setShaking(false), 600);
-
-    const switchTimer = allTapped
-      ? setTimeout(() => setStage("character"), 2000)
-      : null;
-
-    return () => {
-      clearTimeout(shakeTimer);
-      if (switchTimer) clearTimeout(switchTimer);
-    };
-  }, [stage, allTapped]);
+    const t = setTimeout(() => setShaking(false), 600);
+    return () => clearTimeout(t);
+  }, [stage]);
 
   useEffect(() => {
-    if (!allTapped || !myPlayer?.species) return;
-    if (stage === "prompt") {
-      setStage("character");
-    }
-  }, [allTapped, myPlayer]);
+    if (!myRole || stage !== "image") return;
+    setStage("impostor");
+  }, [myRole, stage]);
 
-  // useEffect(() => {
-  //   if (stage !== "character") return;
-  //   const readyTimer = setTimeout(() => {
-  //     socket.emit("playerReady");
-  //   }, 10000);
-  //   return () => clearTimeout(readyTimer);
-  // });
+  useEffect(() => {
+    if (stage !== "impostor") return;
+    const t = setTimeout(() => setStage("reveal"), 5000);
+    return () => clearTimeout(t);
+  }, [stage]);
 
-  // useEffect(() => {
-  //   if (!socket) return;
-  //   socket.on("fullRestart", () => {
-  //     console.log("🔄 fullRestart received in CharacterSelectionScreen");
-  //     setStage("prompt");
-  //   });
-  //   return () => socket.off("fullRestart");
-  // }, [socket]);
+  useEffect(() => {
+    if (stage !== "reveal") return;
+
+    setTimerWidth(100);
+    const startTime = Date.now();
+    const duration = 10000;
+
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, 1 - elapsed / duration);
+      setTimerWidth(remaining * 100);
+      if (remaining <= 0) clearInterval(interval);
+    }, 50);
+
+    const t = setTimeout(() => {
+      onComplete(myPlayer);
+    }, duration);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(t);
+    };
+  }, [stage]);
 
   useEffect(() => {
     if (!socket) return;
-
     socket.on("gameStarting", () => {
-      console.log("🎮 gameStarting received in CharacterSelectionScreen");
       onComplete(myPlayer);
     });
     return () => socket.off("gameStarting");
   }, [socket, myPlayer]);
+
+  const initImage = myPlayer?.infoBlock;
+
+  const infoImage = myRole?.isImpostor
+    ? "Traitor_Block.png"
+    : myPlayer?.infoBlock;
+
+    console.log("myRole in character selection screen", myRole);
 
   return (
     <div
@@ -94,12 +100,34 @@ export default function CharacterSelectionScreen({
           </div>
         )}
 
-        {stage === "character" && (
-          <div className="character-info">
+        {stage === "impostor" && (
+          <div className="impostor-reveal" 
+          >
             <CharacterInfo
-              character={myPlayer}
+              character={{ ...myPlayer, infoBlock: initImage }}
               onComplete={() => onComplete(myPlayer)}
             />
+            <div className="impostor-gif-overlay" 
+            style={{
+              backgroundImage: `url(/UI_Assets/Darken_Screen.png)`,
+              backgroundSize: "cover",
+            }}>
+              {myRole?.isImpostor ? (
+                <img src="/UI_Assets/Character_Select/Spinner_Traitor.gif" alt="impostor reveal" />
+              ) : (
+                <img src="/UI_Assets/Character_Select/Spinner_Hero.gif" alt="hero reveal" />
+              )}
+            </div>
+          </div>
+        )}
+
+        {stage === "reveal" && (
+          <div className="character-info">
+            <CharacterInfo
+              character={{ ...myPlayer, infoBlock: infoImage }}
+              onComplete={() => onComplete(myPlayer)}
+            />
+            {/* <TimerMeter /> */}
           </div>
         )}
       </div>

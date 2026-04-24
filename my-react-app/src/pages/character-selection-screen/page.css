@@ -15,11 +15,40 @@
   overflow: hidden;
 }
 
+.content-container {
+  padding: 50px;
+}
+
 .character-info {
   padding-top: 50px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.impostor-reveal {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.impostor-gif-overlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.impostor-gif-overlay img {
+  width: 50vw; 
+  height: auto;
 }
 
 .egg-anim {
