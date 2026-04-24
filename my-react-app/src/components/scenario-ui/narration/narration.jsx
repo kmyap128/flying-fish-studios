@@ -1,12 +1,11 @@
-import React, { useRef } from "react";
-import { useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 
 export function NarrationPlayer({ url }) {
   const audioRef = useRef(null);
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || url) return;
+    if (!audio || !url) return;
 
     audio.src = url;
     audio.load();

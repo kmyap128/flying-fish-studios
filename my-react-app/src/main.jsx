@@ -29,6 +29,7 @@ function App() {
   const [playerChoices, setPlayerChoices] = useState([]);
   const [roundResult, setRoundResult] = useState(null);
   const [allTapped, setAllTapped] = useState(false);
+  const [narrationDuration, setNarrationDuration] = useState(null);
 
   //const slotRequested = useRef(false);
 
@@ -78,6 +79,7 @@ function App() {
         setScenarioData(round.scenarioData);
         setGameState({ stage, wizardsGrasp });
         setOptionsOrder(optionsOrder);
+        setNarrationDuration(narrationDuration);
         setRoundResult(null);
         setPlayerChoices([]);
         setGameResult(null);
@@ -165,7 +167,6 @@ function App() {
   }, []);
 
   const allPlayers = lobbyState.players ?? [];
-  console.log(allPlayers);
 
   const myPlayer =
     myPedestalIndex !== null ? allPlayers?.[myPedestalIndex] : null;
