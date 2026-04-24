@@ -2,7 +2,6 @@ import { Round } from "./round.js";
 import { CREATURES, ITEMS, SCENARIO_TYPES, STATES } from "./enums/enums.js";
 import { Scenario } from "./scenario.js";
 import { CreaturePlayer } from "./creaturePlayer.js";
-import mp3Duration from "mp3-duration";
 
 export class Game {
   constructor() {
@@ -201,7 +200,7 @@ export class Game {
   //FUNC load current scenario
   loadCurrentScenario() {
     if (this.currentCategoryIndex >= this.scenarioFlow.length) {
-      setTimeout(() => this.endGame(true), 5000);
+      this.endGame(true);
       return;
     }
 
@@ -237,15 +236,7 @@ export class Game {
       this.onScenarioChange(this.round);
     }
 
-    const narrationPath = scenarioData.sound;
-    let narrationDuration;
-
-    mp3Duration("your-file.mp3", (err, duration) => {
-      if (err) return console.log(err.message);
-      narrationDuration = duration;
-    });
-
-    this.startTimer(duration, "scenario", () => {
+    this.startTimer(5, "scenario", () => {
       if (this.onModeChange) this.onModeChange("options");
       this.startTimer(10, "options", () => {
         this.endRound();
@@ -425,18 +416,29 @@ export class Game {
       });
     }
 
-    if (this.onModeChange) this.onModeChange("result");
+    // Lose Condition
+    if (this.wizardsGrasp >= 8) {
+      this.endGame(false);
+      return;
+    }
 
     this.chosen = [false, false, false, false];
 
-    this.startTimer(5, "result", () => {
-      if (this.wizardsGrasp >= 8) {
-        this.endGame(false);
-        return;
-      }
-      this.stage++;
-      this.currentCategoryIndex++;
-      this.loadCurrentScenario();
+    if (this.onModeChange) this.onModeChange("result");
+
+    const narrationPath = scenarioData.sound;
+    let narrationDuration;
+
+    mp3Duration("your-file.mp3", (err, duration) => {
+      if (err) return console.log(err.message);
+      narrationDuration = duration;
+    });
+
+    this.startTimer(duration, "scenario", () => {
+      if (this.onModeChange) this.onModeChange("options");
+      this.startTimer(10, "options", () => {
+        this.endRound();
+      });
     });
   }
 

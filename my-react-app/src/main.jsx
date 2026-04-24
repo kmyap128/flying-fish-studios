@@ -28,7 +28,6 @@ function App() {
   const [optionsOrder, setOptionsOrder] = useState([]);
   const [playerChoices, setPlayerChoices] = useState([]);
   const [roundResult, setRoundResult] = useState(null);
-  const [allTapped, setAllTapped] = useState(false);
 
   //const slotRequested = useRef(false);
 
@@ -37,10 +36,8 @@ function App() {
       console.log("✅ Socket connected:", socket.id);
       console.log("slotAlreadyRequested:", slotAlreadyRequested); // add this
 
-      const params = new URLSearchParams(window.location.search);
-      const requestedSlot = params.has("pedestal")
-        ? Number(params.get("pedestal"))
-        : null;
+      const storedSlot = localStorage.getItem("pedestalIndex");
+      const requestedSlot = storedSlot !== null ? Number(storedSlot) : null;
       socket.emit("requestSlot", requestedSlot);
     });
 
@@ -50,12 +47,10 @@ function App() {
       slotAlreadyRequested = false;
     });
 
-    socket.on("allCharactersAssigned", () => setAllTapped(true));
-    socket.off("allCharactersAssigned");
-
     socket.on("identity", ({ pedestalIndex }) => {
       setMyPedestalIndex(pedestalIndex);
 
+      localStorage.setItem("pedestalIndex", pedestalIndex);
       console.log(`I am pedestal ${pedestalIndex + 1}`);
     });
 
@@ -167,7 +162,6 @@ function App() {
           onComplete={handleCharacterSelectComplete}
           myPlayer={myPlayer}
           socket={socket}
-          allTapped={allTapped}
         />
       )}
       {screen === "scenario" && (
