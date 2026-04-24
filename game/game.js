@@ -656,6 +656,10 @@ export class Game {
   }
 
   endGame(result) {
+    console.log("endGame called with result:", result);
+    console.log("onGameEndPlayer exists:", !!this.onGameEndPlayer);
+    console.log("onGameEndImpostor exists:", !!this.onGameEndImpostor);
+
     clearInterval(this.timerInterval);
     this.state = STATES.END;
 
