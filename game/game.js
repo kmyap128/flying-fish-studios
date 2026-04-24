@@ -378,7 +378,7 @@ export class Game {
 
   SmoulderPassive() {
     const smoulder = this.players.find(
-      (p) => p.species === "Smoulder" && !p.out,
+      (p) => p.species === "Smoulder" && !p.out && !p.isImpostor
     );
     if (!smoulder) return "No_Smoulder";
 
@@ -413,7 +413,7 @@ export class Game {
   }
 
   FinleyPassive() {
-    const finley = this.players.find((p) => p.species === "Finley" && !p.out);
+    const finley = this.players.find((p) => p.species === "Finley" && !p.out && !p.isImpostor);
     if (!finley) return "No_Finley";
 
     // Get all injured players (that are stil in)
@@ -434,7 +434,7 @@ export class Game {
   }
 
   WaddlesPassive() {
-    const waddles = this.players.find((p) => p.species === "Waddles" && !p.out);
+    const waddles = this.players.find((p) => p.species === "Waddles" && !p.out && !p.isImpostor);
     if (!waddles) return "No_Waddles";
 
     // Count choices
@@ -458,7 +458,7 @@ export class Game {
   }
 
   SprigPassive(roundWG) {
-    const sprig = this.players.find((p) => p.species === "Sprig" && !p.out);
+    const sprig = this.players.find((p) => p.species === "Sprig" && !p.out && !p.isImpostor);
     if (!sprig) return "No_Sprig";
 
     // Count all choices
