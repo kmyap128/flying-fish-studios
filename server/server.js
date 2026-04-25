@@ -42,16 +42,6 @@ const game = new Game();
 const readyPlayers = new Set();
 let characterDisplayTimer;
 
-const statsPath = path.join(__dirname, "../data/stats.json");
-
-const updateStats = () => {
-  const stats = JSON.parse(fs.readFileSync(statsPath, "utf-8"));
-  stats.numTimesPlayed += 1;
-  stats.numPlayers += 4;
-  fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
-  console.log("📊 Stats updated:", stats);
-};
-
 game.onScenarioChange = (roundData) => {
   io.emit("scenarioChange", {
     round: roundData,
@@ -65,46 +55,21 @@ game.onScenarioChange = (roundData) => {
 };
 
 game.onModeChange = (mode) => {
+  console.log("mode change", mode);
   io.emit("modeChange", { newMode: mode });
 };
 game.onTimerTick = ({ mode, remaining }) => {
   io.emit("timerTick", { mode, remaining });
 };
 game.onPlayerChoice = (choiceData) => {
+  console.log("playerChoice", choiceData);
   io.emit("playerChoice", choiceData);
 };
-// game.onRoundResult = (resultData) => {
-//   io.emit("roundResult", resultData);
-//   io.emit("modeChange", { newMode: "result" });
-//   io.emit("lobby", getLobbyState());
-// };
-
 game.onRoundResult = (resultData) => {
-  const isSynergy = !!resultData.winningChoice;
-
-  Object.entries(playerSockets).forEach(([slot, socketId]) => {
-    const pedestalIndex = Number(slot);
-    const playerChoice = resultData.playerChoices?.find(
-      (p) => p.pedestalIndex === pedestalIndex,
-    );
-
-    const personalResult = {
-      ...resultData,
-      displayChoice: isSynergy
-        ? resultData.winningChoice?.[0] // everyone sees majority choice label
-        : (playerChoice?.option?.[0] ?? null), // each sees their own choice label
-      resultText: isSynergy
-        ? resultData.resultText // shared result text
-        : (playerChoice?.option?.[2] ?? resultData.resultText), // each sees their own
-    };
-
-    io.to(socketId).emit("roundResult", personalResult);
-  });
-
+  io.emit("roundResult", resultData);
   io.emit("modeChange", { newMode: "result" });
   io.emit("lobby", getLobbyState());
 };
-
 game.onGameEndPlayer = (result) => {
   console.log(
     "onGameEndPlayer fired, game.players:",
@@ -165,7 +130,6 @@ game.onGameEndImpostor = (result) => {
 const scenariosPath = path.join(__dirname, "../data/scenarios.json");
 const scenarioData = JSON.parse(fs.readFileSync(scenariosPath, "utf-8"));
 game.loadScenarios(scenarioData);
-updateStats();
 
 const playerSockets = {};
 let gameStarted = false;
@@ -189,23 +153,28 @@ const tryShowCharacters = () => {
   if (allConnected && allTapped && allHaveCharacters && !gameStarted) {
     console.log("All connected and tapped - showing characters");
     if (!impostorAssigned) {
+      console.log("IMPOSTOR ASSIGNED");
       game.assignImpostor();
       impostorAssigned = true;
 
       Object.entries(playerSockets).forEach(([slot, socketId]) => {
         const player = game.players[Number(slot)];
         io.to(socketId).emit("roleAssigned", { isImpostor: player.isImpostor });
+        console.log("role assigned", player.name, {
+          isImpostor: player.isImpostor,
+        });
       });
 
       io.emit("allPlayersReady");
 
-      game.startTimer(20, "characterDisplay", () => {
+      characterDisplayTimer = setTimeout(() => {
         if (!gameStarted) {
           gameStarted = true;
+          console.log("gameStarting");
           io.emit("gameStarting");
           setTimeout(() => game.loadCurrentScenario(), 1000);
         }
-      });
+      }, 22000);
     }
   }
 };
@@ -230,15 +199,6 @@ const tryShowCharacters = () => {
 //     });
 
 //     console.log("All characters assigned — starting character display");
-
-characterDisplayTimer = setTimeout(() => {
-  if (!gameStarted) {
-    gameStarted = true;
-    console.log("Character display complete — starting game");
-    io.emit("gameStarting");
-    setTimeout(() => game.loadCurrentScenario(), 1000);
-  }
-}, 20000);
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {
@@ -313,6 +273,7 @@ io.on("connection", (socket) => {
       game.players.every((p) => p.species) &&
       Object.keys(playerSockets).length === 4
     ) {
+      console.log("all characters assigned");
       socket.emit("allCharactersAssigned");
     }
 
@@ -365,9 +326,11 @@ io.on("connection", (socket) => {
   subscribe(`pedestal${pedestalIndex + 1}`, ({ selectedChoice }) => {
     //console.log(typeof selectedChoice)
     if (+selectedChoice !== 0) {
+      console.log(selectedChoice);
       if (!gameStarted) {
         const socketId = playerSockets[pedestalIndex];
         if (socketId) {
+          console.log("player tapped", pedestalIndex);
           io.to(socketId).emit("playerTapped");
         }
         readyPlayers.add(pedestalIndex);
@@ -408,11 +371,6 @@ const keyMap = {
 };
 
 const positionToOption = (position) => {
-  if (game.currentScenarioCategory === "dilemma") {
-    if (position === 0) return game.currentOptionsOrder[0];
-    if (position === 1) return game.currentOptionsOrder[1];
-    return null;
-  }
   return game.currentOptionsOrder[position] ?? null;
 };
 
@@ -487,7 +445,6 @@ if (process.stdin.isTTY) {
       // Tell all clients to go back to character selection
       io.emit("fullRestart");
       console.log("🔄 Full restart complete");
-      updateStats();
 
       return;
     }

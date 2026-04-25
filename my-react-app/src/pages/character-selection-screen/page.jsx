@@ -121,9 +121,9 @@ export default function CharacterSelectionScreen({
                 onComplete={() => onComplete(myPlayer)}
               />
             </div>
-            <div className="character-timer-meter-container">
+            {/* <div className="character-timer-meter-container">
               <TimerMeter timerCurrent={countdown} timerDuration={12} />
-            </div>
+            </div> */}
           </>
         )}
       </div>
