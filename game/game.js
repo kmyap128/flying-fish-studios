@@ -279,6 +279,9 @@ export class Game {
     if (!player) return;
     if (player.out) return;
 
+    const disabledKey = player.disabled != null ? `option ${player.disabled}` : null;
+    if (optionKey === disabledKey) return;
+
     if (optionKey === player.disabled) return;
     player.setChoice(optionKey);
 
@@ -319,6 +322,15 @@ export class Game {
     if (this.currentScenarioCategory == "dilemma") {
       tally = { helpful: 0, selfish: 0 };
       this.players.forEach((p) => {
+        const disabledKey = p.disabled != null ? `option ${p.disabled}` : null;
+        const choice =
+          p.choice && p.choice !== disabledKey
+            ? p.choice
+            : disabledKey
+              ? disabledKey === "option 1"
+                ? "option 2"
+                : "option 1"
+              : "option 1";
         if (!p.out) {
           const choice =
             p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
@@ -376,7 +388,7 @@ export class Game {
         winningKey = key;
       } else if (votes === maxVotes) {
         winning = this.currentOptions[impostorChoice];
-        winningKey = key;
+        winningKey = impostorChoice;
       }
     }
 
@@ -534,14 +546,12 @@ export class Game {
     let value;
     let roundWG = 0;
     if (this.currentType == "synergy") {
-      winningChoice = this.getMajorityChoice()[0];
-      winningKey = this.getMajorityChoice()[1];
+      [winningChoice, winningKey] = this.getMajorityChoice();
       value = [winningChoice[1], winningChoice[2]];
       if (this.currentScenarioCategory == "combat") {
         this.players.forEach((p) => {
           if (p.choice == "worst") {
             p.injury = true;
-            console.log(p.injury);
           }
         });
       }
@@ -565,12 +575,21 @@ export class Game {
       let total = 0;
       let value = [];
       this.players.forEach((p) => {
+        const disabledKey = p.disabled != null ? `option ${p.disabled}` : null;
+        const choice =
+          p.choice && p.choice !== disabledKey
+            ? p.choice
+            : disabledKey
+              ? disabledKey === "option 1"
+                ? "option 2"
+                : "option 1"
+              : "option 1";
         if (!p.out) {
           const choiceIndex =
             p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
               ? p.choice
-              : p.disabled
-                ? this.currentOptionsOrder[p.disabled] == "option 1"
+              : disabledKey
+                ? disabledKey == "option 1"
                   ? "option 2"
                   : "option 1"
                 : "option 1";

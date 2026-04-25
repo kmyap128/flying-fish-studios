@@ -42,6 +42,16 @@ const game = new Game();
 const readyPlayers = new Set();
 let characterDisplayTimer;
 
+const statsPath = path.join(__dirname, "../data/stats.json");
+
+const updateStats = () => {
+  const stats = JSON.parse(fs.readFileSync(statsPath, "utf-8"));
+  stats.numTimesPlayed += 1;
+  stats.numPlayers += 4;
+  fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
+  console.log("📊 Stats updated:", stats);
+};
+
 game.onScenarioChange = (roundData) => {
   io.emit("scenarioChange", {
     round: roundData,
@@ -155,6 +165,7 @@ game.onGameEndImpostor = (result) => {
 const scenariosPath = path.join(__dirname, "../data/scenarios.json");
 const scenarioData = JSON.parse(fs.readFileSync(scenariosPath, "utf-8"));
 game.loadScenarios(scenarioData);
+updateStats();
 
 const playerSockets = {};
 let gameStarted = false;
@@ -397,6 +408,11 @@ const keyMap = {
 };
 
 const positionToOption = (position) => {
+  if (game.currentScenarioCategory === "dilemma") {
+    if (position === 0) return game.currentOptionsOrder[0];
+    if (position === 1) return game.currentOptionsOrder[1];
+    return null;
+  }
   return game.currentOptionsOrder[position] ?? null;
 };
 
@@ -471,6 +487,7 @@ if (process.stdin.isTTY) {
       // Tell all clients to go back to character selection
       io.emit("fullRestart");
       console.log("🔄 Full restart complete");
+      updateStats();
 
       return;
     }
