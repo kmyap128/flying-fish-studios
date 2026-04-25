@@ -127,21 +127,21 @@ export class Game {
   handleSacrificeScenario(choiceArray, choiceKey) {
     const key = choiceKey ?? choiceArray;
     const response = choiceKey ? choiceArray : this.currentOptions[choiceArray];
-    console.log(choice);
+    console.log(choiceArray);
     if (this.currentScenario.name == "The Statue of the Greedy King") {
       this.players.forEach((player) => {
-        if (choice == "option 1") player.disabled = 1;
-        else if (choice == "option 2") player.disabled = 2;
+        if (key == "option 1") player.disabled = 1;
+        else if (key == "option 2") player.disabled = 2;
         else player.disabled = 3;
       });
       return [response[1], response[2]];
     } else {
-      if (choice == "option 1") {
+      if (key == "option 1") {
         this.players.forEach((player) => {
           player.item = false;
         });
         return [response[1], response[0]];
-      } else if (choice == "option 2") {
+      } else if (key == "option 2") {
         let normalPlayers = [];
         let impostor;
         this.players.forEach((player) => {
