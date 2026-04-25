@@ -279,7 +279,8 @@ export class Game {
     if (!player) return;
     if (player.out) return;
 
-    const disabledKey = player.disabled != null ? `option ${player.disabled}` : null;
+    const disabledKey =
+      player.disabled != null ? `option ${player.disabled}` : null;
     if (optionKey === disabledKey) return;
 
     if (optionKey === player.disabled) return;
@@ -322,24 +323,9 @@ export class Game {
     if (this.currentScenarioCategory == "dilemma") {
       tally = { helpful: 0, selfish: 0 };
       this.players.forEach((p) => {
-        const disabledKey = p.disabled != null ? `option ${p.disabled}` : null;
-        const choice =
-          p.choice && p.choice !== disabledKey
-            ? p.choice
-            : disabledKey
-              ? disabledKey === "option 1"
-                ? "option 2"
-                : "option 1"
-              : "option 1";
         if (!p.out) {
-          const choice =
-            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
-              ? p.choice
-              : p.disabled
-                ? this.currentOptionsOrder[p.disabled] == "selfish"
-                  ? "helpful"
-                  : "selfish"
-                : "selfish";
+          const choice = p.choice ?? "selfish";
+
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -348,14 +334,8 @@ export class Game {
       tally = { "option 1": 0, "option 2": 0, "option 3": 0 };
       this.players.forEach((p) => {
         if (!p.out) {
-          const choice =
-            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
-              ? p.choice
-              : p.disabled
-                ? this.currentOptionsOrder[p.disabled] == "option 1"
-                  ? "option 2"
-                  : "option 1"
-                : "option 1";
+          const choice = p.choice ?? "option 1";
+
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -364,14 +344,8 @@ export class Game {
       tally = { best: 0, neutral: 0, worst: 0 };
       this.players.forEach((p) => {
         if (!p.out) {
-          const choice =
-            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
-              ? p.choice
-              : p.disabled
-                ? this.currentOptionsOrder[p.disabled] == "worst"
-                  ? "neutral"
-                  : "worst"
-                : "worst";
+          const choice = p.choice ?? "worst";
+
           tally[choice] += 1;
           if (p.isImpostor) impostorChoice = choice;
         }
@@ -575,24 +549,9 @@ export class Game {
       let total = 0;
       let value = [];
       this.players.forEach((p) => {
-        const disabledKey = p.disabled != null ? `option ${p.disabled}` : null;
-        const choice =
-          p.choice && p.choice !== disabledKey
-            ? p.choice
-            : disabledKey
-              ? disabledKey === "option 1"
-                ? "option 2"
-                : "option 1"
-              : "option 1";
         if (!p.out) {
-          const choiceIndex =
-            p.choice && p.choice !== this.currentOptionsOrder[p.disabled]
-              ? p.choice
-              : disabledKey
-                ? disabledKey == "option 1"
-                  ? "option 2"
-                  : "option 1"
-                : "option 1";
+          const choiceIndex = p.choice ?? "option 1";
+
           winningChoices.push(this.currentOptions[choiceIndex]);
           value = this.currentOptions[choiceIndex];
           // if (this.currentScenarioCategory == "item") {
