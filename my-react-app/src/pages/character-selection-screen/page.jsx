@@ -2,15 +2,19 @@ import "./page.css";
 import { useState, useEffect } from "react";
 import { StartPrompt } from "../../components/start-screen-ui/start-prompt/prompt.jsx";
 import { CharacterInfo } from "../../components/start-screen-ui/character-info/characterInfo.jsx";
+import { TimerMeter } from "../../components/hud-ui/timer-meter/timerMeter.jsx";
 
 export default function CharacterSelectionScreen({
   onComplete,
   myPlayer,
   myRole,
   socket,
+  countdown,
+  timerDuration,
 }) {
   const [stage, setStage] = useState("prompt");
   const [timerWidth, setTimerWidth] = useState(100);
+  const [timeLeft, setTimeLeft] = useState(10);
 
   useEffect(() => {
     if (!socket) return;
@@ -38,31 +42,6 @@ export default function CharacterSelectionScreen({
     if (stage !== "impostor") return;
     const t = setTimeout(() => setStage("reveal"), 5000);
     return () => clearTimeout(t);
-  }, [stage]);
-
-  // Reveal: 10s countdown then start game
-  useEffect(() => {
-    if (stage !== "reveal") return;
-
-    setTimerWidth(100);
-    const startTime = Date.now();
-    const duration = 10000;
-
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, 1 - elapsed / duration);
-      setTimerWidth(remaining * 100);
-      if (remaining <= 0) clearInterval(interval);
-    }, 50);
-
-    const t = setTimeout(() => {
-      onComplete(myPlayer);
-    }, duration);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(t);
-    };
   }, [stage]);
 
   useEffect(() => {
@@ -128,12 +107,20 @@ export default function CharacterSelectionScreen({
         )}
 
         {stage === "reveal" && (
-          <div className="character-info">
-            <CharacterInfo
-              character={{ ...myPlayer, infoBlock: infoImage }}
-              onComplete={() => onComplete(myPlayer)}
-            />
-          </div>
+          <>
+            <div className="character-info">
+              <CharacterInfo
+                character={{ ...myPlayer, infoBlock: infoImage }}
+                onComplete={() => onComplete(myPlayer)}
+              />
+            </div>
+            <div className="character-timer-meter-container">
+              <TimerMeter
+                timerCurrent={countdown}
+                timerDuration={12}
+              />
+            </div>
+          </>
         )}
       </div>
     </div>

@@ -188,13 +188,13 @@ const tryShowCharacters = () => {
 
       io.emit("allPlayersReady");
 
-      characterDisplayTimer = setTimeout(() => {
+      game.startTimer(20, "characterDisplay", () => {
         if (!gameStarted) {
           gameStarted = true;
           io.emit("gameStarting");
           setTimeout(() => game.loadCurrentScenario(), 1000);
         }
-      }, 22000);
+      });
     }
   }
 };
@@ -227,7 +227,7 @@ characterDisplayTimer = setTimeout(() => {
     io.emit("gameStarting");
     setTimeout(() => game.loadCurrentScenario(), 1000);
   }
-}, 22000);
+}, 20000);
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {

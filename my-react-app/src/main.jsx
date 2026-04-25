@@ -196,6 +196,8 @@ function App() {
           myRole={myRole}
           socket={socket}
           allTapped={allTapped}
+          countdown={countdown}         
+          timerDuration={timerDuration}
         />
       )}
       {screen === "scenario" && (
