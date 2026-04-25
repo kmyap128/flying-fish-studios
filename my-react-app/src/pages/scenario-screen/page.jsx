@@ -48,6 +48,7 @@ export default function ScenarioScreen({
   const playerName = myPlayer?.name || "Unknown Creature";
   const isImpostor = myRole?.isImpostor ? true : false;
   console.log("impostor", isImpostor);
+  console.log("narrationDuration", narrationDuration);
 
   return (
     <div

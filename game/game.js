@@ -249,11 +249,6 @@ export class Game {
 
     if (this.onModeChange) this.onModeChange("scenario");
 
-    if (this.onScenarioChange) {
-      this.round = new Round(this.currentScenario);
-      this.onScenarioChange(this.round);
-    }
-
     const narrationPath = path.join(
       __dirname,
       `../data/sounds/${this.currentScenario.media.sound}`,
@@ -262,9 +257,14 @@ export class Game {
 
     mp3Duration(narrationPath, (err, duration) => {
       if (err) return console.log(err.message);
-      narrationDuration = duration;
+      this.narrationDuration = duration;
 
-      this.startTimer(narrationDuration, "scenario", () => {
+      if (this.onScenarioChange) {
+        this.round = new Round(this.currentScenario);
+        this.onScenarioChange(this.round);
+      }
+
+      this.startTimer(duration, "scenario", () => {
         this.currentMode = "options";
         if (this.onModeChange) this.onModeChange("options");
         this.startTimer(20, "options", () => {

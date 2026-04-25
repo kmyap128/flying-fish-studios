@@ -81,7 +81,7 @@ function App() {
 
     socket.on(
       "scenarioChange",
-      ({ round, stage, wizardsGrasp, optionsOrder }) => {
+      ({ round, stage, wizardsGrasp, optionsOrder, narrationDuration }) => {
         setScenarioData(round.scenarioData);
         setGameState({ stage, wizardsGrasp });
         setOptionsOrder(optionsOrder);
@@ -212,6 +212,7 @@ function App() {
           myRole={myRole}
           myPlayer={myPlayer}
           roundResult={roundResult}
+          narrationDuration={narrationDuration}
         />
       )}
       {screen === "end" && gameResult && (
