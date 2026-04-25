@@ -251,7 +251,7 @@ export class Game {
 
     const narrationPath = path.join(
       __dirname,
-      `../data/sounds/${this.currentScenario.media.sound}`,
+      `../data/sounds/narrations/${this.currentScenario.media.sound}`,
     );
     let narrationDuration;
 
@@ -618,10 +618,10 @@ export class Game {
     console.log("Wizards Grasp");
     console.log(this.wizardsGrasp);
 
-    const displayChoice = winningChoice 
-      ? winningChoice[0]  // synergy — the label from the majority choice
-      : winningChoices.length > 0 
-        ? winningChoices[0][0]  // individual — label from first player's choice
+    const displayChoice = winningChoice
+      ? winningChoice[0] // synergy — the label from the majority choice
+      : winningChoices.length > 0
+        ? winningChoices[0][0] // individual — label from first player's choice
         : null;
 
     if (this.onRoundResult) {
