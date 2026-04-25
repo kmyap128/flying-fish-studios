@@ -55,6 +55,7 @@ function App() {
     socket.on("allCharactersAssigned", () => setAllTapped(true));
 
     socket.on("roleAssigned", ({ isImpostor }) => {
+      console.log()
       setMyRole({ isImpostor });
     });
 

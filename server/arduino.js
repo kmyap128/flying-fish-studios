@@ -6,7 +6,7 @@ const SILENT_TIMEOUT_MS = 5000;
 const RECONNECT_DELAY_MS = 2000;
 
 //track port (2)
-const PORT1 = new SerialPort({ path: "COM3", baudRate: 115200 });
+const PORT1 = new SerialPort({ path: "COM4", baudRate: 115200 });
 //create parsers (2)
 const PARSER1 = PORT1.pipe(new ReadlineParser({ delimiter: "\n" }));
 
@@ -62,6 +62,7 @@ PORT1.on("open", () => console.log("Port1 open"));
 PORT1.on("error", (err) => console.error("Port error", err.message));
 
 PARSER1.on("data", (data) => {
+  //console.log(data);
   resetSilentTimer();
   
   let newData = data.split(" | ");

@@ -55,12 +55,14 @@ game.onScenarioChange = (roundData) => {
 };
 
 game.onModeChange = (mode) => {
+  console.log("mode change", mode)
   io.emit("modeChange", { newMode: mode });
 };
 game.onTimerTick = ({ mode, remaining }) => {
   io.emit("timerTick", { mode, remaining });
 };
 game.onPlayerChoice = (choiceData) => {
+  console.log("playerChoice", choiceData)
   io.emit("playerChoice", choiceData);
 };
 game.onRoundResult = (resultData) => {
@@ -114,6 +116,7 @@ game.loadScenarios(scenarioData);
 
 const playerSockets = {};
 let gameStarted = false;
+let impostorAssigned = false;
 
 const getLobbyState = () => ({
   connectedSlots: Object.keys(playerSockets).map(Number),
@@ -132,11 +135,15 @@ const tryShowCharacters = () => {
 
   if (allConnected && allTapped && allHaveCharacters && !gameStarted) {
     console.log("All connected and tapped - showing characters");
+    if (!impostorAssigned) {
+      console.log("IMPOSTOR ASSIGNED")
     game.assignImpostor();
+    impostorAssigned = true;
 
     Object.entries(playerSockets).forEach(([slot, socketId]) => {
       const player = game.players[Number(slot)];
       io.to(socketId).emit("roleAssigned", { isImpostor: player.isImpostor });
+      console.log("role assigned", player.name, { isImpostor: player.isImpostor })
     });
 
     io.emit("allPlayersReady");
@@ -144,44 +151,46 @@ const tryShowCharacters = () => {
     characterDisplayTimer = setTimeout(() => {
       if (!gameStarted) {
         gameStarted = true;
+        console.log("gameStarting")
         io.emit("gameStarting");
         setTimeout(() => game.loadCurrentScenario(), 3000);
       }
     }, 10000);
+  }
   }
 }
 
-const tryStartGame = () => {
-  if (gameStarted) return;
-  const allConnected = Object.keys(playerSockets).length === 4;
-  const allHaveCharacters = game.players.every((p) => p.species);
-  console.log(
-    `🔍 tryStartGame: connected=${allConnected} (${Object.keys(playerSockets).length}/4), characters=${allHaveCharacters}`,
-  );
-  if (allConnected && allHaveCharacters) {
-    console.log("📡 Emitting allCharactersAssigned");
-    io.emit("allCharactersAssigned");
-    game.assignImpostor();
+// const tryStartGame = () => {
+//   if (gameStarted) return;
+//   const allConnected = Object.keys(playerSockets).length === 4;
+//   const allHaveCharacters = game.players.every((p) => p.species);
+//   console.log(
+//     `🔍 tryStartGame: connected=${allConnected} (${Object.keys(playerSockets).length}/4), characters=${allHaveCharacters}`,
+//   );
+//   if (allConnected && allHaveCharacters) {
+//     console.log("📡 Emitting allCharactersAssigned");
+//     io.emit("allCharactersAssigned");
+//     game.assignImpostor();
 
-    Object.entries(playerSockets).forEach(([slot, socketId]) => {
-      const player = game.players[Number(slot)];
-      io.to(socketId).emit("roleAssigned", {
-        isImpostor: player.isImpostor,
-      });
-    });
+//     Object.entries(playerSockets).forEach(([slot, socketId]) => {
+//       const player = game.players[Number(slot)];
+//       io.to(socketId).emit("roleAssigned", {
+//         isImpostor: player.isImpostor,
+//       });
+//     });
 
-    console.log("All characters assigned — starting character display");
+//     console.log("All characters assigned — starting character display");
 
-    characterDisplayTimer = setTimeout(() => {
-      if (!gameStarted) {
-        gameStarted = true;
-        console.log("Character display complete — starting game");
-        io.emit("gameStarting");
-        setTimeout(() => game.loadCurrentScenario(), 3000);
-      }
-    }, 10000);
-  }
-};
+//     characterDisplayTimer = setTimeout(() => {
+//       if (!gameStarted) {
+//         gameStarted = true;
+//         console.log("Character display complete — starting game");
+//         io.emit("gameStarting");
+//         setTimeout(() => game.loadCurrentScenario(), 3000);
+//       }
+//     }, 10000);
+//   }
+// };
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {
@@ -256,6 +265,7 @@ io.on("connection", (socket) => {
       game.players.every((p) => p.species) &&
       Object.keys(playerSockets).length === 4
     ) {
+      console.log("all characters assigned")
       socket.emit("allCharactersAssigned");
     }
 
@@ -274,7 +284,7 @@ io.on("connection", (socket) => {
     console.log(`✅ Ready count: ${readyPlayers.size}/4`);
 
     if (readyPlayers.size >= 4 && !gameStarted) {
-      game.assignImpostor();
+      //game.assignImpostor();
       gameStarted = true;
       console.log("All players ready - starting game");
       io.emit("gameStarting");
@@ -306,17 +316,26 @@ io.on("connection", (socket) => {
 
 [0, 1, 2, 3].forEach((pedestalIndex) => {
   subscribe(`pedestal${pedestalIndex + 1}`, ({ selectedChoice }) => {
-    if (!gameStarted) {
-      const socketId = playerSockets[pedestalIndex];
-      if (socketId) io.to(socketId).emit("playerTapped");
-      readyPlayers.add(pedestalIndex);
-      tryShowCharacters();
-      return;
+    //console.log(typeof selectedChoice)
+    if (+selectedChoice !== 0) {
+      console.log(selectedChoice);
+      if (!gameStarted) {
+        const socketId = playerSockets[pedestalIndex];
+        if (socketId) {
+          console.log("player tapped", pedestalIndex);
+          io.to(socketId).emit("playerTapped");
+        }
+        readyPlayers.add(pedestalIndex);
+        tryShowCharacters();
+        return;
+      }
+      if (game.state !== STATES.SCENARIO) return;
+      const optionKey = game.currentOptionsOrder[selectedChoice - 1];
+      if (!optionKey) return;
+      game.registerChoice(pedestalIndex, optionKey);
+    } else {
+      readyPlayers.delete(pedestalIndex);
     }
-    if (game.state !== STATES.SCENARIO) return;
-    const optionKey = game.currentOptionsOrder[selectedChoice - 1];
-    if (!optionKey) return;
-    game.registerChoice(pedestalIndex, optionKey);
   });
 });
 
@@ -411,6 +430,7 @@ if (process.stdin.isTTY) {
       // Reset server state
       readyPlayers.clear();
       gameStarted = false;
+      impostorAssigned = false;
 
       io.emit("lobby", getLobbyState());
 
