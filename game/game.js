@@ -629,7 +629,7 @@ export class Game {
     this.chosen = [false, false, false, false];
 
     this.startTimer(15, "result", () => {
-      if (this.wizardsGrasp >= 11) {
+      if (this.wizardsGrasp >= 15) {
         this.endGame(false);
         return;
       }
