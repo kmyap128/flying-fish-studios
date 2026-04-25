@@ -11,7 +11,12 @@ export function Options({ options, onSelect, myChoice }) {
   return (
     <div id="options-container">
       {displayOptions.map(([key, option]) => {
-        const [label, , , icon] = option;
+        const isNestedOption = Array.isArray(option[1]);
+        const label = option[0];
+        const icon = isNestedOption
+          ? option[1][2]   
+          : option[3];
+
         const isBlank = key === "__blank__";
         const isMyChoice = myChoice === key;
 

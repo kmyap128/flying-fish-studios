@@ -80,5 +80,31 @@
   transform: translate(.45%, 15%);
 }
 
+.grasp-meter {
+  position: relative;
+  display: inline-block;
+}
 
+.meter-img {
+  display: block;
+  width: 100%; /* or fixed width if you're using one */
+}
 
+.grasp-percent {
+  position: absolute;
+  right: 48px;
+  top: 70%;
+  transform: translateY(-50%);
+
+  z-index: 2; /* 🔥 ensures it sits ON TOP */
+
+  color: #f5e6c8;
+  font-weight: bold;
+  font-size: 48px;
+
+  text-shadow: 
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000;
+}
