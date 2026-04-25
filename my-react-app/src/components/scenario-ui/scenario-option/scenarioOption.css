@@ -51,5 +51,6 @@
   padding-left: 60px;
   padding-right: 60px;
   text-align: center;
-  -webkit-text-stroke: 3px black;
+  -webkit-text-stroke: 9px black;
+  paint-order: stroke fill;
 }

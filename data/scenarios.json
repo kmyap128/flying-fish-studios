@@ -349,7 +349,7 @@
       "animation": ""
     },
     "The Whimsical Tree": {
-      "scenario": "An ancient and mythical tree blocks your path. 'Answer my riddle,' it booms. 'I am always hungry, I must be fed. The finger I touch soon turns red.",
+      "scenario": "An ancient and mythical tree blocks your path. 'Answer my riddle,' it booms. 'I am always hungry, I must be fed. The finger I touch soon turns red.'",
       "options": {
         "neutral": [
           "Fire",
