@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { StartPrompt } from "../../components/start-screen-ui/start-prompt/prompt.jsx";
 import { CharacterInfo } from "../../components/start-screen-ui/character-info/characterInfo.jsx";
 import { TimerMeter } from "../../components/hud-ui/timer-meter/timerMeter.jsx";
+import { SoundEffectPlayer } from "../../components/audio/sound-effects/soundEffects.jsx";
+import { MusicPlayer } from "../../components/audio/music/music.jsx";
 
 export default function CharacterSelectionScreen({
   onComplete,
@@ -15,6 +17,10 @@ export default function CharacterSelectionScreen({
   const [stage, setStage] = useState("prompt");
   const [timerWidth, setTimerWidth] = useState(100);
   const [timeLeft, setTimeLeft] = useState(10);
+
+  const music = "/sounds/music/Starting_Screen_Music.mp3";
+
+  const characterLockIn = "/sounds/sound-effects/Character_Lock_In.mp3";
 
   useEffect(() => {
     if (!socket) return;
@@ -53,7 +59,9 @@ export default function CharacterSelectionScreen({
   }, [socket, myPlayer]);
 
   const initImage = myPlayer?.infoBlock;
-  const infoImage = myRole?.isImpostor ? "Traitor_Block.png" : myPlayer?.infoBlock;
+  const infoImage = myRole?.isImpostor
+    ? "Traitor_Block.png"
+    : myPlayer?.infoBlock;
 
   return (
     <div
@@ -64,12 +72,13 @@ export default function CharacterSelectionScreen({
       }}
     >
       <div id="content-container">
+        {" "}
+        <MusicPlayer url={music} />
         {stage === "prompt" && <StartPrompt waiting={false} />}
-
         {stage === "waiting" && <StartPrompt waiting={true} />}
-
         {stage === "hatching" && myPlayer && (
           <div className="egg-anim">
+            <SoundEffectPlayer url={characterLockIn} />
             <img
               src={`/UI_Assets/Character_Select/Egg_Anims/${myPlayer.name}-hatch.gif`}
               alt="hatching"
@@ -77,7 +86,6 @@ export default function CharacterSelectionScreen({
             />
           </div>
         )}
-
         {stage === "impostor" && (
           <div className="impostor-reveal">
             <CharacterInfo
@@ -105,7 +113,6 @@ export default function CharacterSelectionScreen({
             </div>
           </div>
         )}
-
         {stage === "reveal" && (
           <>
             <div className="character-info">
@@ -115,10 +122,7 @@ export default function CharacterSelectionScreen({
               />
             </div>
             <div className="character-timer-meter-container">
-              <TimerMeter
-                timerCurrent={countdown}
-                timerDuration={12}
-              />
+              <TimerMeter timerCurrent={countdown} timerDuration={12} />
             </div>
           </>
         )}
