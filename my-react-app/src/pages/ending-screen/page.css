@@ -6,11 +6,12 @@
   justify-content: center;
 }
 
-.header, .prompt {
+.header, .prompt, .content-container {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .icons {
-    
+    transform: translateY(-10%);
 }
