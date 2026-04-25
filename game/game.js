@@ -685,6 +685,6 @@ export class Game {
 
     this.players[randomInt].makeImpostor();
 
-    console.log(this.players[randomInt], " is impostor");
+    console.log(this.players[randomInt].name, " is impostor");
   }
 }
