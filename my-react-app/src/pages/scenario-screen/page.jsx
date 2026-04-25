@@ -142,6 +142,7 @@ export default function ScenarioScreen({
               passive={roundResult.passives}
               countdown={countdown}
               timerDuration={timerDuration}
+              wizardsGrasp={roundResult?.wizardsGrasp}
             />
           </>
         )}
