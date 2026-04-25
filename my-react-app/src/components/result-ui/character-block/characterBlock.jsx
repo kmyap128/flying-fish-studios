@@ -1,10 +1,10 @@
 import './characterBlock.css';
 
-export function CharacterBlock({ characterName, itemUsed, isInjured }) {  
+export function CharacterBlock({ characterName, passiveUsed, isInjured }) {  
     const characterAbbreviation = characterName.slice(0, 1).toUpperCase() + characterName.slice(1, 3).toLowerCase();
-    const characterStatus = itemUsed ? "Default" : isInjured ? "Injured" : "Transparent";
-    const itemStatus = itemUsed ? "Default" : "Transparent";
-    const promptStatus = itemUsed ? "YesProc" : "NoProc";
+    const characterStatus = passiveUsed ? "Default" : isInjured ? "Injured" : "Transparent";
+    const passiveStatus = passiveUsed ? "Default" : "Transparent";
+    const promptStatus = passiveUsed ? "YesProc" : "NoProc";
     const path = `/UI_Assets/Item_Cards/${characterName}`;
 
     return (
@@ -14,7 +14,7 @@ export function CharacterBlock({ characterName, itemUsed, isInjured }) {
                     <img src={`${path}/Portraits/${characterAbbreviation}_${characterStatus}.png`} alt="" />
                 </div>
                 <div className='item'>
-                    <img src={`${path}/ItemIcons/${characterAbbreviation}_Item_${itemStatus}.png`} alt="" />
+                    <img src={`${path}/ItemIcons/${characterAbbreviation}_Item_${passiveStatus}.png`} alt="" />
                 </div>
                 <div className='prompt'>
                     {characterName === "Smoulder" ? (

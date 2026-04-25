@@ -440,9 +440,9 @@ export class Game {
     }
 
     // Decide return value
-    if (didInjure && didReduce) return ["Smoulder_Both", roundWG]; //Both passives used
-    if (didInjure) return ["Smoulder_Injured", roundWG]; // Injured a teammate
-    if (didReduce) return ["Smoulder_WG_Reduced", roundWG]; //reduced the wizards grasp
+    if (didInjure && didReduce) return ["Smoulder_Used", roundWG]; //Both passives used
+    if (didInjure) return ["Smoulder_Used", roundWG]; // Injured a teammate
+    if (didReduce) return ["Smoulder_Used", roundWG]; //reduced the wizards grasp
     return ["Smoulder_None", roundWG];
   }
 
@@ -464,7 +464,7 @@ export class Game {
       healedPlayer.injury = false;
       console.log(`Finley healed ${healedPlayer.name}`);
 
-      return "Finley_Healed";
+      return "Finley_Used";
     }
 
     return "Finley_None";
@@ -494,7 +494,7 @@ export class Game {
       roundWG -= 1; //changed from 2 to 1 for balance
       console.log("Waddles reduced the Wizard's Grasp!");
       console.log("post-waddles", roundWG);
-      return ["Waddles_Reduced", roundWG];
+      return ["Waddles_Used", roundWG];
     }
 
     return ["Waddles_None", roundWG];
@@ -523,7 +523,7 @@ export class Game {
       roundWG *= 0.5;
       console.log("Sprig reduced WG by 50%");
       console.log("post-sprig", roundWG);
-      return ["Sprig_Halved", roundWG];
+      return ["Sprig_Used", roundWG];
     }
     return ["Sprig_None", roundWG];
   }

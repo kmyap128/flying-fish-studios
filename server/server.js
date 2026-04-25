@@ -68,6 +68,7 @@ game.onPlayerChoice = (choiceData) => {
 game.onRoundResult = (resultData) => {
   io.emit("roundResult", resultData);
   io.emit("modeChange", { newMode: "result" });
+  io.emit("lobby", getLobbyState());
 };
 game.onGameEndPlayer = (result) => {
   console.log("onGameEndPlayer fired, game.players:", game.players.map(p => ({ name: p.name, species: p.species, isImpostor: p.isImpostor })));
@@ -153,9 +154,9 @@ const tryShowCharacters = () => {
         gameStarted = true;
         console.log("gameStarting")
         io.emit("gameStarting");
-        setTimeout(() => game.loadCurrentScenario(), 3000);
+        setTimeout(() => game.loadCurrentScenario(), 1000);
       }
-    }, 10000);
+    }, 22000);
   }
   }
 }
@@ -181,6 +182,7 @@ const tryShowCharacters = () => {
 
 //     console.log("All characters assigned — starting character display");
 
+<<<<<<< HEAD
 //     characterDisplayTimer = setTimeout(() => {
 //       if (!gameStarted) {
 //         gameStarted = true;
@@ -191,6 +193,18 @@ const tryShowCharacters = () => {
 //     }, 10000);
 //   }
 // };
+=======
+    characterDisplayTimer = setTimeout(() => {
+      if (!gameStarted) {
+        gameStarted = true;
+        console.log("Character display complete — starting game");
+        io.emit("gameStarting");
+        setTimeout(() => game.loadCurrentScenario(), 1000);
+      }
+    }, 22000);
+  }
+};
+>>>>>>> 71f92a7070c7f9c039f77c875940353a5e716923
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {

@@ -7,9 +7,23 @@ export function ResultBlock({
   scenarioNum,
   chosenOption,
   resultText,
+  passive,
   countdown,
   timerDuration,
+  wizardsGrasp,
 }) {
+
+  const finleyUsedPassive = passive?.Finley == "Finley_Used";
+  const smoulderUsedPassive = passive?.Smoulder == "Smoulder_Used"
+  const waddlesUsedPassive = passive?.Waddles == "Waddles_Used"
+  const sprigUsedPassive = passive?.Sprig == "Sprig_Used"
+
+  const percent = (wizardsGrasp / 15) * 100;
+  const rounded = Math.round(percent / 10) * 10;
+  const clamped = Math.max(0, Math.min(100, rounded));
+
+  const meterSrc = `/UI_Assets/TotalWG_Meters/WG_Meter_${clamped}.png`
+
   return (
     <div className="result-content">
       <div className="top-section">
@@ -21,22 +35,22 @@ export function ResultBlock({
         <div className="character-panel">
           <CharacterBlock
             characterName="Finley"
-            itemUsed={false}
+            passiveUsed={finleyUsedPassive}
             isInjured={false}
           />
           <CharacterBlock
             characterName="Smoulder"
-            itemUsed={false}
+            passiveUsed={smoulderUsedPassive}
             isInjured={false}
           />
           <CharacterBlock
             characterName="Sprig"
-            itemUsed={false}
+            passiveUsed={sprigUsedPassive}
             isInjured={false}
           />
           <CharacterBlock
             characterName="Waddles"
-            itemUsed={false}
+            passiveUsed={waddlesUsedPassive}
             isInjured={false}
           />
         </div>
@@ -46,7 +60,7 @@ export function ResultBlock({
           </div>
           <div className="grasp-meter">
             <img
-              src="/UI_Assets/TotalWG_Meters/WG_Meter_0.png"
+              src={meterSrc}
               alt="grasp meter"
             />
           </div>

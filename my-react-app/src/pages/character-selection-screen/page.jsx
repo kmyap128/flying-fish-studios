@@ -2,7 +2,6 @@ import "./page.css";
 import { useState, useEffect } from "react";
 import { StartPrompt } from "../../components/start-screen-ui/start-prompt/prompt.jsx";
 import { CharacterInfo } from "../../components/start-screen-ui/character-info/characterInfo.jsx";
-import { TimerMeter } from "../../components/hud-ui/timer-meter/timerMeter.jsx";
 
 export default function CharacterSelectionScreen({
   onComplete,
@@ -11,7 +10,6 @@ export default function CharacterSelectionScreen({
   socket,
 }) {
   const [stage, setStage] = useState("prompt");
-  const [shaking, setShaking] = useState(false);
   const [timerWidth, setTimerWidth] = useState(100);
 
   useEffect(() => {
@@ -20,31 +18,29 @@ export default function CharacterSelectionScreen({
       if (stage === "prompt") setStage("waiting");
     });
     socket.on("allPlayersReady", () => {
-      setStage("image");
-    })
+      setStage("hatching");
+    });
     return () => {
       socket.off("playerTapped");
       socket.off("allPlayersReady");
-    }
+    };
   }, [socket, stage]);
 
+  // Hatching gif plays, then move to impostor reveal
   useEffect(() => {
-    if (stage !== "image") return;
-    const t = setTimeout(() => setShaking(false), 600);
+    if (stage !== "hatching") return;
+    const t = setTimeout(() => setStage("impostor"), 4000);
     return () => clearTimeout(t);
   }, [stage]);
 
-  useEffect(() => {
-    if (!myRole || stage !== "image") return;
-    setStage("impostor");
-  }, [myRole, stage]);
-
+  // Impostor gif plays for 5s, then reveal
   useEffect(() => {
     if (stage !== "impostor") return;
     const t = setTimeout(() => setStage("reveal"), 5000);
     return () => clearTimeout(t);
   }, [stage]);
 
+  // Reveal: 10s countdown then start game
   useEffect(() => {
     if (stage !== "reveal") return;
 
@@ -78,12 +74,7 @@ export default function CharacterSelectionScreen({
   }, [socket, myPlayer]);
 
   const initImage = myPlayer?.infoBlock;
-
-  const infoImage = myRole?.isImpostor
-    ? "Traitor_Block.png"
-    : myPlayer?.infoBlock;
-
-  console.log("myRole in character selection screen", myRole);
+  const infoImage = myRole?.isImpostor ? "Traitor_Block.png" : myPlayer?.infoBlock;
 
   return (
     <div
@@ -98,13 +89,12 @@ export default function CharacterSelectionScreen({
 
         {stage === "waiting" && <StartPrompt waiting={true} />}
 
-        {stage === "image" && (
+        {stage === "hatching" && myPlayer && (
           <div className="egg-anim">
-            <img src="/assets/effect.png" alt="character" className="effect" />
             <img
-              src="/assets/egg.png"
-              alt="transition"
-              className={`egg ${shaking ? "shake" : ""}`}
+              src={`/UI_Assets/Character_Select/Egg_Anims/${myPlayer.name}-hatch.gif`}
+              alt="hatching"
+              className="hatch-gif"
             />
           </div>
         )}
@@ -143,7 +133,6 @@ export default function CharacterSelectionScreen({
               character={{ ...myPlayer, infoBlock: infoImage }}
               onComplete={() => onComplete(myPlayer)}
             />
-            {/* <TimerMeter /> */}
           </div>
         )}
       </div>
