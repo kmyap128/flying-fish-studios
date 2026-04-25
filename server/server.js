@@ -66,6 +66,7 @@ game.onPlayerChoice = (choiceData) => {
 game.onRoundResult = (resultData) => {
   io.emit("roundResult", resultData);
   io.emit("modeChange", { newMode: "result" });
+  io.emit("lobby", getLobbyState());
 };
 game.onGameEndPlayer = (result) => {
   console.log("onGameEndPlayer fired, game.players:", game.players.map(p => ({ name: p.name, species: p.species, isImpostor: p.isImpostor })));

@@ -38,6 +38,11 @@ export default function ScenarioScreen({
     ? `/sounds/narrations/${scenarioData.media.sound}`
     : null;
 
+  const myInjury = roundResult?.playerChoices?.find(
+    (p) => p.pedestalIndex === myPlayer?.pedestalIndex
+  )?.injury ?? myPlayer?.injury ?? false;
+  console.log("My Injury Status:", myInjury);
+
   let narDuration = null;
 
   const playerName = myPlayer?.name || "Unknown Creature";
@@ -66,7 +71,7 @@ export default function ScenarioScreen({
                 <CreatureBar
                   creatureName={playerName}
                   isImpostor={isImpostor}
-                  isInjured={false}
+                  isInjured={myInjury}
                 />
               </div>
               <div id="wizard-bar-container">
@@ -99,7 +104,7 @@ export default function ScenarioScreen({
                 <CreatureBar
                   creatureName={playerName}
                   isImpostor={isImpostor}
-                  isInjured={false}
+                  isInjured={myInjury}
                 />
               </div>
               <div id="timer-container">
