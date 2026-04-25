@@ -7,9 +7,16 @@ export function ResultBlock({
   scenarioNum,
   chosenOption,
   resultText,
+  passive,
   countdown,
   timerDuration,
 }) {
+
+  const finleyUsedPassive = passive?.Finley == "Finley_Used";
+  const smoulderUsedPassive = passive?.Smoulder == "Smoulder_Used"
+  const waddlesUsedPassive = passive?.Waddles == "Waddles_Used"
+  const sprigUsedPassive = passive?.Sprig == "Sprig_Used"
+
   return (
     <div className="result-content">
       <div className="top-section">
@@ -21,22 +28,22 @@ export function ResultBlock({
         <div className="character-panel">
           <CharacterBlock
             characterName="Finley"
-            itemUsed={false}
+            passiveUsed={finleyUsedPassive}
             isInjured={false}
           />
           <CharacterBlock
             characterName="Smoulder"
-            itemUsed={false}
+            passiveUsed={smoulderUsedPassive}
             isInjured={false}
           />
           <CharacterBlock
             characterName="Sprig"
-            itemUsed={false}
+            passiveUsed={sprigUsedPassive}
             isInjured={false}
           />
           <CharacterBlock
             characterName="Waddles"
-            itemUsed={false}
+            passiveUsed={waddlesUsedPassive}
             isInjured={false}
           />
         </div>
