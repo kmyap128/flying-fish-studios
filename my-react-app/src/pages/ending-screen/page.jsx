@@ -71,7 +71,16 @@ export default function EndingScreen({
               <img src={banner} alt="" />
             </div>
             <div className="prompt">
-              <img src="/UI_Assets/Final_Results/Final_Prompt.png" alt="" />
+              { isImpostor
+                ? (result === "win"
+                    ? <img src="/UI_Assets/Final_Results/Traitor_victory.png" alt="" />
+                    : <img src="/UI_Assets/Final_Results/Traitor_defeat.png" alt="" />
+                  )
+                : (result === "win"
+                    ? <img src="/UI_Assets/Final_Results/Hero_victory.png" alt="" />
+                    : <img src="/UI_Assets/Final_Results/Hero_Defeat.png" alt="" />
+                  )
+              }
             </div>
             <div className="icons">
               {isImpostor ? (
