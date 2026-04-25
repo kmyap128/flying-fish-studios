@@ -9,7 +9,8 @@ import { Options } from "../../components/scenario-ui/options/options.jsx";
 import { ResultBlock } from "../../components/result-ui/result-block/resultBlock.jsx";
 import { useRef } from "react";
 import "./page.css";
-import { NarrationPlayer } from "../../components/scenario-ui/narration/narration.jsx";
+import { NarrationPlayer } from "../../components/audio/narration/narration.jsx";
+import { MusicPlayer } from "../../components/audio/music/music.jsx";
 
 export default function ScenarioScreen({
   socket,
@@ -37,10 +38,14 @@ export default function ScenarioScreen({
   const narration = scenarioData
     ? `/sounds/narrations/${scenarioData.media.sound}`
     : null;
+  const music = "/sounds/music/Gameplay_Music.mp3";
 
-  const myInjury = roundResult?.playerChoices?.find(
-    (p) => p.pedestalIndex === myPlayer?.pedestalIndex
-  )?.injury ?? myPlayer?.injury ?? false;
+  const myInjury =
+    roundResult?.playerChoices?.find(
+      (p) => p.pedestalIndex === myPlayer?.pedestalIndex,
+    )?.injury ??
+    myPlayer?.injury ??
+    false;
   console.log("My Injury Status:", myInjury);
 
   let narDuration = null;
@@ -60,6 +65,7 @@ export default function ScenarioScreen({
       }}
     >
       <div id="content-container">
+        <MusicPlayer url={music} />
         {!gameResult && mode === "scenario" && scenarioData && (
           <>
             {/* <div className='header'>
