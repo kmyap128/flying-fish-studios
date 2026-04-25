@@ -626,6 +626,7 @@ export class Game {
       this.onRoundResult({
         winningChoice,
         displayChoice,
+        scenarioType: this.currentType,
         resultText: this.resultText,
         wizardsGrasp: this.wizardsGrasp,
 
