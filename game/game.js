@@ -264,7 +264,7 @@ export class Game {
       this.startTimer(duration, "scenario", () => {
         this.currentMode = "options";
         if (this.onModeChange) this.onModeChange("options");
-        this.startTimer(20, "options", () => {
+        this.startTimer(15, "options", () => {
           this.currentMode = null;
           this.endRound();
         });

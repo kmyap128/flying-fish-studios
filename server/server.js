@@ -174,7 +174,7 @@ const tryShowCharacters = () => {
           io.emit("gameStarting");
           setTimeout(() => game.loadCurrentScenario(), 1000);
         }
-      }, 22000);
+      }, 20000);
     }
   }
 };
