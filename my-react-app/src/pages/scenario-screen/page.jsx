@@ -155,6 +155,8 @@ export default function ScenarioScreen({
               countdown={countdown}
               timerDuration={timerDuration}
               wizardsGrasp={roundResult?.wizardsGrasp}
+              scenarioType={roundResult.scenarioType}
+              isInjured={myInjury}
             />
           </>
         )}

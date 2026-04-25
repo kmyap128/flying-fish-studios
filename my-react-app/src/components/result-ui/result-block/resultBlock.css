@@ -68,10 +68,35 @@
   justify-content: flex-start;
 }
 
-.scorecard img, .grasp-meter img {
+.scorecard-bkg, .grasp-meter img {
   width: 100%;
   height: auto;
-  display: block;
+  position: relative;
+  display: inline-block; 
+}
+
+.scenario-icon{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(40%, -65%);
+  width: 15%; 
+  height: auto;
+  object-fit: contain;
+}
+
+.synergy-text {
+  position: absolute;
+  text-transform: capitalize;
+  text-align: right;
+  top: 50%;
+  left: 50%;
+  transform: translate(175%, -150%);
+  font-size: 5em;
+  color: #fff;
+  -webkit-text-stroke: 9px black;
+  paint-order: stroke fill;
+  font-weight: bold;
 }
 
 .time-meter {
@@ -108,3 +133,4 @@
     -2px  2px 0 #000,
      2px  2px 0 #000;
 }
+

@@ -11,6 +11,8 @@ export function ResultBlock({
   countdown,
   timerDuration,
   wizardsGrasp,
+  scenarioType,
+  isInjured,
 }) {
 
   const finleyUsedPassive = passive?.Finley == "Finley_Used";
@@ -25,6 +27,8 @@ export function ResultBlock({
 
   const meterSrc = `/UI_Assets/TotalWG_Meters/WG_Meter_${clamped}.png`
 
+  console.log("scenarioType in ResultBlock:", scenarioType);
+
   return (
     <div className="result-content">
       <div className="top-section">
@@ -37,34 +41,34 @@ export function ResultBlock({
           <CharacterBlock
             characterName="Finley"
             passiveUsed={finleyUsedPassive}
-            isInjured={false}
+            isInjured={isInjured}
           />
           <CharacterBlock
             characterName="Smoulder"
             passiveUsed={smoulderUsedPassive}
-            isInjured={false}
+            isInjured={isInjured}
           />
           <CharacterBlock
             characterName="Sprig"
             passiveUsed={sprigUsedPassive}
-            isInjured={false}
+            isInjured={isInjured}
           />
           <CharacterBlock
             characterName="Waddles"
             passiveUsed={waddlesUsedPassive}
-            isInjured={false}
+            isInjured={isInjured}
           />
         </div>
         <div className="grasp-breakdown">
           <div className="scorecard">
-            <img src="/UI_Assets/Scorecard/Scorecard_BKG.png" alt="scorecard" />
+            <img className="scorecard-bkg" src="/UI_Assets/Scorecard/Scorecard_BKG.png" alt="scorecard" />
+            <img className="scenario-icon" src={`/UI_Assets/Scorecard/icons_${scenarioType}.png`} alt="scenario type" />
+            <p className="synergy-text">{scenarioType}</p>
           </div>
           <div className="grasp-meter">
             <img src={meterSrc} alt="grasp meter" className="meter-img" />
             <span className="grasp-percent">{displayPercent}%</span>
           </div>
-
-
         </div>
       </div>
 
