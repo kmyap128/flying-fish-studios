@@ -182,18 +182,6 @@ const tryShowCharacters = () => {
 
 //     console.log("All characters assigned — starting character display");
 
-<<<<<<< HEAD
-//     characterDisplayTimer = setTimeout(() => {
-//       if (!gameStarted) {
-//         gameStarted = true;
-//         console.log("Character display complete — starting game");
-//         io.emit("gameStarting");
-//         setTimeout(() => game.loadCurrentScenario(), 3000);
-//       }
-//     }, 10000);
-//   }
-// };
-=======
     characterDisplayTimer = setTimeout(() => {
       if (!gameStarted) {
         gameStarted = true;
@@ -202,9 +190,6 @@ const tryShowCharacters = () => {
         setTimeout(() => game.loadCurrentScenario(), 1000);
       }
     }, 22000);
-  }
-};
->>>>>>> 71f92a7070c7f9c039f77c875940353a5e716923
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {
