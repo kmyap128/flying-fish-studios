@@ -145,9 +145,9 @@ const tryShowCharacters = () => {
       if (!gameStarted) {
         gameStarted = true;
         io.emit("gameStarting");
-        setTimeout(() => game.loadCurrentScenario(), 3000);
+        setTimeout(() => game.loadCurrentScenario(), 1000);
       }
-    }, 10000);
+    }, 22000);
   }
 }
 
@@ -177,9 +177,9 @@ const tryStartGame = () => {
         gameStarted = true;
         console.log("Character display complete — starting game");
         io.emit("gameStarting");
-        setTimeout(() => game.loadCurrentScenario(), 3000);
+        setTimeout(() => game.loadCurrentScenario(), 1000);
       }
-    }, 10000);
+    }, 22000);
   }
 };
 
