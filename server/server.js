@@ -55,14 +55,12 @@ game.onScenarioChange = (roundData) => {
 };
 
 game.onModeChange = (mode) => {
-  console.log("mode change", mode)
   io.emit("modeChange", { newMode: mode });
 };
 game.onTimerTick = ({ mode, remaining }) => {
   io.emit("timerTick", { mode, remaining });
 };
 game.onPlayerChoice = (choiceData) => {
-  console.log("playerChoice", choiceData)
   io.emit("playerChoice", choiceData);
 };
 // game.onRoundResult = (resultData) => {
@@ -77,17 +75,17 @@ game.onRoundResult = (resultData) => {
   Object.entries(playerSockets).forEach(([slot, socketId]) => {
     const pedestalIndex = Number(slot);
     const playerChoice = resultData.playerChoices?.find(
-      (p) => p.pedestalIndex === pedestalIndex
+      (p) => p.pedestalIndex === pedestalIndex,
     );
 
     const personalResult = {
       ...resultData,
       displayChoice: isSynergy
-        ? resultData.winningChoice?.[0]           // everyone sees majority choice label
-        : playerChoice?.option?.[0] ?? null,      // each sees their own choice label
+        ? resultData.winningChoice?.[0] // everyone sees majority choice label
+        : (playerChoice?.option?.[0] ?? null), // each sees their own choice label
       resultText: isSynergy
-        ? resultData.resultText                    // shared result text
-        : playerChoice?.option?.[2] ?? resultData.resultText, // each sees their own
+        ? resultData.resultText // shared result text
+        : (playerChoice?.option?.[2] ?? resultData.resultText), // each sees their own
     };
 
     io.to(socketId).emit("roundResult", personalResult);
@@ -98,7 +96,14 @@ game.onRoundResult = (resultData) => {
 };
 
 game.onGameEndPlayer = (result) => {
-  console.log("onGameEndPlayer fired, game.players:", game.players.map(p => ({ name: p.name, species: p.species, isImpostor: p.isImpostor })));
+  console.log(
+    "onGameEndPlayer fired, game.players:",
+    game.players.map((p) => ({
+      name: p.name,
+      species: p.species,
+      isImpostor: p.isImpostor,
+    })),
+  );
 
   const allPlayersWithRoles = game.players.map((p) => ({
     pedestalIndex: p.pedestalIndex,
@@ -114,7 +119,11 @@ game.onGameEndPlayer = (result) => {
     if (!p.isImpostor) {
       const socketId = playerSockets[p.pedestalIndex];
       if (socketId)
-        io.to(socketId).emit("gameEnd", { result, isImpostor: false, allPlayers: allPlayersWithRoles });
+        io.to(socketId).emit("gameEnd", {
+          result,
+          isImpostor: false,
+          allPlayers: allPlayersWithRoles,
+        });
     }
   });
 };
@@ -133,7 +142,12 @@ game.onGameEndImpostor = (result) => {
 
   if (impostor) {
     const socketId = playerSockets[impostor.pedestalIndex];
-    if (socketId) io.to(socketId).emit("gameEnd", { result, isImpostor: true, allPlayers: allPlayersWithRoles });
+    if (socketId)
+      io.to(socketId).emit("gameEnd", {
+        result,
+        isImpostor: true,
+        allPlayers: allPlayersWithRoles,
+      });
   }
 };
 
@@ -164,29 +178,26 @@ const tryShowCharacters = () => {
   if (allConnected && allTapped && allHaveCharacters && !gameStarted) {
     console.log("All connected and tapped - showing characters");
     if (!impostorAssigned) {
-      console.log("IMPOSTOR ASSIGNED")
-    game.assignImpostor();
-    impostorAssigned = true;
+      game.assignImpostor();
+      impostorAssigned = true;
 
-    Object.entries(playerSockets).forEach(([slot, socketId]) => {
-      const player = game.players[Number(slot)];
-      io.to(socketId).emit("roleAssigned", { isImpostor: player.isImpostor });
-      console.log("role assigned", player.name, { isImpostor: player.isImpostor })
-    });
+      Object.entries(playerSockets).forEach(([slot, socketId]) => {
+        const player = game.players[Number(slot)];
+        io.to(socketId).emit("roleAssigned", { isImpostor: player.isImpostor });
+      });
 
-    io.emit("allPlayersReady");
+      io.emit("allPlayersReady");
 
-    characterDisplayTimer = setTimeout(() => {
-      if (!gameStarted) {
-        gameStarted = true;
-        console.log("gameStarting")
-        io.emit("gameStarting");
-        setTimeout(() => game.loadCurrentScenario(), 1000);
-      }
-    }, 22000);
+      characterDisplayTimer = setTimeout(() => {
+        if (!gameStarted) {
+          gameStarted = true;
+          io.emit("gameStarting");
+          setTimeout(() => game.loadCurrentScenario(), 1000);
+        }
+      }, 22000);
+    }
   }
-  }
-}
+};
 
 // const tryStartGame = () => {
 //   if (gameStarted) return;
@@ -209,14 +220,14 @@ const tryShowCharacters = () => {
 
 //     console.log("All characters assigned — starting character display");
 
-    characterDisplayTimer = setTimeout(() => {
-      if (!gameStarted) {
-        gameStarted = true;
-        console.log("Character display complete — starting game");
-        io.emit("gameStarting");
-        setTimeout(() => game.loadCurrentScenario(), 1000);
-      }
-    }, 22000);
+characterDisplayTimer = setTimeout(() => {
+  if (!gameStarted) {
+    gameStarted = true;
+    console.log("Character display complete — starting game");
+    io.emit("gameStarting");
+    setTimeout(() => game.loadCurrentScenario(), 1000);
+  }
+}, 22000);
 
 io.on("connection", (socket) => {
   socket.on("requestSlot", (requestedSlot) => {
@@ -291,7 +302,6 @@ io.on("connection", (socket) => {
       game.players.every((p) => p.species) &&
       Object.keys(playerSockets).length === 4
     ) {
-      console.log("all characters assigned")
       socket.emit("allCharactersAssigned");
     }
 
@@ -344,11 +354,9 @@ io.on("connection", (socket) => {
   subscribe(`pedestal${pedestalIndex + 1}`, ({ selectedChoice }) => {
     //console.log(typeof selectedChoice)
     if (+selectedChoice !== 0) {
-      console.log(selectedChoice);
       if (!gameStarted) {
         const socketId = playerSockets[pedestalIndex];
         if (socketId) {
-          console.log("player tapped", pedestalIndex);
           io.to(socketId).emit("playerTapped");
         }
         readyPlayers.add(pedestalIndex);

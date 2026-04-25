@@ -21,6 +21,7 @@ export function ResultBlock({
   const percent = (wizardsGrasp / 15) * 100;
   const rounded = Math.round(percent / 10) * 10;
   const clamped = Math.max(0, Math.min(100, rounded));
+  const displayPercent = Math.max(0, Math.min(100, Math.round(percent)));
 
   const meterSrc = `/UI_Assets/TotalWG_Meters/WG_Meter_${clamped}.png`
 
@@ -59,11 +60,11 @@ export function ResultBlock({
             <img src="/UI_Assets/Scorecard/Scorecard_BKG.png" alt="scorecard" />
           </div>
           <div className="grasp-meter">
-            <img
-              src={meterSrc}
-              alt="grasp meter"
-            />
+            <img src={meterSrc} alt="grasp meter" className="meter-img" />
+            <span className="grasp-percent">{displayPercent}%</span>
           </div>
+
+
         </div>
       </div>
 
