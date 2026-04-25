@@ -124,28 +124,26 @@ export class Game {
     ];
   }
 
-  handleSacrificeScenario(newChoice) {
-    let choice = newChoice;
-    let response = choice;
-    console.log(choice);
+  handleSacrificeScenario(choiceArray, choiceKey) {
+    const key = choiceKey ?? choiceArray;
+    const response = choiceKey ? choiceArray : this.currentOptions[choiceArray];
+    console.log(choiceArray);
     if (this.currentScenario.name == "The Statue of the Greedy King") {
       this.players.forEach((player) => {
-        if (choice == "option 1") player.disabled = 1;
-        else if (choice == "option 2") player.disabled = 2;
+        if (key == "option 1") player.disabled = 1;
+        else if (key == "option 2") player.disabled = 2;
         else player.disabled = 3;
       });
-      return [response[1], response[0]];
+      return [response[1], response[2]];
     } else {
-      if (choice == "option 1") {
+      if (key == "option 1") {
         this.players.forEach((player) => {
-          player.item == false;
+          player.item = false;
         });
         return [response[1], response[0]];
-      } else if (choice == "option 2") {
-        let chance = Math.random();
+      } else if (key == "option 2") {
         let normalPlayers = [];
         let impostor;
-        let out;
         this.players.forEach((player) => {
           if (player.isImpostor) {
             impostor = player;
@@ -153,13 +151,15 @@ export class Game {
             normalPlayers.push(player);
           }
         });
-        if (chance < 0.15) {
+        const chance = Math.random();
+        let out;
+        if (chance < 0.15 && normalPlayers[0]) {
           normalPlayers[0].out = true;
           out = normalPlayers[0];
-        } else if (chance < 0.3) {
+        } else if (chance < 0.3 && normalPlayers[1]) {
           normalPlayers[1].out = true;
           out = normalPlayers[1];
-        } else if (chance < 0.45) {
+        } else if (chance < 0.45 && normalPlayers[2]) {
           normalPlayers[2].out = true;
           out = normalPlayers[2];
         } else {
@@ -168,10 +168,7 @@ export class Game {
         }
         return [response[1], `${out.name} has been left behind`];
       } else {
-        if (this.currentScenario.name === "The Glowing Bridge") {
-          return [response[1], response[2]];
-        }
-        return [response[1], response[0]];
+        return [response[1], response[2]];
       }
     }
   }
@@ -549,8 +546,8 @@ export class Game {
         });
       }
       if (this.currentScenarioCategory == "sacrifice") {
-        value = this.handleSacrificeScenario(winningChoice);
-        console.log(value);
+        // In endRound, synergy sacrifice path:
+        value = this.handleSacrificeScenario(winningChoice, winningKey); // ADD winningKey        console.log(value);
         this.resultText = value[1];
         console.log("sacrifice value", value[0]);
         roundWG = value[0];
@@ -587,6 +584,7 @@ export class Game {
           if (this.currentScenarioCategory == "sacrifice") {
             value = this.handleSacrificeScenario(
               this.currentOptions[choiceIndex],
+              p.choice,
             );
             this.resultText = value[1];
             total += value[0];

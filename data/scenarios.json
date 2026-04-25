@@ -227,19 +227,19 @@
         "option 1": [
           "Lose the ability to choose answer one",
           2,
-          "",
+          "Lose the ability to choose answer one",
           "statue/No1.png"
         ],
         "option 2": [
           "Lose the ability to choose answer two",
           2,
-          "",
+          "Lose the ability to choose answer two",
           "statue/No2.png"
         ],
         "option 3": [
           "Lose the ability to choose answer three",
           2,
-          "",
+          "Lose the ability to choose answer three",
           "statue/No3.png"
         ]
       },
@@ -255,13 +255,13 @@
         "option 1": [
           "Drop your items to reduce weight",
           1,
-          "",
+          "You lose all of your items, but cross successfully.",
           "glowing-bridge/Drop.png"
         ],
         "option 2": [
           "Leave a companion behind",
           2,
-          "",
+          "Someone is left behind.",
           "glowing-bridge/Vote.png"
         ],
         "option 3": [
@@ -280,9 +280,24 @@
     "The Illuminated Portal": {
       "scenario": "A mesmerizing portal hums in the woods, pulling at your mind. You cannot look away unless you please it.",
       "options": {
-        "option 1": ["Toss in your items", 2, "", "portal/Toss.png"],
-        "option 2": ["Throw in a companion", 2, "", "portal/Companion.png"],
-        "option 3": ["Sacrifice Wizard's Grasp", 4, "", "portal/WG.png"]
+        "option 1": [
+          "Toss in your items",
+          2,
+          "You lose your items, but are able to move past the portal.",
+          "portal/Toss.png"
+        ],
+        "option 2": [
+          "Throw in a companion",
+          2,
+          "Someone is sacrificed.",
+          "portal/Companion.png"
+        ],
+        "option 3": [
+          "Sacrifice Wizard's Grasp",
+          4,
+          "The wizard gets much closer to you.",
+          "portal/WG.png"
+        ]
       },
       "type": "synergy",
       "sound": "The_Illuminated_Portal.mp3",
