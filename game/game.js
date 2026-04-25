@@ -618,9 +618,16 @@ export class Game {
     console.log("Wizards Grasp");
     console.log(this.wizardsGrasp);
 
+    const displayChoice = winningChoice 
+      ? winningChoice[0]  // synergy — the label from the majority choice
+      : winningChoices.length > 0 
+        ? winningChoices[0][0]  // individual — label from first player's choice
+        : null;
+
     if (this.onRoundResult) {
       this.onRoundResult({
         winningChoice,
+        displayChoice,
         resultText: this.resultText,
         wizardsGrasp: this.wizardsGrasp,
 

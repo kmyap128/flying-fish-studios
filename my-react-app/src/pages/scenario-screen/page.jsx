@@ -142,7 +142,7 @@ export default function ScenarioScreen({
           <>
             <ResultBlock
               scenarioNum={gameState.stage + 1}
-              chosenOption={roundResult.winningChoice[0]}
+              chosenOption={roundResult.displayChoice}
               resultText={roundResult.resultText}
               passive={roundResult.passives}
               countdown={countdown}

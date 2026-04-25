@@ -63,11 +63,38 @@ game.onTimerTick = ({ mode, remaining }) => {
 game.onPlayerChoice = (choiceData) => {
   io.emit("playerChoice", choiceData);
 };
+// game.onRoundResult = (resultData) => {
+//   io.emit("roundResult", resultData);
+//   io.emit("modeChange", { newMode: "result" });
+//   io.emit("lobby", getLobbyState());
+// };
+
 game.onRoundResult = (resultData) => {
-  io.emit("roundResult", resultData);
+  const isSynergy = !!resultData.winningChoice;
+
+  Object.entries(playerSockets).forEach(([slot, socketId]) => {
+    const pedestalIndex = Number(slot);
+    const playerChoice = resultData.playerChoices?.find(
+      (p) => p.pedestalIndex === pedestalIndex
+    );
+
+    const personalResult = {
+      ...resultData,
+      displayChoice: isSynergy
+        ? resultData.winningChoice?.[0]           // everyone sees majority choice label
+        : playerChoice?.option?.[0] ?? null,      // each sees their own choice label
+      resultText: isSynergy
+        ? resultData.resultText                    // shared result text
+        : playerChoice?.option?.[2] ?? resultData.resultText, // each sees their own
+    };
+
+    io.to(socketId).emit("roundResult", personalResult);
+  });
+
   io.emit("modeChange", { newMode: "result" });
   io.emit("lobby", getLobbyState());
 };
+
 game.onGameEndPlayer = (result) => {
   console.log("onGameEndPlayer fired, game.players:", game.players.map(p => ({ name: p.name, species: p.species, isImpostor: p.isImpostor })));
 
